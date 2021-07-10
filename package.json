@@ -1,7 +1,7 @@
 {
   "name": "hotweb3",
   "version": "1.0.0",
-  "description": "A JavaScript/TypeScript client for Hotmoka",
+  "description": "A JavaScript/TypeScript client for a remote Hotmoka node",
   "main": "dist/hotweb3.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
@@ -15,11 +15,16 @@
     "test:marshallable": "mocha -r ts-node/register test/Marshallable.test.ts",
     "test:signedRequests": "mocha -r ts-node/register test/SignedRequests.test.ts"
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "keywords": [
     "hotmoka",
     "hotweb3",
     "client",
-    "blockchain"
+    "blockchain",
+    "JavaScript",
+    "TypeScript"
   ],
   "author": "Dinu Berinde",
   "license": "ISC",
