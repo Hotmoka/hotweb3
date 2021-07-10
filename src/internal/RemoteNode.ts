@@ -20,6 +20,10 @@ import {Signature} from "./signature/Signature";
 import {InfoModel} from "../models/info/InfoModel";
 import {ManifestHelper} from "./ManifestHelper";
 
+/**
+ * Client to connect to a remote Hotmoka node
+ * and to interact with the exposed API.
+ */
 export class RemoteNode implements Node {
     public readonly url: string
     public readonly signature?: Signature

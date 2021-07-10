@@ -3,6 +3,7 @@ import {HotmokaException} from "../exception/HotmokaException";
 
 /**
  * A stream used to generate the bytes of the JS objects.
+ * Porting of the ObjectOutputStream class of Java.
  */
 export class Stream {
     /**

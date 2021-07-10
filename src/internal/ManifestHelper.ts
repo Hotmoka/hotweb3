@@ -15,6 +15,9 @@ import {Validators} from "../models/info/Validators";
 import {Validator} from "../models/info/Validator";
 import {StorageValueModel} from "../models/values/StorageValueModel";
 
+/**
+ * Helper class to get information about the remote Hotmoka node.
+ */
 export class ManifestHelper {
     private remoteNode: RemoteNode
 

@@ -15,6 +15,9 @@ import {StaticMethodCallTransactionRequestModel} from "../models/requests/Static
 import {SignatureAlgorithmResponseModel} from "../models/responses/SignatureAlgorithmResponseModel";
 import {InfoModel} from "../models/info/InfoModel";
 
+/**
+ * API exposed by a remote Hotmoka node.
+ */
 export interface Node {
 
     // get
