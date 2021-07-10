@@ -1,11 +1,25 @@
 # hotweb3
-JavaScript/TypeScript client for Hotmoka
+JavaScript/TypeScript client for a remote [Hotmoka](https://www.hotmoka.io) node
 
-## Install packages
-`npm i`
 
-## Build
-`npm run bundle`
+## Build 
+
+### Requirements
+
+-   [Node.js](https://nodejs.org)
+-   [npm](https://www.npmjs.com/)
+
+### Install dependencies
+```bash
+npm install
+```
+### Bundle source code
+
+```bash
+npm run bundle
+```
 
 ## Tests
-`npm run test:all`
+```bash
+npm run test:all
+```
