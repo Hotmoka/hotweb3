@@ -30,7 +30,6 @@ out/
 
 # JavaScript
 node_modules/
-dist/
 .npm
 *.tgz
 
