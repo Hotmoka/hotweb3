@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "A JavaScript/TypeScript client for a remote Hotmoka node",
   "main": "dist/hotweb3.js",
-  "types": "dist/types/index.d.ts",
+  "types": "./types/index.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "types": "npx tsc --declaration --outDir dist/types --emitDeclarationOnly",
+    "types": "npx tsc --declaration --outDir ./types --emitDeclarationOnly",
     "bundle": "npm run clean && npm run lint && npx webpack --mode production && npm run types && npm run clean:dist",
     "clean": "npx rimraf dist",
     "clean:dist": "npx rimraf dist/*.txt",
