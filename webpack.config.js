@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require("webpack");
 
 module.exports = {
     entry: './src/index.ts',
@@ -13,7 +12,10 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        fallback: {
+            "buffer": require.resolve("buffer/")
+        }
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -23,12 +25,7 @@ module.exports = {
         globalObject: 'this'
     },
     target: 'web',
-    plugins: [
-        new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer']
-        })
-    ],
     externals: {
         'axios': 'axios'
-    },
+    }
 };
