@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { FieldSignatureModel } from "../../models/signatures/FieldSignatureModel";
-import { StorageReferenceModel } from "../../models/values/StorageReferenceModel";
-import { TransactionReferenceModel } from "../../models/values/TransactionReferenceModel";
+import { FieldSignatureModel } from "../models/signatures/FieldSignatureModel";
+import { StorageReferenceModel } from "../models/values/StorageReferenceModel";
+import { TransactionReferenceModel } from "../models/values/TransactionReferenceModel";
 /**
  * A context used during object marshalling into bytes.
  */

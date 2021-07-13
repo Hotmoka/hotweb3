@@ -1,6 +1,7 @@
 /// <reference types="node" />
 /**
  * A stream used to generate the bytes of the JS objects.
+ * Porting of the ObjectOutputStream class of Java.
  */
 export declare class Stream {
     /**

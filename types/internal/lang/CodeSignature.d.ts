@@ -1,5 +1,5 @@
-import { VoidMethodSignatureModel } from "../../models/signatures/VoidMethodSignatureModel";
-import { NonVoidMethodSignatureModel } from "../../models/signatures/NonVoidMethodSignatureModel";
+import { VoidMethodSignatureModel } from "../models/signatures/VoidMethodSignatureModel";
+import { NonVoidMethodSignatureModel } from "../models/signatures/NonVoidMethodSignatureModel";
 export declare class CodeSignature {
     /**
      * The method {@code receive} of a payable contract, with an int argument.
