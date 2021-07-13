@@ -12,9 +12,8 @@ export {Validator} from "./models/info/Validator"
 export {Signature} from "./internal/signature/Signature";
 export {Algorithm} from "./internal/signature/Algorithm";
 
-// errors
+// exception
 export {HotmokaException} from "./internal/exception/HotmokaException"
-export {HotmokaError} from "./models/errors/HotmokaError"
 
 // requests
 export {InstanceMethodCallTransactionRequestModel} from "./models/requests/InstanceMethodCallTransactionRequestModel"

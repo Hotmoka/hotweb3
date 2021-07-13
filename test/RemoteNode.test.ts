@@ -441,7 +441,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
 
-    }).timeout(20000)
+    }).timeout(40000)
 
 
 })

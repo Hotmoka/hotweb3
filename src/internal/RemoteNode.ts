@@ -4,7 +4,6 @@ import {ClassTagModel} from "../models/updates/ClassTagModel";
 import {StateModel} from "../models/updates/StateModel";
 import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
 import axios, {AxiosResponse} from "axios";
-import {HotmokaError} from "../models/errors/HotmokaError";
 import {TransactionRestRequestModel} from "../models/requests/TransactionRestRequestModel";
 import {TransactionRestResponseModel} from "../models/responses/TransactionRestResponseModel";
 import {JarStoreInitialTransactionRequestModel} from "../models/requests/JarStoreInitialTransactionRequestModel";
@@ -21,6 +20,7 @@ import {InfoModel} from "../models/info/InfoModel";
 import {ManifestHelper} from "./helpers/ManifestHelper";
 import {NonceHelper} from "./helpers/NonceHelper";
 import {GasHelper} from "./helpers/GasHelper";
+import {HotmokaException} from "./exception/HotmokaException";
 
 /**
  * Client to connect to a remote Hotmoka node
@@ -42,33 +42,31 @@ export class RemoteNode implements Node {
 
 
     /**
-     * It resolves the given error received from the HTTP call.
+     * It resolves the given error received from a HTTP call.
      * @param error the error
-     * @private
-     * @return HotmokaError the parsed error model
+     * @return the message error
      */
-    private static resolveError(error: any): HotmokaError {
+    private static resolveError(error: any): string {
         if (error && error.response && error.response.data) {
-            const message = error.response.data.message ? error.response.data.message : 'Internal Server Error'
-            const exceptionClassName = error.response.data.exceptionClassName ? error.response.data.exceptionClassName : 'Exception'
-            return new HotmokaError(message, exceptionClassName)
+            const message = error.response.data.message ? error.response.data.message : 'Internal Error'
+            return error.response.data.exceptionClassName ? error.response.data.exceptionClassName + '@' + message : message
         } else {
-            return new HotmokaError('Internal Server Error', 'Exception')
+            return 'Internal Error'
         }
     }
 
     /**
      * Performs a GET request and yields a Promise of entity T as response.
      * @param url the url
-     * @private
      * @return a Promise of entity T
+     * @throws HotmokaException if errors occur
      */
     private static async get<T>(url: string): Promise<T> {
         try {
             const res: AxiosResponse = await axios.get<T>(url)
             return res.data
         } catch (error) {
-            throw RemoteNode.resolveError(error)
+            throw new HotmokaException(RemoteNode.resolveError(error))
         }
     }
 
@@ -76,15 +74,15 @@ export class RemoteNode implements Node {
      * Performs a POST request and yields a Promise of entity T as response.
      * @param url the url
      * @param body the body of type P
-     * @private
      * @return a Promise of entity T
+     * @throws HotmokaException if errors occur
      */
     private static async post<T, P>(url: string, body?: P): Promise<T> {
         try {
             const res: AxiosResponse = await axios.post<T>(url, body)
             return res.data
         } catch (error) {
-            throw RemoteNode.resolveError(error)
+            throw new HotmokaException(RemoteNode.resolveError(error))
         }
     }
 
