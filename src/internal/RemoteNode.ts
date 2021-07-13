@@ -18,7 +18,9 @@ import {StaticMethodCallTransactionRequestModel} from "../models/requests/Static
 import {SignatureAlgorithmResponseModel} from "../models/responses/SignatureAlgorithmResponseModel";
 import {Signature} from "./signature/Signature";
 import {InfoModel} from "../models/info/InfoModel";
-import {ManifestHelper} from "./ManifestHelper";
+import {ManifestHelper} from "./helpers/ManifestHelper";
+import {NonceHelper} from "./helpers/NonceHelper";
+import {GasHelper} from "./helpers/GasHelper";
 
 /**
  * Client to connect to a remote Hotmoka node
@@ -181,10 +183,34 @@ export class RemoteNode implements Node {
         return await RemoteNode.post<StorageValueModel, StaticMethodCallTransactionRequestModel>(this.url + '/run/staticMethodCallTransaction', request)
     }
 
-    // info
+    // helpers
 
+    /**
+     * Yields the info of this remote node.
+     * @return the info of the node
+     */
     async info(): Promise<InfoModel> {
        return await new ManifestHelper(this).info()
+    }
+
+    /**
+     * Yields the nonce of an account.
+     * @param account the account
+     * @param classpath the classpath where the account was installed
+     * @return the nonce of the account
+     */
+    async getNonceOf(account: StorageReferenceModel, classpath: TransactionReferenceModel): Promise<string> {
+        const nonce = await new NonceHelper(this).getNonceOf(account, classpath)
+        return nonce.value ?? '0'
+    }
+
+    /**
+     * Yields the gas price for a transaction.
+     * @return the gas price
+     */
+    async getGasPrice(): Promise<string> {
+        const gasPrice = await new GasHelper(this).getGasPrice()
+        return gasPrice.value ?? '1'
     }
 
     private wait(milliseconds: number): Promise<void> {
