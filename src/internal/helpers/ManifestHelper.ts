@@ -1,30 +1,34 @@
-import {InfoModel} from "../models/info/InfoModel";
-import {RemoteNode} from "./RemoteNode";
-import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
-import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
-import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
-import {CodeSignature} from "./lang/CodeSignature";
-import {HotmokaException} from "./exception/HotmokaException";
-import {MethodSignatureModel} from "../models/signatures/MethodSignatureModel";
-import {GameteInfo} from "../models/info/GameteInfo";
-import {GasStation} from "../models/info/GasStation";
-import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSignatureModel";
-import {ClassType} from "./lang/ClassType";
-import {BasicType} from "./lang/BasicType";
-import {Validators} from "../models/info/Validators";
-import {Validator} from "../models/info/Validator";
-import {StorageValueModel} from "../models/values/StorageValueModel";
+import {InfoModel} from "../../models/info/InfoModel";
+import {RemoteNode} from "../RemoteNode";
+import {InstanceMethodCallTransactionRequestModel} from "../../models/requests/InstanceMethodCallTransactionRequestModel";
+import {StorageReferenceModel} from "../../models/values/StorageReferenceModel";
+import {TransactionReferenceModel} from "../../models/values/TransactionReferenceModel";
+import {CodeSignature} from "../lang/CodeSignature";
+import {HotmokaException} from "../exception/HotmokaException";
+import {MethodSignatureModel} from "../../models/signatures/MethodSignatureModel";
+import {GameteInfo} from "../../models/info/GameteInfo";
+import {GasStation} from "../../models/info/GasStation";
+import {NonVoidMethodSignatureModel} from "../../models/signatures/NonVoidMethodSignatureModel";
+import {ClassType} from "../lang/ClassType";
+import {BasicType} from "../lang/BasicType";
+import {Validators} from "../../models/info/Validators";
+import {Validator} from "../../models/info/Validator";
+import {StorageValueModel} from "../../models/values/StorageValueModel";
 
 /**
  * Helper class to get information about the remote Hotmoka node.
  */
 export class ManifestHelper {
-    private remoteNode: RemoteNode
+    private readonly remoteNode: RemoteNode
 
     constructor(remoteNode: RemoteNode) {
         this.remoteNode = remoteNode
     }
 
+    /**
+     * Yields the info of a remote node.
+     * @return the info of the node
+     */
     async info(): Promise<InfoModel> {
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const manifest = await this.remoteNode.getManifest()
