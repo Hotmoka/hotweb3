@@ -103,7 +103,7 @@ describe('Testing the marshalling of the JS objects', () => {
     })
 
     it('writeBigInteger(9007199254740991765896) = rO0ABXcMAwoB6Ef//////G2I', async () => {
-        // TODO: implement big bigInteger
+
         const marshallingContext = new MarshallingContext()
         marshallingContext.writeBigInteger('9007199254740991765896')
         marshallingContext.flush()
