@@ -1,19 +1,19 @@
-import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
-import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
-import {StateModel} from "../models/updates/StateModel";
-import {ClassTagModel} from "../models/updates/ClassTagModel";
-import {TransactionRestRequestModel} from "../models/requests/TransactionRestRequestModel";
-import {TransactionRestResponseModel} from "../models/responses/TransactionRestResponseModel";
-import {JarStoreInitialTransactionRequestModel} from "../models/requests/JarStoreInitialTransactionRequestModel";
-import {GameteCreationTransactionRequestModel} from "../models/requests/GameteCreationTransactionRequestModel";
-import {InitializationTransactionRequestModel} from "../models/requests/InitializationTransactionRequestModel";
-import {JarStoreTransactionRequestModel} from "../models/requests/JarStoreTransactionRequestModel";
-import {ConstructorCallTransactionRequestModel} from "../models/requests/ConstructorCallTransactionRequestModel";
-import {StorageValueModel} from "../models/values/StorageValueModel";
-import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
-import {StaticMethodCallTransactionRequestModel} from "../models/requests/StaticMethodCallTransactionRequestModel";
-import {SignatureAlgorithmResponseModel} from "../models/responses/SignatureAlgorithmResponseModel";
-import {InfoModel} from "../models/info/InfoModel";
+import {TransactionReferenceModel} from "./models/values/TransactionReferenceModel";
+import {StorageReferenceModel} from "./models/values/StorageReferenceModel";
+import {StateModel} from "./models/updates/StateModel";
+import {ClassTagModel} from "./models/updates/ClassTagModel";
+import {TransactionRestRequestModel} from "./models/requests/TransactionRestRequestModel";
+import {TransactionRestResponseModel} from "./models/responses/TransactionRestResponseModel";
+import {JarStoreInitialTransactionRequestModel} from "./models/requests/JarStoreInitialTransactionRequestModel";
+import {GameteCreationTransactionRequestModel} from "./models/requests/GameteCreationTransactionRequestModel";
+import {InitializationTransactionRequestModel} from "./models/requests/InitializationTransactionRequestModel";
+import {JarStoreTransactionRequestModel} from "./models/requests/JarStoreTransactionRequestModel";
+import {ConstructorCallTransactionRequestModel} from "./models/requests/ConstructorCallTransactionRequestModel";
+import {StorageValueModel} from "./models/values/StorageValueModel";
+import {InstanceMethodCallTransactionRequestModel} from "./models/requests/InstanceMethodCallTransactionRequestModel";
+import {StaticMethodCallTransactionRequestModel} from "./models/requests/StaticMethodCallTransactionRequestModel";
+import {SignatureAlgorithmResponseModel} from "./models/responses/SignatureAlgorithmResponseModel";
+import {InfoModel} from "./models/info/InfoModel";
 
 /**
  * API exposed by a remote Hotmoka node.

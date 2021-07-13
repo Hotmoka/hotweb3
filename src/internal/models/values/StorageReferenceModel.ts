@@ -1,7 +1,7 @@
 import {TransactionReferenceModel} from "./TransactionReferenceModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {Selectors} from "../../internal/marshalling/Selectors";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {Selectors} from "../../marshalling/Selectors";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 export class StorageReferenceModel {
     /**

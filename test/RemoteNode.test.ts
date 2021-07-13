@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {TransactionReferenceModel} from "../src";
 import {StateModel} from "../src";
 import {StorageReferenceModel} from "../src";
-import {TransactionRestRequestModel} from "../src/models/requests/TransactionRestRequestModel";
+import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
 import {TransactionRestResponseModel} from "../src";
 import * as fs from "fs";
 import * as path from "path"

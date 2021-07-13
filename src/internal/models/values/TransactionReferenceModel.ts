@@ -1,8 +1,8 @@
 /**
  * The model of a transaction reference.
  */
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 export class TransactionReferenceModel {
     /**

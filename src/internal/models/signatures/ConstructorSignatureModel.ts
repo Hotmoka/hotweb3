@@ -1,7 +1,7 @@
 import {CodeSignatureModel} from "./CodeSignatureModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {ClassType} from "../../internal/lang/ClassType";
-import {Selectors} from "../../internal/marshalling/Selectors";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {ClassType} from "../../lang/ClassType";
+import {Selectors} from "../../marshalling/Selectors";
 
 /**
  * The model of the signature of a constructor of a class.

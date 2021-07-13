@@ -1,9 +1,9 @@
 import {MethodSignatureModel} from "./MethodSignatureModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {Selectors} from "../../internal/marshalling/Selectors";
-import {BasicType} from "../../internal/lang/BasicType";
-import {ClassType} from "../../internal/lang/ClassType";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {Selectors} from "../../marshalling/Selectors";
+import {BasicType} from "../../lang/BasicType";
+import {ClassType} from "../../lang/ClassType";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 export class NonVoidMethodSignatureModel extends MethodSignatureModel {
     /**

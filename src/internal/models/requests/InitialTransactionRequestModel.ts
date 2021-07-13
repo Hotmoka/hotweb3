@@ -1,5 +1,5 @@
 import {TransactionRequestModel} from "./TransactionRequestModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
 
 export abstract class InitialTransactionRequestModel extends TransactionRequestModel {
 

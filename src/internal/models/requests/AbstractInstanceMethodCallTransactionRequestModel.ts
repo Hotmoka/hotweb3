@@ -3,8 +3,8 @@ import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {MethodSignatureModel} from "../signatures/MethodSignatureModel";
 import {StorageValueModel} from "../values/StorageValueModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 export abstract class AbstractInstanceMethodCallTransactionRequestModel extends MethodCallTransactionRequestModel {
 

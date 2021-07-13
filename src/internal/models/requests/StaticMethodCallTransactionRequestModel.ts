@@ -3,11 +3,11 @@ import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {MethodSignatureModel} from "../signatures/MethodSignatureModel";
 import {StorageValueModel} from "../values/StorageValueModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {Selectors} from "../../internal/marshalling/Selectors";
-import {Signer} from "../../internal/signature/Signer";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
-import {Signature} from "../../internal/signature/Signature";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {Selectors} from "../../marshalling/Selectors";
+import {Signer} from "../../signature/Signer";
+import {HotmokaException} from "../../exception/HotmokaException";
+import {Signature} from "../../signature/Signature";
 
 export class StaticMethodCallTransactionRequestModel extends MethodCallTransactionRequestModel {
     chainId: string

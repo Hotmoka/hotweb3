@@ -1,7 +1,7 @@
-import {VoidMethodSignatureModel} from "../../models/signatures/VoidMethodSignatureModel";
+import {VoidMethodSignatureModel} from "../models/signatures/VoidMethodSignatureModel";
 import {ClassType} from "./ClassType";
 import {BasicType} from "./BasicType";
-import {NonVoidMethodSignatureModel} from "../../models/signatures/NonVoidMethodSignatureModel";
+import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSignatureModel";
 
 export class CodeSignature {
     /**

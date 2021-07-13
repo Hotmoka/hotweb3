@@ -1,9 +1,9 @@
 import {RemoteNode} from "../RemoteNode";
-import {StorageReferenceModel} from "../../models/values/StorageReferenceModel";
-import {StorageValueModel} from "../../models/values/StorageValueModel";
-import {InstanceMethodCallTransactionRequestModel} from "../../models/requests/InstanceMethodCallTransactionRequestModel";
+import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
+import {StorageValueModel} from "../models/values/StorageValueModel";
+import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
 import {CodeSignature} from "../lang/CodeSignature";
-import {TransactionReferenceModel} from "../../models/values/TransactionReferenceModel";
+import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
 
 export class NonceHelper {
     private static readonly GAS_LIMIT = "100000"

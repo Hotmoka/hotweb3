@@ -1,8 +1,8 @@
 import {SignatureModel} from "./SignatureModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {ClassType} from "../../internal/lang/ClassType";
-import {BasicType} from "../../internal/lang/BasicType";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {ClassType} from "../../lang/ClassType";
+import {BasicType} from "../../lang/BasicType";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 /**
  * The model of the signature of a field of a class.

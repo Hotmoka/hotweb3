@@ -2,13 +2,13 @@ import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {MethodSignatureModel} from "../signatures/MethodSignatureModel";
 import {StorageValueModel} from "../values/StorageValueModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {CodeSignature} from "../../internal/lang/CodeSignature";
-import {Selectors} from "../../internal/marshalling/Selectors";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {CodeSignature} from "../../lang/CodeSignature";
+import {Selectors} from "../../marshalling/Selectors";
 import {AbstractInstanceMethodCallTransactionRequestModel} from "./AbstractInstanceMethodCallTransactionRequestModel";
-import {Signer} from "../../internal/signature/Signer";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
-import {Signature} from "../../internal/signature/Signature";
+import {Signer} from "../../signature/Signer";
+import {HotmokaException} from "../../exception/HotmokaException";
+import {Signature} from "../../signature/Signature";
 
 export class InstanceMethodCallTransactionRequestModel extends AbstractInstanceMethodCallTransactionRequestModel {
     /**

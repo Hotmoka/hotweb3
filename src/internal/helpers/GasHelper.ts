@@ -1,10 +1,10 @@
 import {RemoteNode} from "../RemoteNode";
-import {InstanceMethodCallTransactionRequestModel} from "../../models/requests/InstanceMethodCallTransactionRequestModel";
+import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
 import {CodeSignature} from "../lang/CodeSignature";
-import {StorageReferenceModel} from "../../models/values/StorageReferenceModel";
+import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
 import {HotmokaException} from "../exception/HotmokaException";
-import {TransactionReferenceModel} from "../../models/values/TransactionReferenceModel";
-import {StorageValueModel} from "../../models/values/StorageValueModel";
+import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
+import {StorageValueModel} from "../models/values/StorageValueModel";
 
 export class GasHelper {
     private static readonly GAS_LIMIT = "100000"

@@ -1,7 +1,7 @@
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {InitialTransactionRequestModel} from "./InitialTransactionRequestModel";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 
 export class InitializationTransactionRequestModel extends InitialTransactionRequestModel {

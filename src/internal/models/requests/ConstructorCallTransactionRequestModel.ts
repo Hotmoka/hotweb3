@@ -2,12 +2,12 @@ import {ConstructorSignatureModel} from "../signatures/ConstructorSignatureModel
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {StorageValueModel} from "../values/StorageValueModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {CodeExecutionTransactionRequestModel} from "./CodeExecutionTransactionRequestModel";
-import {Selectors} from "../../internal/marshalling/Selectors";
-import {Signer} from "../../internal/signature/Signer";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
-import {Signature} from "../../internal/signature/Signature";
+import {Selectors} from "../../marshalling/Selectors";
+import {Signer} from "../../signature/Signer";
+import {HotmokaException} from "../../exception/HotmokaException";
+import {Signature} from "../../signature/Signature";
 
 export class ConstructorCallTransactionRequestModel extends CodeExecutionTransactionRequestModel {
     constructorSignature: ConstructorSignatureModel

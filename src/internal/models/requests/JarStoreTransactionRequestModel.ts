@@ -1,12 +1,12 @@
 import {NonInitialTransactionRequestModel} from "./NonInitialTransactionRequestModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
-import {Signer} from "../../internal/signature/Signer";
+import {Signer} from "../../signature/Signer";
 import {Buffer} from "buffer";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {Selectors} from "../../internal/marshalling/Selectors";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
-import {Signature} from "../../internal/signature/Signature";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {Selectors} from "../../marshalling/Selectors";
+import {HotmokaException} from "../../exception/HotmokaException";
+import {Signature} from "../../signature/Signature";
 
 
 /**

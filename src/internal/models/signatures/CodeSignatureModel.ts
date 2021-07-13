@@ -1,8 +1,8 @@
 import {SignatureModel} from "./SignatureModel";
-import {MarshallingContext} from "../../internal/marshalling/MarshallingContext";
-import {BasicType} from "../../internal/lang/BasicType";
-import {ClassType} from "../../internal/lang/ClassType";
-import {HotmokaException} from "../../internal/exception/HotmokaException";
+import {MarshallingContext} from "../../marshalling/MarshallingContext";
+import {BasicType} from "../../lang/BasicType";
+import {ClassType} from "../../lang/ClassType";
+import {HotmokaException} from "../../exception/HotmokaException";
 
 
 /**

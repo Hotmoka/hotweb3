@@ -1,3 +1,3 @@
-import {Marshallable} from "../../internal/marshalling/Marshallable";
+import {Marshallable} from "../../marshalling/Marshallable";
 
 export abstract class TransactionRequestModel extends Marshallable {}
