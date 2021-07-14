@@ -1,16 +1,17 @@
-/**
- * The model of a transaction reference.
- */
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {HotmokaException} from "../../exception/HotmokaException";
 
+/**
+ * A transaction reference that refers to a transaction in the local store of a node.
+ */
 export class TransactionReferenceModel {
     /**
      * The type of transaction.
      */
     type: string
+
     /**
-     * Used at least for local transactions.
+     * The hash of the request that generated the transaction.
      */
     hash: string
 

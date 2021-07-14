@@ -6,22 +6,22 @@ import {Selectors} from "../../marshalling/Selectors";
 import {HotmokaException} from "../../exception/HotmokaException";
 
 /**
- * The model of a storage value.
+ * A value that can be stored in the blockchain, passed as argument to an entry
+ * or returned from an entry.
  */
 export class StorageValueModel {
     /**
-     * Used for primitive values, big integers, strings and null.
-     * For the null value, this field holds exactly null, not the string "null".
+     * Used for primitive values, big integers, and strings.
      */
     value?: string
 
     /**
-     * Used for storage references.
+     * Used for storage references and null.
      */
     reference?: StorageReferenceModel
 
     /**
-     * The type of the value. For storage references and {@code null}, this is {@code "reference"}.
+     * The type of the value. For storage references and null, this is "reference".
      */
     type?: string
 
@@ -50,14 +50,24 @@ export class StorageValueModel {
      * Yields a storage value.
      * @param value the value
      * @param type the type of the value
+     * @return a storage value
      */
     public static newStorageValue(value: string, type: string): StorageValueModel {
         return new StorageValueModel(value, undefined, type, undefined)
     }
 
     /**
+     * Yields a null reference.
+     * @return a null reference storage value
+     */
+    public static newNullReference(): StorageValueModel {
+        return new StorageValueModel(undefined, undefined, "reference", undefined)
+    }
+
+    /**
      * Yields a reference storage value.
      * @param reference the reference
+     * @return a reference storage value
      */
     public static newReference(reference: StorageReferenceModel): StorageValueModel {
         return new StorageValueModel(undefined, reference, "reference", undefined)
@@ -67,11 +77,17 @@ export class StorageValueModel {
      * Yields an enum storage value.
      * @param enumElementName the enum name
      * @param type the type of enum
+     * @return an enum storage value
      */
     public static newEnum(enumElementName: string, type: string): StorageValueModel {
         return new StorageValueModel(undefined, undefined, type, enumElementName)
     }
 
+    /**
+     * Marshals a storage value object into a stream.
+     * @param context the context holding the stream
+     * @param storageValue the storage value to marshall
+     */
     public static into(context: MarshallingContext, storageValue: StorageValueModel): void {
         if (storageValue.type === null || storageValue.type === undefined) {
             throw new HotmokaException("Unexpected value type " + storageValue.type)
@@ -83,7 +99,7 @@ export class StorageValueModel {
             if (storageValue.reference) {
                 StorageReferenceModel.into(context, storageValue.reference)
             } else {
-                this.writeNull(context)
+                StorageValueModel.writeNull(context)
             }
         } else if (storageValue.value === null || storageValue.value === undefined) {
             throw new HotmokaException("Unexpected value " + storageValue.value)
@@ -170,7 +186,6 @@ export class StorageValueModel {
             default: throw new HotmokaException("Unexpected type " + storageValue.type)
         }
     }
-
 
     private static writeString(context: MarshallingContext, storageValue: StorageValueModel): void {
         if (storageValue.value === null || storageValue.value === undefined) {

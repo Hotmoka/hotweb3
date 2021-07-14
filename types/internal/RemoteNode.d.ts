@@ -79,10 +79,9 @@ export declare class RemoteNode implements Node {
     /**
      * Yields the nonce of an account.
      * @param account the account
-     * @param classpath the classpath where the account was installed
      * @return the nonce of the account
      */
-    getNonceOf(account: StorageReferenceModel, classpath: TransactionReferenceModel): Promise<string>;
+    getNonceOf(account: StorageReferenceModel): Promise<string>;
     /**
      * Yields the gas price for a transaction.
      * @return the gas price

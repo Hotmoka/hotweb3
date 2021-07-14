@@ -7,7 +7,7 @@ import {Buffer} from "buffer";
 export abstract class Marshallable {
 
     /**
-     * Marshalls this object into a buffer.
+     * Marshals this object into a buffer.
      * @return the buffer of bytes
      */
     protected marshall(): Buffer {
