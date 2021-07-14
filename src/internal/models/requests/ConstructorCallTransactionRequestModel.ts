@@ -31,14 +31,12 @@ export class ConstructorCallTransactionRequestModel extends CodeExecutionTransac
     /**
      * A request for calling a constructor of a storage class in a node.
      * It builds the transaction request.
-     *
-     *
      * @param caller the externally owned caller contract that pays for the transaction
-     * @param nonce the nonce used for transaction ordering and to forbid transaction replay; it is relative to the {@code caller}
+     * @param nonce the nonce used for transaction ordering and to forbid transaction replay; it is relative to the caller
      * @param chainId the chain identifier where this request can be executed, to forbid transaction replay across chains
      * @param gasLimit the maximal amount of gas that can be consumed by the transaction
      * @param gasPrice the coins payed for each unit of gas consumed by the transaction
-     * @param classpath the class path where the {@code caller} can be interpreted and the code must be executed
+     * @param classpath the class path where the caller can be interpreted and the code must be executed
      * @param constructorSignature the signature of constructor that must be called
      * @param actuals the actual arguments passed to the constructor
      * @param signature the optional signer of the request

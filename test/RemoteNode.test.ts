@@ -232,9 +232,10 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new NonVoidMethodSignatureModel(
                 "foo5",
                 "io.hotmoka.examples.basic.Simple",
@@ -242,7 +243,6 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
                 BasicType.INT.name
             ),
             [],
-            CHAIN_ID,
             remoteNode.signature
         )
 
@@ -262,9 +262,10 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new NonVoidMethodSignatureModel(
                 "foo5",
                 "io.hotmoka.examples.basic.Simple",
@@ -272,7 +273,6 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
                 BasicType.INT.name
             ),
             [],
-            CHAIN_ID,
             remoteNode.signature
         )
 
@@ -332,9 +332,10 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new NonVoidMethodSignatureModel(
                 "foo5",
                 "io.hotmoka.examples.basic.Simple",
@@ -342,7 +343,6 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
                 BasicType.INT.name
             ),
             [],
-            CHAIN_ID,
             remoteNode.signature
         )
 

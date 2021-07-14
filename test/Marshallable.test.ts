@@ -376,15 +376,15 @@ describe('Testing the marshalling of the JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             nonVoidMethodSignature,
             [StorageValueModel.newReference(new StorageReferenceModel(new TransactionReferenceModel(
                 "local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"
                 ), "0"
-            ))],
-            "chaintest"
+            ))]
         )
 
         staticMethodCall.into(marshallingContext)
@@ -409,12 +409,12 @@ describe('Testing the marshalling of the JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             RECEIVE_INT,
-            [StorageValueModel.newStorageValue("300", BasicType.INT.name)],
-            "chaintest"
+            [StorageValueModel.newStorageValue("300", BasicType.INT.name)]
         )
 
         staticMethodCall.into(marshallingContext)
@@ -433,12 +433,12 @@ describe('Testing the marshalling of the JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             CodeSignature.NONCE,
-            [],
-            "chaintest"
+            []
         )
 
         staticMethodCall.into(marshallingContext)

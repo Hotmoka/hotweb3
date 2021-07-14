@@ -28,7 +28,6 @@ export class InstanceMethodCallTransactionRequestModel extends AbstractInstanceM
     /**
      * A request for calling an instance method of a storage object in a node.
      * It builds the transaction request.
-     *
      * @param caller the externally owned caller contract that pays for the transaction
      * @param nonce the nonce used for transaction ordering and to forbid transaction replay; it is relative to the caller
      * @param chainId the chain identifier where this request can be executed, to forbid transaction replay across chains
