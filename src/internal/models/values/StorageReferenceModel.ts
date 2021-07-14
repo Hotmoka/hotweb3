@@ -20,6 +20,12 @@ export class StorageReferenceModel {
      */
     progressive: string
 
+    /**
+     * Builds a storage reference.
+     * @param transaction the transaction that created the object
+     * @param progressive the progressive number of the object among those that have been created
+     *                    during the same transaction
+     */
     constructor(transaction: TransactionReferenceModel, progressive: string) {
 
         if (!transaction) {
@@ -27,7 +33,7 @@ export class StorageReferenceModel {
         }
 
         if (progressive === null || progressive === undefined) {
-            throw new HotmokaException("progressive cannot be null")
+            throw new HotmokaException("progressive cannot be null or undefined")
         }
 
         this.transaction = transaction

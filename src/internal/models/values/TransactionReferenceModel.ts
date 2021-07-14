@@ -15,6 +15,11 @@ export class TransactionReferenceModel {
      */
     hash: string
 
+    /**
+     * Builds a transaction request.
+     * @param type the type of the transaction (must be "local")
+     * @param hash the hash of the request that generated the transaction
+     */
     constructor(type: string, hash: string) {
 
         if (!hash) {

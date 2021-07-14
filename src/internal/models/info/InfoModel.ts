@@ -4,6 +4,9 @@ import {GameteInfo} from "./GameteInfo";
 import {GasStation} from "./GasStation";
 import {Validators} from "./Validators";
 
+/**
+ * The model holding the information of a remote Hotmoka node.
+ */
 export class InfoModel {
     takamakaCode?: TransactionReferenceModel
     manifest?: StorageReferenceModel
