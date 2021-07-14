@@ -3,6 +3,11 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
 import {HotmokaException} from "../../exception/HotmokaException";
 
+/**
+ * A reference to an object of class type that can be stored in the blockchain.
+ * It knows the transaction that created the object. Objects created during the
+ * same transaction are disambiguated by a progressive number.
+ */
 export class StorageReferenceModel {
     /**
      * The transaction that created the object.

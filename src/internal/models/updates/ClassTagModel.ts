@@ -1,7 +1,10 @@
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 
+
 /**
- * The model of the class tag of an object.
+ * An update that states that an object belongs to a given class.
+ * It is stored in blockchain by the transaction that created the
+ * object and is not modified later anymore.
  */
 export class ClassTagModel {
     /**
