@@ -200,18 +200,18 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new InstanceMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new NonVoidMethodSignatureModel(
                 "foo3",
                 "io.hotmoka.examples.basic.Simple",
                 [],
                 BasicType.INT.name
             ),
-            [],
             simpleStorageReference,
-            CHAIN_ID,
+            [],
             remoteNode.signature
         )
 
@@ -442,17 +442,16 @@ describe('Testing the Info of a remote hotmoka node', () => {
 
 const getGamete = async (manifest: StorageReferenceModel, takamakaCode: TransactionReferenceModel): Promise<StorageValueModel> => {
     const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
-
     return remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
         manifest,
         "0",
-        takamakaCode,
+        CHAIN_ID,
         "100000",
         "0",
+        takamakaCode,
         CodeSignature.GET_GAMETE,
-        [],
         manifest,
-        CHAIN_ID
+        []
     ))
 }
 

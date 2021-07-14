@@ -65,16 +65,16 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             CodeSignature.GET_GAMETE,
-            [],
             new StorageReferenceModel(new TransactionReferenceModel(
                 "local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"
                 ), "0"
             ),
-            "chaintest",
+            [],
             SIGNATURE
         )
 
@@ -95,16 +95,16 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             RECEIVE_INT,
-            [StorageValueModel.newStorageValue("300", BasicType.INT.name)],
             new StorageReferenceModel(new TransactionReferenceModel(
                 "local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"
                 ), "0"
             ),
-            "chaintest",
+            [StorageValueModel.newStorageValue("300", BasicType.INT.name)],
             SIGNATURE
         )
 

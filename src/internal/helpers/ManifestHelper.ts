@@ -137,13 +137,13 @@ export class ManifestHelper {
         return new InstanceMethodCallTransactionRequestModel(
             caller,
             "0",
-            classPath,
+            "",
             "100000",
             "0",
+            classPath,
             methodsSignatureModel,
-            actuals ?? [],
             receiver,
-            "",
+            actuals ?? [],
             this.remoteNode.signature
         )
     }

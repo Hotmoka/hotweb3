@@ -23,13 +23,13 @@ export class NonceHelper {
         return this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             account,
             "0",
-            classTag.jar,
+            "",
             NonceHelper.GAS_LIMIT,
             "0",
+            classTag.jar,
             CodeSignature.NONCE,
-            [],
             account,
-            ''
+            []
         ))
     }
 }

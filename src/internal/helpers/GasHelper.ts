@@ -25,13 +25,13 @@ export class GasHelper {
         const gasStation = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             manifest,
             "0",
-            takamakaCode,
+            "",
             GasHelper.GAS_LIMIT,
             "0",
+            takamakaCode,
             CodeSignature.GET_GAS_STATION,
-            [],
             manifest,
-            ''
+            []
         ))
 
         if (!gasStation.reference) {
@@ -55,13 +55,13 @@ export class GasHelper {
         const ignoresGasPrice = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             manifest,
             "0",
-            takamakaCode,
+            "",
             GasHelper.GAS_LIMIT,
             "0",
+            takamakaCode,
             CodeSignature.IGNORES_GAS_PRICE,
-            [],
             gasStation,
-            ''
+            []
         ))
 
         if (ignoresGasPrice.value && ignoresGasPrice.value === 'true') {
@@ -71,13 +71,13 @@ export class GasHelper {
         return await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             manifest,
             "0",
-            takamakaCode,
+            "",
             GasHelper.GAS_LIMIT,
             "0",
+            takamakaCode,
             CodeSignature.GET_GAS_PRICE,
-            [],
             gasStation,
-            ''
+            []
         ))
     }
 }
