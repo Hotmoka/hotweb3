@@ -45,12 +45,12 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "11500",
             "500",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             constructorSignature,
             [StorageValueModel.newStorageValue("999", ClassType.BIG_INTEGER.name)],
-            "chaintest",
             SIGNATURE
         )
 

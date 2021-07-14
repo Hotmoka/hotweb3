@@ -171,15 +171,15 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new ConstructorSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 [BasicType.INT.name]
             ),
             [StorageValueModel.newStorageValue("13", BasicType.INT.name)],
-            CHAIN_ID,
             remoteNode.signature
         )
 
@@ -298,15 +298,15 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            basicJarClasspath,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
+            basicJarClasspath,
             new ConstructorSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 [BasicType.INT.name]
             ),
             [StorageValueModel.newStorageValue("13", BasicType.INT.name)],
-            CHAIN_ID,
             remoteNode.signature
         )
 
