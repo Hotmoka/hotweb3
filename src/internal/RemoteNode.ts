@@ -194,11 +194,10 @@ export class RemoteNode implements Node {
     /**
      * Yields the nonce of an account.
      * @param account the account
-     * @param classpath the classpath where the account was installed
      * @return the nonce of the account
      */
-    async getNonceOf(account: StorageReferenceModel, classpath: TransactionReferenceModel): Promise<string> {
-        const nonce = await new NonceHelper(this).getNonceOf(account, classpath)
+    async getNonceOf(account: StorageReferenceModel): Promise<string> {
+        const nonce = await new NonceHelper(this).getNonceOf(account)
         return nonce.value ?? '0'
     }
 

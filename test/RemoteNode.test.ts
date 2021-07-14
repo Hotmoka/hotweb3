@@ -152,7 +152,7 @@ describe('Testing the RUN methods of a remote hotmoka node', () => {
         if (!gamete.reference) {
             assert.fail('missing gamete')
         }
-        const nonceOfGamete = await remoteNode.getNonceOf(gamete.reference, takamakaCode)
+        const nonceOfGamete = await remoteNode.getNonceOf(gamete.reference)
 
         expect(Number(nonceOfGamete)).to.be.gt(1)
     }).timeout(10000)
@@ -164,9 +164,8 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
     it('addConstructorCallTransaction - it should invoke new Simple(13)', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // constructor call
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
@@ -194,9 +193,8 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
     it('runInstanceMethodCallTransaction - it should invoke simple.foo3() == 13', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // method call
         const requestInstanceMethodCall = new InstanceMethodCallTransactionRequestModel(
@@ -227,9 +225,8 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
     it('addStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // method call
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
@@ -258,9 +255,8 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
     it('runStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // method call
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
@@ -295,9 +291,8 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // constructor call
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
@@ -330,9 +325,8 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
     it('postStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
 
-        const takamakaCode = await remoteNode.getTakamakaCode()
         const gasPrice = await remoteNode.getGasPrice()
-        const nonceOfEOA = await remoteNode.getNonceOf(EOA, takamakaCode)
+        const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
         // method call
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
