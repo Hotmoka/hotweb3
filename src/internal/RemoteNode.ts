@@ -21,6 +21,12 @@ import {NonceHelper} from "./helpers/NonceHelper";
 import {GasHelper} from "./helpers/GasHelper";
 import {HotmokaException} from "./exceptions/HotmokaException";
 import {Signer} from "./signature/Signer";
+import {NoSuchElementException} from "./exceptions/NoSuchElementException";
+import {TransactionRejectedException} from "./exceptions/TransactionRejectedException";
+import {TransactionException} from "./exceptions/TransactionException";
+import {TimeoutException} from "./exceptions/TimeoutException";
+import {InterruptedException} from "./exceptions/InterruptedException";
+import {CodeExecutionException} from "./exceptions/CodeExecutionException";
 
 /**
  * Client to connect to a remote Hotmoka node
@@ -38,7 +44,7 @@ export class RemoteNode implements Node {
     public readonly signer?: Signer
 
     /**
-     * It constructs the instance of the remote node.
+     * Builds the instance of the remote node.
      * @param url the url of the remote node
      * @param signer the optional signer to sign the transaction requests
      */
@@ -47,34 +53,58 @@ export class RemoteNode implements Node {
         this.signer = signer
     }
 
-
     /**
-     * It resolves the given error received from a HTTP call.
+     * It resolves the given error received from a HTTP call to a custom Hotmoka exception.
      * @param error the error
-     * @return the message error
+     * @return one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
-    private static resolveError(error: any): string {
+    private static resolveHotmokaExceptionFrom(error: any): Error {
         if (error && error.response && error.response.data) {
             const message = error.response.data.message ? error.response.data.message : 'Internal Error'
-            return error.response.data.exceptionClassName ? error.response.data.exceptionClassName + '@' + message : message
+            const exceptionClassName = error.response.data.exceptionClassName
+
+            if (exceptionClassName && (typeof exceptionClassName === 'string' || exceptionClassName instanceof String)) {
+                if (exceptionClassName.indexOf("NoSuchElementException") != -1) {
+                    return new NoSuchElementException(message)
+                } else if (exceptionClassName.indexOf("TransactionRejectedException") != -1) {
+                    return new TransactionRejectedException(message)
+                } else if (exceptionClassName.indexOf("TransactionException") != -1) {
+                    return new TransactionException(message)
+                } else if (exceptionClassName.indexOf("TimeoutException") != -1) {
+                    return new TimeoutException(message)
+                } else if (exceptionClassName.indexOf("InterruptedException") != -1) {
+                    return new InterruptedException(message)
+                } else if (exceptionClassName.indexOf("CodeExecutionException") != -1) {
+                    return new CodeExecutionException(message)
+                } else {
+                    return new HotmokaException(message)
+                }
+            } else {
+                return new HotmokaException(message)
+            }
         } else {
-            return 'Internal Error'
+            return new HotmokaException('Internal Error')
         }
     }
+
 
 
     /**
      * Performs a GET request and yields a Promise of entity T as response.
      * @param url the url
      * @return a Promise of entity T
-     * @throws HotmokaException if errors occur
+     * @throws one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
     private static async get<T>(url: string): Promise<T> {
         try {
             const res: AxiosResponse = await axios.get<T>(url)
             return res.data
         } catch (error) {
-            throw new HotmokaException(RemoteNode.resolveError(error))
+            throw RemoteNode.resolveHotmokaExceptionFrom(error)
         }
     }
 
@@ -83,14 +113,16 @@ export class RemoteNode implements Node {
      * @param url the url
      * @param body the body of type P
      * @return a Promise of entity T
-     * @throws HotmokaException if errors occur
+     * @throws one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
     private static async post<T, P>(url: string, body?: P): Promise<T> {
         try {
             const res: AxiosResponse = await axios.post<T>(url, body)
             return res.data
         } catch (error) {
-            throw new HotmokaException(RemoteNode.resolveError(error))
+            throw RemoteNode.resolveHotmokaExceptionFrom(error)
         }
     }
 
@@ -194,6 +226,11 @@ export class RemoteNode implements Node {
     /**
      * Yields the info of this remote node.
      * @return the info of the node
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
     async info(): Promise<InfoModel> {
@@ -204,6 +241,11 @@ export class RemoteNode implements Node {
      * Yields the nonce of an account.
      * @param account the account
      * @return the nonce of the account
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
     async getNonceOf(account: StorageReferenceModel): Promise<string> {
@@ -214,6 +256,11 @@ export class RemoteNode implements Node {
     /**
      * Yields the gas price for a transaction.
      * @return the gas price
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
     async getGasPrice(): Promise<string> {
