@@ -15,29 +15,36 @@ import {InstanceMethodCallTransactionRequestModel} from "./models/requests/Insta
 import {StorageValueModel} from "./models/values/StorageValueModel";
 import {StaticMethodCallTransactionRequestModel} from "./models/requests/StaticMethodCallTransactionRequestModel";
 import {SignatureAlgorithmResponseModel} from "./models/responses/SignatureAlgorithmResponseModel";
-import {Signature} from "./signature/Signature";
 import {InfoModel} from "./models/info/InfoModel";
 import {ManifestHelper} from "./helpers/ManifestHelper";
 import {NonceHelper} from "./helpers/NonceHelper";
 import {GasHelper} from "./helpers/GasHelper";
 import {HotmokaException} from "./exception/HotmokaException";
+import {Signer} from "./signature/Signer";
 
 /**
  * Client to connect to a remote Hotmoka node
  * and to interact with the exposed API.
  */
 export class RemoteNode implements Node {
+    /**
+     * The url of the remote Hotmoka node.
+     */
     public readonly url: string
-    public readonly signature?: Signature
+
+    /**
+     * The optional signer to sign the transaction requests.
+     */
+    public readonly signer?: Signer
 
     /**
      * It constructs the instance of the remote node.
      * @param url the url of the remote node
-     * @param signature the optional signature to sign the requests
+     * @param signer the optional signer to sign the transaction requests
      */
-    constructor(url: string, signature?: Signature) {
+    constructor(url: string, signer?: Signer) {
         this.url = url
-        this.signature = signature
+        this.signer = signer
     }
 
 
@@ -54,6 +61,7 @@ export class RemoteNode implements Node {
             return 'Internal Error'
         }
     }
+
 
     /**
      * Performs a GET request and yields a Promise of entity T as response.
@@ -88,16 +96,16 @@ export class RemoteNode implements Node {
 
     // get
 
-    async getClassTag(request: StorageReferenceModel): Promise<ClassTagModel> {
-        return await RemoteNode.post<ClassTagModel, StorageReferenceModel>(this.url + '/get/classTag', request)
+    async getClassTag(object: StorageReferenceModel): Promise<ClassTagModel> {
+        return await RemoteNode.post<ClassTagModel, StorageReferenceModel>(this.url + '/get/classTag', object)
     }
 
     async getManifest(): Promise<StorageReferenceModel> {
         return await RemoteNode.get<StorageReferenceModel>(this.url + '/get/manifest')
     }
 
-    async getState(request: StorageReferenceModel): Promise<StateModel> {
-        return await RemoteNode.post<StateModel, StorageReferenceModel>(this.url + '/get/state', request)
+    async getState(object: StorageReferenceModel): Promise<StateModel> {
+        return await RemoteNode.post<StateModel, StorageReferenceModel>(this.url + '/get/state', object)
     }
 
     async getTakamakaCode(): Promise<TransactionReferenceModel> {
@@ -108,19 +116,19 @@ export class RemoteNode implements Node {
         return await RemoteNode.get<SignatureAlgorithmResponseModel>(this.url + '/get/nameOfSignatureAlgorithmForRequests')
     }
 
-    async getRequestAt(request: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>> {
+    async getRequestAt(reference: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>> {
         await this.wait(1000)
-        return await RemoteNode.post<TransactionRestRequestModel<unknown>, TransactionReferenceModel>(this.url + '/get/request', request)
+        return await RemoteNode.post<TransactionRestRequestModel<unknown>, TransactionReferenceModel>(this.url + '/get/request', reference)
     }
 
-    async getResponseAt(request: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
+    async getResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
         await this.wait(1000)
-        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/response', request)
+        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/response', reference)
     }
 
-    async getPolledResponseAt(request: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
+    async getPolledResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
         await this.wait(1000)
-        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/polledResponse', request)
+        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/polledResponse', reference)
     }
 
     // add
@@ -186,6 +194,7 @@ export class RemoteNode implements Node {
     /**
      * Yields the info of this remote node.
      * @return the info of the node
+     * @throws HotmokaException if generic errors occur
      */
     async info(): Promise<InfoModel> {
        return await new ManifestHelper(this).info()
@@ -195,6 +204,7 @@ export class RemoteNode implements Node {
      * Yields the nonce of an account.
      * @param account the account
      * @return the nonce of the account
+     * @throws HotmokaException if generic errors occur
      */
     async getNonceOf(account: StorageReferenceModel): Promise<string> {
         const nonce = await new NonceHelper(this).getNonceOf(account)
@@ -204,6 +214,7 @@ export class RemoteNode implements Node {
     /**
      * Yields the gas price for a transaction.
      * @return the gas price
+     * @throws HotmokaException if generic errors occur
      */
     async getGasPrice(): Promise<string> {
         const gasPrice = await new GasHelper(this).getGasPrice()
