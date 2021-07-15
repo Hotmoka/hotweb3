@@ -12,8 +12,14 @@ export {Validator} from "./internal/models/info/Validator"
 export {Signer} from "./internal/signature/Signer";
 export {Algorithm} from "./internal/signature/Algorithm";
 
-// exception
+// exceptions
 export {HotmokaException} from "./internal/exceptions/HotmokaException"
+export {CodeExecutionException} from "./internal/exceptions/CodeExecutionException"
+export {InterruptedException} from "./internal/exceptions/InterruptedException"
+export {NoSuchElementException} from "./internal/exceptions/NoSuchElementException"
+export {TimeoutException} from "./internal/exceptions/TimeoutException"
+export {TransactionRejectedException} from "./internal/exceptions/TransactionRejectedException"
+export {TransactionException} from "./internal/exceptions/TransactionException"
 
 // requests
 export {InstanceMethodCallTransactionRequestModel} from "./internal/models/requests/InstanceMethodCallTransactionRequestModel"
