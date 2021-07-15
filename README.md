@@ -4,7 +4,7 @@ JavaScript/TypeScript client for a remote [Hotmoka](https://www.hotmoka.io) node
 
 ## Usage
 
-```js
+```html
 // In Browser
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script src="dist/hotweb3.js"></script>
@@ -38,7 +38,7 @@ const remoteNode = new RemoteNode("http://panarea.hotmoka.io")
 })()
 ```
 
-```js
+```typescript
 // In TypeScript
 import {
     RemoteNode,
