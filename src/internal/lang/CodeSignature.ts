@@ -3,164 +3,167 @@ import {ClassType} from "./ClassType";
 import {BasicType} from "./BasicType";
 import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSignatureModel";
 
+/**
+ * The signature of a method or constructor.
+ */
 export class CodeSignature {
     /**
-     * The method {@code receive} of a payable contract, with an int argument.
+     * The method "receive" of a payable contract, with an int argument.
      */
-    public static readonly RECEIVE_INT = new VoidMethodSignatureModel("receive", ClassType.PAYABLE_CONTRACT.name, [BasicType.INT.name])
+    public static readonly RECEIVE_INT = new VoidMethodSignatureModel(ClassType.PAYABLE_CONTRACT.name,"receive",  [BasicType.INT.name])
 
     /**
-     * The method {@code receive} of a payable contract, with a long argument.
+     * The method "receive" of a payable contract, with a long argument.
      */
-    public static readonly RECEIVE_LONG = new VoidMethodSignatureModel("receive", ClassType.PAYABLE_CONTRACT.name, [BasicType.LONG.name])
+    public static readonly RECEIVE_LONG = new VoidMethodSignatureModel(ClassType.PAYABLE_CONTRACT.name,"receive",[BasicType.LONG.name])
 
     /**
-     * The method {@code receive} of a payable contract, with a big integer argument.
+     * The method "receive" of a payable contract, with a big integer argument.
      */
-    public static readonly RECEIVE_BIG_INTEGER = new VoidMethodSignatureModel("receive", ClassType.PAYABLE_CONTRACT.name, [ClassType.BIG_INTEGER.name])
+    public static readonly RECEIVE_BIG_INTEGER = new VoidMethodSignatureModel(ClassType.PAYABLE_CONTRACT.name,"receive",[ClassType.BIG_INTEGER.name])
 
     /**
-     * The method {@code getGamete} of the manifest.
+     * The method "getGamete" of the manifest.
      */
-    public static readonly GET_GAMETE = new NonVoidMethodSignatureModel("getGamete", ClassType.MANIFEST.name, [], ClassType.ACCOUNT.name)
+    public static readonly GET_GAMETE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getGamete", ClassType.ACCOUNT.name,[])
 
     /**
-     * The method {@code nonce} of an account.
+     * The method "nonce" of an account.
      */
-    public static readonly NONCE = new NonVoidMethodSignatureModel( "nonce", ClassType.ACCOUNT.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly NONCE = new NonVoidMethodSignatureModel(ClassType.ACCOUNT.name,"nonce", ClassType.BIG_INTEGER.name, [])
 
     /**
-     * The method {@code getGasStation} of the manifest.
+     * The method "getGasStation" of the manifest.
      */
-    public static readonly GET_GAS_STATION = new NonVoidMethodSignatureModel("getGasStation", ClassType.MANIFEST.name, [], ClassType.GAS_STATION.name)
+    public static readonly GET_GAS_STATION = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getGasStation", ClassType.GAS_STATION.name,[])
 
     /**
-     * The method {@code getGasPrice} of the gas station.
+     * The method "getGasPrice" of the gas station.
      */
-    public static readonly GET_GAS_PRICE = new NonVoidMethodSignatureModel("getGasPrice", ClassType.GAS_STATION.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly GET_GAS_PRICE = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getGasPrice", ClassType.BIG_INTEGER.name, [])
 
     /**
-     * The method {@code ignoresGasPrice} of the gas station.
+     * The method "ignoresGasPrice" of the gas station.
      */
-    public static readonly IGNORES_GAS_PRICE = new NonVoidMethodSignatureModel("ignoresGasPrice", ClassType.GAS_STATION.name, [] , BasicType.BOOLEAN.name)
+    public static readonly IGNORES_GAS_PRICE = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"ignoresGasPrice", BasicType.BOOLEAN.name, [])
 
     /**
-     * The method {@code getChainId} of the manifest.
+     * The method "getChainId" of the manifest.
      */
-    public static readonly GET_CHAIN_ID = new NonVoidMethodSignatureModel("getChainId", ClassType.MANIFEST.name, [], ClassType.STRING.name)
+    public static readonly GET_CHAIN_ID = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getChainId", ClassType.STRING.name, [])
 
     /**
-     * The method {@code getMaxErrorLength} of the manifest.
+     * The method "getMaxErrorLength" of the manifest.
      */
-    public static readonly GET_MAX_ERROR_LENGTH = new NonVoidMethodSignatureModel("getMaxErrorLength", ClassType.MANIFEST.name, [], BasicType.INT.name)
+    public static readonly GET_MAX_ERROR_LENGTH = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getMaxErrorLength", BasicType.INT.name, [])
 
     /**
-     * The method {@code getMaxDependencies} of the manifest.
+     * The method "getMaxDependencies" of the manifest.
      */
-    public static readonly GET_MAX_DEPENDENCIES = new NonVoidMethodSignatureModel("getMaxDependencies", ClassType.MANIFEST.name, [], BasicType.INT.name)
+    public static readonly GET_MAX_DEPENDENCIES = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getMaxDependencies", BasicType.INT.name,[])
 
     /**
-     * The method {@code getMaxCumulativeSizeOfDependencies} of the manifest.
+     * The method "getMaxCumulativeSizeOfDependencies" of the manifest.
      */
-    public static readonly GET_MAX_CUMULATIVE_SIZE_OF_DEPENDENCIES = new NonVoidMethodSignatureModel("getMaxCumulativeSizeOfDependencies", ClassType.MANIFEST.name, [], BasicType.LONG.name)
+    public static readonly GET_MAX_CUMULATIVE_SIZE_OF_DEPENDENCIES = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "getMaxCumulativeSizeOfDependencies", BasicType.LONG.name,[])
 
     /**
-     * The method {@code allowsSelfCharged} of the manifest.
+     * The method "allowsSelfCharged" of the manifest.
      */
-    public static readonly ALLOWS_SELF_CHARGED = new NonVoidMethodSignatureModel("allowsSelfCharged", ClassType.MANIFEST.name, [], BasicType.BOOLEAN.name)
+    public static readonly ALLOWS_SELF_CHARGED = new NonVoidMethodSignatureModel( ClassType.MANIFEST.name,"allowsSelfCharged", BasicType.BOOLEAN.name, [])
 
     /**
-     * The method {@code allowsUnsignedFaucet} of the manifest.
+     * The method "allowsUnsignedFaucet" of the manifest.
      */
-    public static readonly ALLOWS_UNSIGNED_FAUCET = new NonVoidMethodSignatureModel("allowsUnsignedFaucet", ClassType.MANIFEST.name, [], BasicType.BOOLEAN.name)
+    public static readonly ALLOWS_UNSIGNED_FAUCET = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"allowsUnsignedFaucet", BasicType.BOOLEAN.name, [])
 
     /**
-     * The method {@code skipsVerification} of the manifest.
+     * The method "skipsVerification" of the manifest.
      */
-    public static readonly SKIPS_VERIFICATION = new NonVoidMethodSignatureModel("skipsVerification", ClassType.MANIFEST.name,  [], BasicType.BOOLEAN.name)
+    public static readonly SKIPS_VERIFICATION = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"skipsVerification", BasicType.BOOLEAN.name,[])
 
     /**
-     * The method {@code getSignature} of the manifest.
+     * The method "getSignature" of the manifest.
      */
-    public static readonly GET_SIGNATURE = new NonVoidMethodSignatureModel("getSignature", ClassType.MANIFEST.name, [], ClassType.STRING.name)
+    public static readonly GET_SIGNATURE = new NonVoidMethodSignatureModel( ClassType.MANIFEST.name,"getSignature", ClassType.STRING.name,[])
 
     /**
-     * The method {@code balance} of a contract.
+     * The method "balance" of a contract.
      */
-    public static readonly BALANCE = new NonVoidMethodSignatureModel("balance", ClassType.CONTRACT.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly BALANCE = new NonVoidMethodSignatureModel(ClassType.CONTRACT.name,"balance", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code balanceRed} of a contract.
+     * The method "balanceRed" of a contract.
      */
-    public static readonly BALANCE_RED = new NonVoidMethodSignatureModel("balanceRed", ClassType.CONTRACT.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly BALANCE_RED = new NonVoidMethodSignatureModel(ClassType.CONTRACT.name,"balanceRed", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getMaxFaucet} of the gamete.
+     * The method "getMaxFaucet" of the gamete.
      */
-    public static readonly GET_MAX_FAUCET = new NonVoidMethodSignatureModel("getMaxFaucet", ClassType.GAMETE.name,[], ClassType.BIG_INTEGER.name)
+    public static readonly GET_MAX_FAUCET = new NonVoidMethodSignatureModel(ClassType.GAMETE.name,"getMaxFaucet", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getMaxRedFaucet} of the gamete.
+     * The method "getMaxRedFaucet" of the gamete.
      */
-    public static readonly GET_MAX_RED_FAUCET = new NonVoidMethodSignatureModel("getMaxRedFaucet", ClassType.GAMETE.name, [],  ClassType.BIG_INTEGER.name)
+    public static readonly GET_MAX_RED_FAUCET = new NonVoidMethodSignatureModel(ClassType.GAMETE.name,"getMaxRedFaucet", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getValidators} of the manifest.
+     * The method "getValidators" of the manifest.
      */
-    public static readonly GET_VALIDATORS = new NonVoidMethodSignatureModel("getValidators", ClassType.MANIFEST.name, [], ClassType.VALIDATORS.name)
+    public static readonly GET_VALIDATORS = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getValidators", ClassType.VALIDATORS.name,[])
 
     /**
-     * The method {@code getVersions} of the manifest.
+     * The method "getVersions" of the manifest.
      */
-    public static readonly GET_VERSIONS = new NonVoidMethodSignatureModel("getVersions", ClassType.MANIFEST.name, [], ClassType.VERSIONS.name)
+    public static readonly GET_VERSIONS = new NonVoidMethodSignatureModel( ClassType.MANIFEST.name,"getVersions", ClassType.VERSIONS.name,[])
 
     /**
-     * The method {@code getMaxGasPerTransaction} of the gas station.
+     * The method "getMaxGasPerTransaction" of the gas station.
      */
-    public static readonly GET_MAX_GAS_PER_TRANSACTION = new NonVoidMethodSignatureModel("getMaxGasPerTransaction", ClassType.GAS_STATION.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly GET_MAX_GAS_PER_TRANSACTION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getMaxGasPerTransaction", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getTargetGasAtReward} of the gas station.
+     * The method "getTargetGasAtReward" of the gas station.
      */
-    public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel("getTargetGasAtReward", ClassType.GAS_STATION.name, [],  ClassType.BIG_INTEGER.name)
+    public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel( ClassType.GAS_STATION.name,"getTargetGasAtReward", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getInflation} of the gas station.
+     * The method "getInflation" of the gas station.
      */
-    public static readonly GET_INFLATION = new NonVoidMethodSignatureModel("getInflation", ClassType.GAS_STATION.name, [],  BasicType.LONG.name)
+    public static readonly GET_INFLATION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getInflation", BasicType.LONG.name,[])
 
     /**
-     * The method {@code getOblivion} of the gas station.
+     * The method "getOblivion" of the gas station.
      */
-    public static readonly GET_OBLIVION = new NonVoidMethodSignatureModel("getOblivion", ClassType.GAS_STATION.name,  [], BasicType.LONG.name)
+    public static readonly GET_OBLIVION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getOblivion", BasicType.LONG.name,[])
 
     /**
-     * The method {@code getHeight} of the manifest.
+     * The method "getHeight" of the manifest.
      */
-    public static readonly GET_HEIGHT = new NonVoidMethodSignatureModel("getHeight", ClassType.VALIDATORS.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly GET_HEIGHT = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getHeight", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getNumberOfTransactions} of the manifest.
+     * The method "getNumberOfTransactions" of the manifest.
      */
-    public static readonly GET_NUMBER_OF_TRANSACTIONS = new NonVoidMethodSignatureModel("getNumberOfTransactions", ClassType.VALIDATORS.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly GET_NUMBER_OF_TRANSACTIONS = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getNumberOfTransactions", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getTicketForNewPoll} of the manifest.
+     * The method "getTicketForNewPoll" of the manifest.
      */
-    public static readonly GET_TICKET_FOR_NEW_POLL = new NonVoidMethodSignatureModel("getTicketForNewPoll", ClassType.VALIDATORS.name, [], ClassType.BIG_INTEGER.name)
+    public static readonly GET_TICKET_FOR_NEW_POLL = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getTicketForNewPoll", ClassType.BIG_INTEGER.name, [])
 
     /**
-     * The method {@code getPolls} of the validators object.
+     * The method "getPolls" of the validators object.
      */
-    public static readonly GET_POLLS = new NonVoidMethodSignatureModel("getPolls", ClassType.VALIDATORS.name, [], ClassType.STORAGE_SET_VIEW.name)
+    public static readonly GET_POLLS = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getPolls", ClassType.STORAGE_SET_VIEW.name,[])
 
     /**
-     * The method {@code getVerificationVersion} of the versions object.
+     * The method "getVerificationVersion" of the versions object.
      */
-    public static readonly GET_VERIFICATION_VERSION = new NonVoidMethodSignatureModel("getVerificationVersion", ClassType.VERSIONS.name, [], BasicType.INT.name)
+    public static readonly GET_VERIFICATION_VERSION = new NonVoidMethodSignatureModel(ClassType.VERSIONS.name,"getVerificationVersion", BasicType.INT.name,[])
 
     /**
-     * The method {@code id} of a validator.
+     * The method "id" of a validator.
      */
-    public static readonly ID = new NonVoidMethodSignatureModel("id", ClassType.VALIDATOR.name, [], ClassType.STRING.name)
+    public static readonly ID = new NonVoidMethodSignatureModel(ClassType.VALIDATOR.name,"id", ClassType.STRING.name, [])
 }

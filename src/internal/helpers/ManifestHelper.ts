@@ -87,11 +87,11 @@ export class ManifestHelper {
         const oblivion = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_OBLIVION, gasStation.reference))
 
         // validators
-        const shares = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel("getShares", ClassType.VALIDATORS.name,  [], ClassType.STORAGE_MAP.name), validators.reference))
+        const shares = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getShares", ClassType.STORAGE_MAP.name,  []), validators.reference))
         if (!shares.reference) {
             throw new HotmokaException("Shares not found")
         }
-        const numOfValidators = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel("size", ClassType.STORAGE_MAP.name,  [], BasicType.INT.name), shares.reference))
+        const numOfValidators = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.STORAGE_MAP.name, "size", BasicType.INT.name,[]), shares.reference))
         const height = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_HEIGHT, validators.reference))
         const numberOfTransactions = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_NUMBER_OF_TRANSACTIONS, validators.reference))
         const ticketForNewPoll = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_TICKET_FOR_NEW_POLL, validators.reference))
@@ -99,7 +99,7 @@ export class ManifestHelper {
         if (!polls.reference) {
             throw new HotmokaException("Polls not found")
         }
-        const numOfPolls = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel("size", ClassType.STORAGE_SET_VIEW.name,  [], BasicType.INT.name), polls.reference))
+        const numOfPolls = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.STORAGE_SET_VIEW.name,"size", BasicType.INT.name,[]), polls.reference))
 
         const info = new InfoModel()
         info.takamakaCode = takamakaCode
@@ -144,7 +144,7 @@ export class ManifestHelper {
             methodsSignatureModel,
             receiver,
             actuals ?? [],
-            this.remoteNode.signature
+            this.remoteNode.signer
         )
     }
 
@@ -153,7 +153,7 @@ export class ManifestHelper {
             this.buildInstanceMethodCallTransactionModel(
                 manifest,
                 takamakaCode,
-                new NonVoidMethodSignatureModel("select", ClassType.STORAGE_MAP.name,  [BasicType.INT.name], ClassType.OBJECT.name),
+                new NonVoidMethodSignatureModel(ClassType.STORAGE_MAP.name, "select", ClassType.OBJECT.name, [BasicType.INT.name]),
                 shares,
                 [StorageValueModel.newStorageValue(i + '', BasicType.INT.name)]
             )
@@ -169,7 +169,7 @@ export class ManifestHelper {
             this.buildInstanceMethodCallTransactionModel(
                 manifest,
                 takamakaCode,
-                new NonVoidMethodSignatureModel("get", ClassType.STORAGE_MAP.name, [ClassType.OBJECT.name], ClassType.OBJECT.name),
+                new NonVoidMethodSignatureModel(ClassType.STORAGE_MAP.name, "get", ClassType.OBJECT.name,[ClassType.OBJECT.name]),
                 shares,
                 [validator]
             )

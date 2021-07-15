@@ -3,6 +3,9 @@ import {MarshallingContext} from "../marshalling/MarshallingContext";
 import {Selectors} from "../marshalling/Selectors";
 import {Constants} from "./Constants";
 
+/**
+ * A class type that can be used for stored objects in blockchain.
+ */
 export class ClassType extends Marshallable {
     /**
      * The frequently used class type for {@link java.lang.Object}.
@@ -242,18 +245,22 @@ export class ClassType extends Marshallable {
     /**
      * The frequently used class type for {@link io.takamaka.code.dao.SharedEntity}.
      */
-    public static readonly SHARED_ENTITY =  new ClassType("io.takamaka.code.dao.SharedEntity")
+    public static readonly SHARED_ENTITY = new ClassType("io.takamaka.code.dao.SharedEntity")
 
     /**
      * The frequently used class type for {@link io.takamaka.code.dao.SharedEntityView}.
      */
-    public static readonly SHARED_ENTITY_VIEW =  new ClassType("io.takamaka.code.dao.SharedEntityView")
+    public static readonly SHARED_ENTITY_VIEW = new ClassType("io.takamaka.code.dao.SharedEntityView")
 
     /**
      * The name of the class type.
      */
     public readonly name: string
 
+    /**
+     * Builds a class type that can be used for storage objects in blockchain.
+     * @param name the name of the class
+     */
     public constructor(name: string) {
         super()
         this.name = name
@@ -263,6 +270,10 @@ export class ClassType extends Marshallable {
         return classType.name === this.name
     }
 
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     public into(context: MarshallingContext): void {
         if (this.equals(ClassType.BIG_INTEGER))
             context.writeByte(Selectors.SELECTOR_BIGINTEGER_CLASS);
