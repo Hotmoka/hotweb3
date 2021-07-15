@@ -1,6 +1,9 @@
 import {TransactionResponseModel} from "./TransactionResponseModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 
+/**
+ * A response for a transaction that installs a jar in a yet not initialized node.
+ */
 export class JarStoreInitialTransactionResponseModel extends TransactionResponseModel {
 
     /**

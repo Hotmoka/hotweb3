@@ -1,6 +1,9 @@
 import {Validator} from "./Validator";
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 
+/**
+ * The model holding the information of the validators.
+ */
 export class Validators {
     validatorsReference?: StorageReferenceModel
     validators: Array<Validator> = []

@@ -23,7 +23,7 @@ export abstract class NonInitialTransactionRequestModel extends TransactionReque
         }
 
         if (gasLimit === null || gasLimit === undefined) {
-            throw new HotmokaException("gasLimit cannot be null")
+            throw new HotmokaException("gasLimit cannot be null or undefined")
         }
 
         if (Number(gasLimit) < 0) {
@@ -31,7 +31,7 @@ export abstract class NonInitialTransactionRequestModel extends TransactionReque
         }
 
         if (gasPrice === null || gasPrice === undefined) {
-            throw new HotmokaException("gasPrice cannot be null")
+            throw new HotmokaException("gasPrice cannot be null or undefined")
         }
 
         if (Number(gasPrice) < 0) {
@@ -43,7 +43,7 @@ export abstract class NonInitialTransactionRequestModel extends TransactionReque
         }
 
         if (nonce === null || nonce === undefined) {
-            throw new HotmokaException("nonce cannot be null")
+            throw new HotmokaException("nonce cannot be null or undefined")
         }
 
         if (Number(nonce) < 0) {

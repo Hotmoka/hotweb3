@@ -7,7 +7,6 @@ import {CodeExecutionTransactionRequestModel} from "./CodeExecutionTransactionRe
 import {Selectors} from "../../marshalling/Selectors";
 import {Signer} from "../../signature/Signer";
 import {HotmokaException} from "../../exception/HotmokaException";
-import {Signature} from "../../signature/Signature";
 
 /**
  * A request for calling a constructor of a storage class in a node.
@@ -39,7 +38,7 @@ export class ConstructorCallTransactionRequestModel extends CodeExecutionTransac
      * @param classpath the class path where the caller can be interpreted and the code must be executed
      * @param constructorSignature the signature of constructor that must be called
      * @param actuals the actual arguments passed to the constructor
-     * @param signature the optional signer of the request
+     * @param signer the optional signer of the request
      * @throws HotmokaException if errors occur
      */
     constructor(caller: StorageReferenceModel,
@@ -50,7 +49,7 @@ export class ConstructorCallTransactionRequestModel extends CodeExecutionTransac
                 classpath: TransactionReferenceModel,
                 constructorSignature: ConstructorSignatureModel,
                 actuals: Array<StorageValueModel>,
-                signature?: Signature
+                signer?: Signer
     ) {
         super(caller, nonce, classpath, gasLimit, gasPrice, actuals)
 
@@ -71,7 +70,7 @@ export class ConstructorCallTransactionRequestModel extends CodeExecutionTransac
 
         this.constructorSignature = constructorSignature
         this.chainId = chainId
-        this.signature = signature ? Signer.INSTANCE.sign(signature, this.marshall()) : ''
+        this.signature = signer ? signer.sign(this.marshall()) : ''
     }
 
     /**

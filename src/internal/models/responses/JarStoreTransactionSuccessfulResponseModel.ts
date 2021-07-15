@@ -2,6 +2,9 @@ import {JarStoreTransactionResponseModel} from "./JarStoreTransactionResponseMod
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {UpdateModel} from "../updates/UpdateModel";
 
+/**
+ * A response for a successful transaction that installs a jar in a blockchain.
+ */
 export class JarStoreTransactionSuccessfulResponseModel extends JarStoreTransactionResponseModel {
     /**
      * The jar to install, instrumented.

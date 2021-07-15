@@ -5,17 +5,30 @@ import {BasicType} from "../../lang/BasicType";
 import {ClassType} from "../../lang/ClassType";
 import {HotmokaException} from "../../exception/HotmokaException";
 
+/**
+ * The signature of a method of a class, that returns a value.
+ */
 export class NonVoidMethodSignatureModel extends MethodSignatureModel {
+
     /**
      * The return type of the method.
      */
     returnType: string
 
-    constructor(methodName: string,
-                definingClass: string,
-                formals: Array<string>,
-                returnType: string) {
-        super(methodName, definingClass, formals)
+    /**
+     * Builds the signature of a method, that returns a value.
+     * @param definingClass the class of the method
+     * @param methodName the name of the method
+     * @param returnType the type of the returned value
+     * @param formals the formal arguments of the method
+     * @throws HotmokaException if errors occur
+     */
+    constructor(definingClass: string,
+                methodName: string,
+                returnType: string,
+                formals: Array<string>
+    ) {
+        super(definingClass, methodName, formals)
 
         if (!returnType) {
             throw new HotmokaException("Invalid returnType " + returnType)
@@ -24,6 +37,10 @@ export class NonVoidMethodSignatureModel extends MethodSignatureModel {
         this.returnType = returnType
     }
 
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     public into(context: MarshallingContext): void {
         context.writeByte(Selectors.SELECTOR_NON_VOID_METHOD)
         super.into(context)

@@ -8,7 +8,6 @@ import {Selectors} from "../../marshalling/Selectors";
 import {AbstractInstanceMethodCallTransactionRequestModel} from "./AbstractInstanceMethodCallTransactionRequestModel";
 import {Signer} from "../../signature/Signer";
 import {HotmokaException} from "../../exception/HotmokaException";
-import {Signature} from "../../signature/Signature";
 
 /**
  * A request for calling an instance method of a storage object in a node.
@@ -37,7 +36,7 @@ export class InstanceMethodCallTransactionRequestModel extends AbstractInstanceM
      * @param method the method that must be called
      * @param receiver the receiver of the call
      * @param actuals the actual arguments passed to the method
-     * @param signature the signer of the request
+     * @param signer the signer of the request
      * @throws HotmokaException if errors occur
      */
     constructor(
@@ -50,7 +49,7 @@ export class InstanceMethodCallTransactionRequestModel extends AbstractInstanceM
         method: MethodSignatureModel,
         receiver: StorageReferenceModel,
         actuals: Array<StorageValueModel>,
-        signature?: Signature
+        signer?: Signer
     ) {
         super(caller, nonce, classpath, gasLimit, gasPrice, method, actuals, receiver)
 
@@ -59,7 +58,7 @@ export class InstanceMethodCallTransactionRequestModel extends AbstractInstanceM
         }
 
         this.chainId = chainId
-        this.signature = signature ? Signer.INSTANCE.sign(signature, this.marshall()) : ''
+        this.signature = signer ? signer.sign(this.marshall()) : ''
     }
 
     /**

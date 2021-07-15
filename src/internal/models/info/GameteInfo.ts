@@ -1,5 +1,8 @@
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 
+/**
+ * The model holding the information of the gamete.
+ */
 export class GameteInfo {
     gamete?: StorageReferenceModel
     balanceOfGamete?: string

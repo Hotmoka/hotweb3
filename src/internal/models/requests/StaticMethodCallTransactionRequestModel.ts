@@ -7,7 +7,6 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
 import {Signer} from "../../signature/Signer";
 import {HotmokaException} from "../../exception/HotmokaException";
-import {Signature} from "../../signature/Signature";
 
 /**
  * A request for calling a static method of a storage class in a node.
@@ -34,7 +33,7 @@ export class StaticMethodCallTransactionRequestModel extends MethodCallTransacti
      * @param classpath the class path where the caller can be interpreted and the code must be executed
      * @param method the method that must be called
      * @param actuals the actual arguments passed to the method
-     * @param signature the optional signer of the request
+     * @param signer the optional signer of the request
      * @throws HotmokaException if errors occur
      */
     constructor(
@@ -46,7 +45,7 @@ export class StaticMethodCallTransactionRequestModel extends MethodCallTransacti
         classpath: TransactionReferenceModel,
         method: MethodSignatureModel,
         actuals: Array<StorageValueModel>,
-        signature?: Signature
+        signer?: Signer
     ) {
         super(caller, nonce, classpath, gasLimit, gasPrice, method, actuals)
 
@@ -55,7 +54,7 @@ export class StaticMethodCallTransactionRequestModel extends MethodCallTransacti
         }
 
         this.chainId = chainId
-        this.signature = signature ? Signer.INSTANCE.sign(signature, this.marshall()) : ''
+        this.signature = signer ? signer.sign(this.marshall()) : ''
     }
 
     /**

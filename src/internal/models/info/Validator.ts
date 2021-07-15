@@ -1,5 +1,8 @@
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 
+/**
+ * The model holding the information of a validator.
+ */
 export class Validator {
     validator?: StorageReferenceModel
     id?: string

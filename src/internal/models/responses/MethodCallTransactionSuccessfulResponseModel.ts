@@ -3,6 +3,11 @@ import {StorageValueModel} from "../values/StorageValueModel";
 import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {UpdateModel} from "../updates/UpdateModel";
 
+/**
+ * A response for a successful transaction that calls a method
+ * in blockchain. The method has been called without problems and
+ * without generating exceptions. The method does not return {@code void}.
+ */
 export class MethodCallTransactionSuccessfulResponseModel extends MethodCallTransactionResponseModel {
     /**
      * The return value of the method.

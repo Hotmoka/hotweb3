@@ -1,6 +1,9 @@
 import {JarStoreTransactionResponseModel} from "./JarStoreTransactionResponseModel";
 import {UpdateModel} from "../updates/UpdateModel";
 
+/**
+ * A response for a failed transaction that should have installed a jar in the node.
+ */
 export class JarStoreTransactionFailedResponseModel extends JarStoreTransactionResponseModel {
     /**
      * The amount of gas consumed by the transaction as penalty for the failure.

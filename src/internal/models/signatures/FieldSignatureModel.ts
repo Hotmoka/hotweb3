@@ -5,7 +5,7 @@ import {BasicType} from "../../lang/BasicType";
 import {HotmokaException} from "../../exception/HotmokaException";
 
 /**
- * The model of the signature of a field of a class.
+ * The signature of a field of a class.
  */
 export class FieldSignatureModel extends SignatureModel {
 
@@ -19,7 +19,14 @@ export class FieldSignatureModel extends SignatureModel {
      */
     type: string
 
-    constructor(name: string, type: string, definingClass: string) {
+    /**
+     * Builds the signature of a field.
+     * @param definingClass the class of the field
+     * @param name the name of the field
+     * @param type the type of the field
+     * @throws HotmokaException if errors occur
+     */
+    constructor(definingClass: string, name: string, type: string) {
         super(definingClass)
 
         if (!name) {
@@ -34,6 +41,10 @@ export class FieldSignatureModel extends SignatureModel {
         this.type = type
     }
 
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     public into(context: MarshallingContext): void {
         super.into(context)
         context.writeString(this.name)

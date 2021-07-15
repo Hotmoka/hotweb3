@@ -34,6 +34,11 @@ export class TransactionReferenceModel {
         this.hash = hash
     }
 
+    /**
+     * Marshals an object into a stream.
+     * @param context the context holding the stream
+     * @param transactionReference the object to marshal
+     */
     public static into(context: MarshallingContext, transactionReference: TransactionReferenceModel): void {
         context.writeTransactionReference(transactionReference)
     }

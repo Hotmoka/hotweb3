@@ -1,6 +1,9 @@
 import {MethodCallTransactionResponseModel} from "./MethodCallTransactionResponseModel";
 import {UpdateModel} from "../updates/UpdateModel";
 
+/**
+ * A response for a failed transaction that should have called a method in blockchain.
+ */
 export class MethodCallTransactionFailedResponseModel extends MethodCallTransactionResponseModel {
     /**
      * The amount of gas consumed by the transaction as penalty for the failure.

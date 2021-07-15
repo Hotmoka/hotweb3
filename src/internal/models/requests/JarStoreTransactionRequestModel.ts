@@ -6,27 +6,55 @@ import {Buffer} from "buffer";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
 import {HotmokaException} from "../../exception/HotmokaException";
-import {Signature} from "../../signature/Signature";
 
 
 /**
- * The model of a jar store transaction request.
+ * A request for a transaction that installs a jar in an initialized node.
  */
 export class JarStoreTransactionRequestModel extends NonInitialTransactionRequestModel {
+    /**
+     * The string of the jar to install.
+     */
     jar: string
+
+    /**
+     * The dependencies of the jar, already installed in blockchain.
+     */
     dependencies: Array<TransactionReferenceModel>
+
+    /**
+     * The chain identifier where this request can be executed, to forbid transaction replay across chains.
+     */
     chainId: string
+
+    /**
+     * The signature of the request.
+     */
     signature: string
 
+
+    /**
+     * Builds the transaction request.
+     * @param caller the externally owned caller contract that pays for the transaction
+     * @param nonce the nonce used for transaction ordering and to forbid transaction replay; it is relative to the caller
+     * @param chainId the chain identifier where this request can be executed, to forbid transaction replay across chains
+     * @param gasLimit the maximal amount of gas that can be consumed by the transaction
+     * @param gasPrice the coins payed for each unit of gas consumed by the transaction
+     * @param classpath the class path where the caller is interpreted
+     * @param jar the bytes of the jar to install
+     * @param dependencies the dependencies of the jar, already installed in blockchain
+     * @param signer the signer of the request
+     * @throws HotmokaException if errors occur
+     */
     constructor(caller: StorageReferenceModel,
                 nonce: string,
-                classpath: TransactionReferenceModel,
+                chainId: string,
                 gasLimit: string,
                 gasPrice: string,
+                classpath: TransactionReferenceModel,
                 jar: string,
                 dependencies: Array<TransactionReferenceModel>,
-                chainId: string,
-                signature?: Signature
+                signer?: Signer
     ) {
         super(caller, nonce, classpath, gasLimit, gasPrice)
 
@@ -51,9 +79,13 @@ export class JarStoreTransactionRequestModel extends NonInitialTransactionReques
         this.jar = jar
         this.dependencies = dependencies
         this.chainId = chainId
-        this.signature = signature ? Signer.INSTANCE.sign(signature, this.marshall()) : ''
+        this.signature = signer ? signer.sign(this.marshall()) : ''
     }
 
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     public into(context: MarshallingContext): void {
        this.intoWithoutSignature(context)
     }

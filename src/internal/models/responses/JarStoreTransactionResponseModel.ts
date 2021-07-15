@@ -1,6 +1,9 @@
 import {TransactionResponseModel} from "./TransactionResponseModel";
 import {UpdateModel} from "../updates/UpdateModel";
 
+/**
+ * The response of a transaction that installed a jar in a node.
+ */
 export abstract class JarStoreTransactionResponseModel extends TransactionResponseModel {
     /**
      * The updates resulting from the execution of the transaction.

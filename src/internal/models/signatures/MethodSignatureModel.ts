@@ -3,7 +3,7 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {HotmokaException} from "../../exception/HotmokaException";
 
 /**
- * The model of the signature of a method of a class.
+ * The signature of a method of a class.
  */
 export abstract class MethodSignatureModel extends CodeSignatureModel {
     /**
@@ -11,10 +11,14 @@ export abstract class MethodSignatureModel extends CodeSignatureModel {
      */
     methodName: string
 
-
-    constructor(methodName: string,
-                definingClass: string,
-                formals: Array<string>) {
+    /**
+     * Builds the signature of a method.
+     * @param definingClass the class of the method
+     * @param methodName the name of the method
+     * @param formals the formal arguments of the method
+     * @throws HotmokaException if errors occur
+     */
+    protected constructor(definingClass: string, methodName: string, formals: Array<string>) {
         super(definingClass, formals)
 
         if (!methodName) {
@@ -30,6 +34,10 @@ export abstract class MethodSignatureModel extends CodeSignatureModel {
             super.equals(other)
     }
 
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     public into(context: MarshallingContext): void {
         super.into(context)
         context.writeString(this.methodName)

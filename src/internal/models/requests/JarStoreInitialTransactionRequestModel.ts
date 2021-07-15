@@ -2,10 +2,8 @@ import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {InitialTransactionRequestModel} from "./InitialTransactionRequestModel";
 import {HotmokaException} from "../../exception/HotmokaException";
 
-
-
 /**
- * The model of an initial jar store transaction request.
+ * A request for a transaction that installs a jar.
  */
 export class JarStoreInitialTransactionRequestModel extends InitialTransactionRequestModel {
     /**
@@ -18,6 +16,12 @@ export class JarStoreInitialTransactionRequestModel extends InitialTransactionRe
      */
     dependencies: Array<TransactionReferenceModel>
 
+    /**
+     * Builds the transaction request.
+     * @param jar the bytes of the jar to install
+     * @param dependencies the dependencies of the jar, already installed in blockchain
+     * @throws HotmokaException if errors occur
+     */
     constructor(jar: string,
                 dependencies: Array<TransactionReferenceModel>) {
         super()
