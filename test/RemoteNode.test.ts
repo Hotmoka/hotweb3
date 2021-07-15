@@ -22,6 +22,9 @@ import {ConstructorCallTransactionSuccessfulResponseModel} from "../src";
 import {MethodCallTransactionSuccessfulResponseModel} from "../src";
 import {InfoModel} from "../src";
 import assert = require("assert");
+import {StateModel} from "../src";
+import {NoSuchElementException} from "../src";
+
 
 
 const getPrivateKey = (pathFile: string): string => {
@@ -53,6 +56,57 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         expect(result.transaction).to.be.not.null
         expect(result.transaction.hash).to.be.not.null
         expect(result.transaction.hash).to.be.have.length.above(10)
+    }).timeout(10000)
+
+    it('getState - it should respond with a valid state of the manifest', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const manifest: StorageReferenceModel = await remoteNode.getManifest()
+        const state: StateModel = await remoteNode.getState(manifest)
+
+        expect(state).to.be.not.null
+        expect(state.updates).to.be.not.empty
+    }).timeout(10000)
+
+    it('getState - it should throw a NoSuchElementException for a non existing object', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+
+        try {
+            await remoteNode.getState(new StorageReferenceModel(new TransactionReferenceModel("local", "66d7d1db2559b628a3e9904f589ed681ca8dbf770995558375e3349c21a516de"), "0"))
+            assert.fail("should throw a NoSuchElementException for a non existing object")
+        } catch (exception) {
+            if (exception instanceof NoSuchElementException) {
+                expect(exception.message).to.eql('unknown transaction reference 66d7d1db2559b628a3e9904f589ed681ca8dbf770995558375e3349c21a516de')
+            } else {
+                assert.fail("should throw a NoSuchElementException for a non existing object")
+            }
+        }
+
+    }).timeout(10000)
+
+    it('getClassTag - it should throw a HotmokaException for a non existing object', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const manifest = await remoteNode.getManifest()
+        const classTag = await remoteNode.getClassTag(manifest)
+
+        expect(classTag.className).to.eql('io.takamaka.code.governance.Manifest')
+        expect(classTag.jar).to.not.null
+        expect(classTag.jar.hash).to.be.not.null
+    }).timeout(10000)
+
+    it('getClassTag - it should throw a NoSuchElementException for a non existing object', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+
+        try {
+            await remoteNode.getClassTag(new StorageReferenceModel(new TransactionReferenceModel("local", "66d7d1db2559b628a3e9904f589ed681ca8dbf770995558375e3349c21a516de"), "0"))
+            assert.fail("should throw a HotmokaException for a non existing object")
+        } catch (exception) {
+            if (exception instanceof NoSuchElementException) {
+                expect(exception.message).to.eql('unknown transaction reference 66d7d1db2559b628a3e9904f589ed681ca8dbf770995558375e3349c21a516de')
+            } else {
+                assert.fail("should throw a NoSuchElementException for a non existing object")
+            }
+        }
+
     }).timeout(10000)
 
     it('getRequestAt - it should respond with a valid request for takamakaCode', async () => {
