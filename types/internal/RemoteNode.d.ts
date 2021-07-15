@@ -14,32 +14,42 @@ import { InstanceMethodCallTransactionRequestModel } from "./models/requests/Ins
 import { StorageValueModel } from "./models/values/StorageValueModel";
 import { StaticMethodCallTransactionRequestModel } from "./models/requests/StaticMethodCallTransactionRequestModel";
 import { SignatureAlgorithmResponseModel } from "./models/responses/SignatureAlgorithmResponseModel";
-import { Signature } from "./signature/Signature";
 import { InfoModel } from "./models/info/InfoModel";
+import { Signer } from "./signature/Signer";
 /**
  * Client to connect to a remote Hotmoka node
  * and to interact with the exposed API.
  */
 export declare class RemoteNode implements Node {
+    /**
+     * The url of the remote Hotmoka node.
+     */
     readonly url: string;
-    readonly signature?: Signature;
     /**
-     * It constructs the instance of the remote node.
+     * The optional signer to sign the transaction requests.
+     */
+    readonly signer?: Signer;
+    /**
+     * Builds the instance of the remote node.
      * @param url the url of the remote node
-     * @param signature the optional signature to sign the requests
+     * @param signer the optional signer to sign the transaction requests
      */
-    constructor(url: string, signature?: Signature);
+    constructor(url: string, signer?: Signer);
     /**
-     * It resolves the given error received from a HTTP call.
+     * It resolves the given error received from a HTTP call to a custom Hotmoka exception.
      * @param error the error
-     * @return the message error
+     * @return one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
-    private static resolveError;
+    private static resolveHotmokaExceptionFrom;
     /**
      * Performs a GET request and yields a Promise of entity T as response.
      * @param url the url
      * @return a Promise of entity T
-     * @throws HotmokaException if errors occur
+     * @throws one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
     private static get;
     /**
@@ -47,17 +57,19 @@ export declare class RemoteNode implements Node {
      * @param url the url
      * @param body the body of type P
      * @return a Promise of entity T
-     * @throws HotmokaException if errors occur
+     * @throws one of {@link HotmokaException},{@link NoSuchElementException},{@link TransactionRejectedException},
+     *          {@link TransactionException}, {@link TimeoutException},
+     *          {@link InterruptedException}, {@link CodeExecutionException} if exceptions are raised
      */
     private static post;
-    getClassTag(request: StorageReferenceModel): Promise<ClassTagModel>;
+    getClassTag(object: StorageReferenceModel): Promise<ClassTagModel>;
     getManifest(): Promise<StorageReferenceModel>;
-    getState(request: StorageReferenceModel): Promise<StateModel>;
+    getState(object: StorageReferenceModel): Promise<StateModel>;
     getTakamakaCode(): Promise<TransactionReferenceModel>;
     getNameOfSignatureAlgorithmForRequests(): Promise<SignatureAlgorithmResponseModel>;
-    getRequestAt(request: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>>;
-    getResponseAt(request: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>>;
-    getPolledResponseAt(request: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>>;
+    getRequestAt(reference: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>>;
+    getResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>>;
+    getPolledResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>>;
     addJarStoreInitialTransaction(request: JarStoreInitialTransactionRequestModel): Promise<TransactionReferenceModel>;
     addRedGreenGameteCreationTransaction(request: GameteCreationTransactionRequestModel): Promise<StorageReferenceModel>;
     addInitializationTransaction(request: InitializationTransactionRequestModel): Promise<void>;
@@ -74,17 +86,35 @@ export declare class RemoteNode implements Node {
     /**
      * Yields the info of this remote node.
      * @return the info of the node
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
      */
     info(): Promise<InfoModel>;
     /**
      * Yields the nonce of an account.
      * @param account the account
      * @return the nonce of the account
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
      */
     getNonceOf(account: StorageReferenceModel): Promise<string>;
     /**
      * Yields the gas price for a transaction.
      * @return the gas price
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
      */
     getGasPrice(): Promise<string>;
     private wait;

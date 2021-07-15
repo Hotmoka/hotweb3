@@ -1,5 +1,8 @@
 import { Marshallable } from "../marshalling/Marshallable";
 import { MarshallingContext } from "../marshalling/MarshallingContext";
+/**
+ * A class type that can be used for stored objects in blockchain.
+ */
 export declare class ClassType extends Marshallable {
     /**
      * The frequently used class type for {@link java.lang.Object}.
@@ -201,7 +204,15 @@ export declare class ClassType extends Marshallable {
      * The name of the class type.
      */
     readonly name: string;
+    /**
+     * Builds a class type that can be used for storage objects in blockchain.
+     * @param name the name of the class
+     */
     constructor(name: string);
     private equals;
+    /**
+     * Marshals this object into a stream.
+     * @param context the context holding the stream
+     */
     into(context: MarshallingContext): void;
 }

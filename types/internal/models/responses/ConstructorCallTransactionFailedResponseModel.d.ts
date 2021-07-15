@@ -1,5 +1,9 @@
 import { ConstructorCallTransactionResponseModel } from "./ConstructorCallTransactionResponseModel";
 import { UpdateModel } from "../updates/UpdateModel";
+/**
+ * A response for a failed transaction that should have called a constructor
+ * of a storage class in blockchain.
+ */
 export declare class ConstructorCallTransactionFailedResponseModel extends ConstructorCallTransactionResponseModel {
     /**
      * The amount of gas consumed by the transaction as penalty for the failure.

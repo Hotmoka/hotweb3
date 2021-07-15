@@ -1,5 +1,8 @@
 import { Marshallable } from "../marshalling/Marshallable";
 import { MarshallingContext } from "../marshalling/MarshallingContext";
+/**
+ * The basic types of the Takamaka language.
+ */
 export declare class BasicType extends Marshallable {
     static readonly BOOLEAN: BasicType;
     static readonly BYTE: BasicType;
@@ -13,6 +16,10 @@ export declare class BasicType extends Marshallable {
      * The name of this basic type.
      */
     readonly name: string;
+    /**
+     * Builds a basic type of the Takamaka language.
+     * @param type the type
+     */
     constructor(type: string);
     into(context: MarshallingContext): void;
     /**
@@ -23,7 +30,7 @@ export declare class BasicType extends Marshallable {
     /**
      * Checks whether a type is a {@link BasicType}
      * @param type the type to check
-     * @return true if the type is a BasicType, false otherwis
+     * @return true if the type is a BasicType, false otherwise
      */
     static isBasicType(type: string): boolean;
 }

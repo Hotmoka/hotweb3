@@ -21,6 +21,13 @@ export declare class StorageValueModel {
      * Used for enumeration values only: it is the name of the element in the enumeration.
      */
     enumElementName?: string;
+    /**
+     * Builds a storage value.
+     * @param value the value of primitive types, big integers, and strings
+     * @param reference the storage reference or the null reference
+     * @param type the type of the value. For storage references and null, this is "reference"
+     * @param enumElementName the name of the element in the enumeration
+     */
     constructor(value?: string, reference?: StorageReferenceModel, type?: string, enumElementName?: string);
     /**
      * Yields a storage value.

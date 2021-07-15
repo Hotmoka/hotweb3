@@ -1,13 +1,30 @@
 /// <reference types="node" />
-import { Signature } from "./Signature";
+import { Algorithm } from "./Algorithm";
+import { eddsa } from "elliptic";
+/**
+ * The signer of a transaction request.
+ */
 export declare class Signer {
-    static readonly INSTANCE: Signer;
-    private constructor();
     /**
-     * Signs the data.
-     * @param signature the signature with which to sign the data
+     * The algorithm of the signatures.
+     */
+    readonly algorithm: Algorithm;
+    /**
+     * The private key.
+     */
+    readonly privateKey: eddsa.KeyPair;
+    /**
+     * Builds a signer to sign the transaction requests.
+     * @param algorithm the algorithm
+     * @param privateKey the raw key encoded in base64 or wrapped in PEM format
+     * @throws HotmokaException if errors occur
+     */
+    constructor(algorithm: Algorithm, privateKey: string);
+    /**
+     * Signs the data for a transaction request.
      * @param data the data
      * @return the signed data as a base64 string
      */
-    sign(signature: Signature, data: Buffer): string;
+    sign(data: Buffer): string;
+    private static isPemFormat;
 }

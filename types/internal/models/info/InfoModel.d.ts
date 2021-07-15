@@ -3,6 +3,9 @@ import { StorageReferenceModel } from "../values/StorageReferenceModel";
 import { GameteInfo } from "./GameteInfo";
 import { GasStation } from "./GasStation";
 import { Validators } from "./Validators";
+/**
+ * The model holding the information of a remote Hotmoka node.
+ */
 export declare class InfoModel {
     takamakaCode?: TransactionReferenceModel;
     manifest?: StorageReferenceModel;

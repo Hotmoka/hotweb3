@@ -1,4 +1,7 @@
 import { StorageReferenceModel } from "../values/StorageReferenceModel";
+/**
+ * The model holding the information of the gas station.
+ */
 export declare class GasStation {
     gasStation?: StorageReferenceModel;
     gasPrice?: string;

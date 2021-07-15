@@ -5,7 +5,7 @@ import { MarshallingContext } from "./MarshallingContext";
  */
 export declare abstract class Marshallable {
     /**
-     * Marshalls this object into a buffer.
+     * Marshals this object into a buffer.
      * @return the buffer of bytes
      */
     protected marshall(): Buffer;

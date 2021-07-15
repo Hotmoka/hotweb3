@@ -1,3 +1,6 @@
+/**
+ * The names of some classes of the Takamaka library.
+ */
 export declare class Constants {
     /**
      * The name of the package prefix of all Takamaka implementation classes.
