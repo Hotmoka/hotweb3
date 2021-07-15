@@ -89,8 +89,6 @@ export class RemoteNode implements Node {
         }
     }
 
-
-
     /**
      * Performs a GET request and yields a Promise of entity T as response.
      * @param url the url

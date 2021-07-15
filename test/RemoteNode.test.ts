@@ -25,8 +25,6 @@ import assert = require("assert");
 import {StateModel} from "../src";
 import {NoSuchElementException} from "../src";
 
-
-
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
