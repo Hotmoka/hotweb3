@@ -1,7 +1,6 @@
-import {RemoteNode, Signature} from "../src"
+import {RemoteNode, Signer} from "../src"
 import {expect} from 'chai';
 import {TransactionReferenceModel} from "../src";
-import {StateModel} from "../src";
 import {StorageReferenceModel} from "../src";
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
 import {TransactionRestResponseModel} from "../src";
@@ -24,14 +23,15 @@ import {MethodCallTransactionSuccessfulResponseModel} from "../src";
 import {InfoModel} from "../src";
 import assert = require("assert");
 
+
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
 
-const CHAIN_ID = "chain-btmZzq"
+const chainId = "chain-btmZzq"
 const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
 const basicJarClasspath = new TransactionReferenceModel("local", "35ec7fdea4fdf8a25ab562256d3f1b8cf489d411148633658631179ed23c81a5")
-const SIGNATURE = new Signature(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
+const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
 const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "60d7d1db2559b628a3e9904f589ed681ca8dbf770995558375e3349c21a516de"), "0")
 const gasLimit = "500000"
 
@@ -53,20 +53,6 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         expect(result.transaction).to.be.not.null
         expect(result.transaction.hash).to.be.not.null
         expect(result.transaction.hash).to.be.have.length.above(10)
-    }).timeout(10000)
-
-    it('getState - it should respond with a valid state model of the manifest', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-
-        const manifest: StorageReferenceModel = await remoteNode.getManifest()
-        const result: StateModel = await remoteNode.getState(manifest)
-
-        expect(result.updates).to.be.not.null
-        expect(result.updates.length).to.be.above(1)
-
-        const manifestUpdate = result.updates.filter(update => update.className === 'io.takamaka.code.governance.Manifest')
-        expect(manifestUpdate).to.not.be.empty
-        expect(manifestUpdate[0].object.transaction.hash).to.eql(manifest.transaction.hash)
     }).timeout(10000)
 
     it('getRequestAt - it should respond with a valid request for takamakaCode', async () => {
@@ -117,7 +103,7 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         expect(result).to.be.not.null
         expect(result.algorithm).to.be.not.null
         expect(result.algorithm).to.be.not.empty
-        expect(result.algorithm).to.be.eql(Algorithm[SIGNATURE.algorithm].toLocaleLowerCase())
+        expect(result.algorithm).to.be.eql(Algorithm[signer.algorithm].toLocaleLowerCase())
     }).timeout(10000)
 })
 
@@ -162,7 +148,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
    let simpleStorageReference: StorageReferenceModel
 
     it('addConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -171,7 +157,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -180,7 +166,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
                 [BasicType.INT.name]
             ),
             [StorageValueModel.newStorageValue("13", BasicType.INT.name)],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         simpleStorageReference = await remoteNode.addConstructorCallTransaction(requestConstructorCall)
@@ -191,7 +177,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
 
 
     it('runInstanceMethodCallTransaction - it should invoke simple.foo3() == 13', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -200,19 +186,19 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new InstanceMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
             new NonVoidMethodSignatureModel(
-                "foo3",
                 "io.hotmoka.examples.basic.Simple",
-                [],
-                BasicType.INT.name
+                "foo3",
+                BasicType.INT.name,
+                []
             ),
             simpleStorageReference,
             [],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         const result = await remoteNode.runInstanceMethodCallTransaction(requestInstanceMethodCall)
@@ -223,7 +209,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
 
 
     it('addStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -232,18 +218,18 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
             new NonVoidMethodSignatureModel(
-                "foo5",
                 "io.hotmoka.examples.basic.Simple",
-                [],
-                BasicType.INT.name
+                "foo5",
+                BasicType.INT.name,
+                []
             ),
             [],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         const result = await remoteNode.addStaticMethodCallTransaction(requestInstanceMethodCall)
@@ -253,7 +239,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
     }).timeout(10000)
 
     it('runStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -262,18 +248,18 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
             new NonVoidMethodSignatureModel(
-                "foo5",
                 "io.hotmoka.examples.basic.Simple",
-                [],
-                BasicType.INT.name
+                "foo5",
+                BasicType.INT.name,
+                []
             ),
             [],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         const result = await remoteNode.runStaticMethodCallTransaction(requestInstanceMethodCall)
@@ -289,7 +275,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
 describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -298,7 +284,7 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -307,7 +293,7 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
                 [BasicType.INT.name]
             ),
             [StorageValueModel.newStorageValue("13", BasicType.INT.name)],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         const promiseResult = await remoteNode.postConstructorCallTransaction(requestConstructorCall)
@@ -323,7 +309,7 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
 
 
     it('postStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -332,18 +318,18 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            CHAIN_ID,
+            chainId,
             gasLimit,
             gasPrice,
             basicJarClasspath,
             new NonVoidMethodSignatureModel(
-                "foo5",
                 "io.hotmoka.examples.basic.Simple",
-                [],
-                BasicType.INT.name
+                "foo5",
+                BasicType.INT.name,
+                []
             ),
             [],
-            remoteNode.signature
+            remoteNode.signer
         )
 
         const promiseResult = await remoteNode.postStaticMethodCallTransaction(requestInstanceMethodCall)
@@ -388,7 +374,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
         }
 
         expect(info.takamakaCode.hash).to.be.eql('bbdc415227b228422093d6248cc590d3ea7c2d74bddb65664cb59a393953fa0e')
-        expect(info.chainId).to.be.eql(CHAIN_ID)
+        expect(info.chainId).to.be.eql(chainId)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
         expect(info.maxDependencies).to.be.eql(20)
@@ -441,11 +427,11 @@ describe('Testing the Info of a remote hotmoka node', () => {
 })
 
 const getGamete = async (manifest: StorageReferenceModel, takamakaCode: TransactionReferenceModel): Promise<StorageValueModel> => {
-    const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNATURE)
+    const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
     return remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
         manifest,
         "0",
-        CHAIN_ID,
+        chainId,
         "100000",
         "0",
         takamakaCode,

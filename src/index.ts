@@ -9,7 +9,7 @@ export {Validators} from "./internal/models/info/Validators"
 export {Validator} from "./internal/models/info/Validator"
 
 // signer
-export {Signature} from "./internal/signature/Signature";
+export {Signer} from "./internal/signature/Signer";
 export {Algorithm} from "./internal/signature/Algorithm";
 
 // exception

@@ -184,7 +184,7 @@ describe('Testing the marshalling of the JS objects', () => {
 
 
     it('classType - writeFieldSignature(fieldSignature") = rO0ABXcM/xQAB2JhbGFuY2Ua', async () => {
-        const fieldSignature = new FieldSignatureModel("balance", ClassType.BIG_INTEGER.name, ClassType.CONTRACT.name)
+        const fieldSignature = new FieldSignatureModel(ClassType.CONTRACT.name, "balance", ClassType.BIG_INTEGER.name)
         const marshallingContext = new MarshallingContext()
         marshallingContext.writeFieldSignature(fieldSignature)
         marshallingContext.flush()
@@ -217,7 +217,7 @@ describe('Testing the marshalling of the JS objects', () => {
     })
 
     it('basicType - writeFieldSignature(fieldSignature") = rO0ABXcJ/yYABHNpemUE', async () => {
-        const fieldSignature = new FieldSignatureModel("size", BasicType.INT.name, ClassType.STORAGE_TREE_INTMAP_NODE.name)
+        const fieldSignature = new FieldSignatureModel(ClassType.STORAGE_TREE_INTMAP_NODE.name, "size", BasicType.INT.name)
         const marshallingContext = new MarshallingContext()
         marshallingContext.writeFieldSignature(fieldSignature)
         marshallingContext.flush()
@@ -360,14 +360,20 @@ describe('Testing the marshalling of the JS objects', () => {
         expect(result).to.be.eq('rO0ABXcEABMBGg==')
     })
 
+    const RECEIVE_INT = new VoidMethodSignatureModel(
+        ClassType.PAYABLE_CONTRACT.name,
+        "receive",
+        [BasicType.INT.name]
+    )
+
     it('new StaticMethodCallTransactionRequestModel(..) NonVoidMethod gas station = rO0ABXdIBgAJY2hhaW50ZXN0///Q5JZGjCX8pZF5iF+nxf9PRA770ODJbCQmt5lzNmGYggQAE4gAD6AABQELAAEoARcAB2JhbGFuY2Ua', async () => {
         const marshallingContext = new MarshallingContext()
 
         const nonVoidMethodSignature = new NonVoidMethodSignatureModel(
-            "balance",
             ClassType.GAS_STATION.name,
-            [ClassType.STORAGE.name],
-            ClassType.BIG_INTEGER.name
+            "balance",
+            ClassType.BIG_INTEGER.name,
+            [ClassType.STORAGE.name]
         )
 
         const staticMethodCall = new StaticMethodCallTransactionRequestModel(
@@ -393,15 +399,9 @@ describe('Testing the marshalling of the JS objects', () => {
         const result = marshallingContext.toBase64()
         expect(result).to.be.eq('rO0ABXdIBgAJY2hhaW50ZXN0///Q5JZGjCX8pZF5iF+nxf9PRA770ODJbCQmt5lzNmGYggQAE4gAD6AABQELAAEoARcAB2JhbGFuY2Ua')
     })
-
     it('new StaticMethodCallTransactionRequestModel(..) VoidMethod = rO0ABXdKBgAJY2hhaW50ZXN0///Q5JZGjCX8pZF5iF+nxf9PRA770ODJbCQmt5lzNmGYggQAE4gAD6AABQEOAAABLAIbAQQAB3JlY2VpdmU=', async () => {
-        const marshallingContext = new MarshallingContext()
 
-        const RECEIVE_INT = new VoidMethodSignatureModel(
-            "receive",
-            ClassType.PAYABLE_CONTRACT.name,
-            [BasicType.INT.name]
-        )
+        const marshallingContext = new MarshallingContext()
 
         const staticMethodCall = new StaticMethodCallTransactionRequestModel(
             new StorageReferenceModel(new TransactionReferenceModel(
@@ -452,8 +452,8 @@ describe('Testing the marshalling of the JS objects', () => {
         const marshallingContext = new MarshallingContext()
 
         const RECEIVE_INT = new VoidMethodSignatureModel(
-            "receive",
             ClassType.PAYABLE_CONTRACT.name,
+            "receive",
             [BasicType.INT.name]
         )
 
@@ -520,12 +520,12 @@ describe('Testing the marshalling of the JS objects', () => {
                 ), "0"
             ),
             "1",
-            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
+            "chaintest",
             "5000",
             "4000",
+            new TransactionReferenceModel("local", "d0e496468c25fca59179885fa7c5ff4f440efbd0e0c96c2426b7997336619882"),
             getLocalJar('lambdas.jar').toString('base64'),
             [],
-            "chaintest"
         )
 
         jarStoreTransaction.into(marshallingContext)
