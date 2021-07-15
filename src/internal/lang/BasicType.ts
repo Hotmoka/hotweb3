@@ -1,7 +1,7 @@
 import {Marshallable} from "../marshalling/Marshallable";
 import {MarshallingContext} from "../marshalling/MarshallingContext";
 import {Selectors} from "../marshalling/Selectors";
-import {HotmokaException} from "../exception/HotmokaException";
+import {HotmokaException} from "../exceptions/HotmokaException";
 
 /**
  * The basic types of the Takamaka language.

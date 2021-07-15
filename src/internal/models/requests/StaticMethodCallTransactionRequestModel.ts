@@ -6,7 +6,7 @@ import {StorageValueModel} from "../values/StorageValueModel";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
 import {Signer} from "../../signature/Signer";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A request for calling a static method of a storage class in a node.

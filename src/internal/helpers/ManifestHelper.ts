@@ -4,7 +4,7 @@ import {InstanceMethodCallTransactionRequestModel} from "../models/requests/Inst
 import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
 import {CodeSignature} from "../lang/CodeSignature";
-import {HotmokaException} from "../exception/HotmokaException";
+import {HotmokaException} from "../exceptions/HotmokaException";
 import {MethodSignatureModel} from "../models/signatures/MethodSignatureModel";
 import {GameteInfo} from "../models/info/GameteInfo";
 import {GasStation} from "../models/info/GasStation";

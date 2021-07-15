@@ -13,7 +13,7 @@ export {Signer} from "./internal/signature/Signer";
 export {Algorithm} from "./internal/signature/Algorithm";
 
 // exception
-export {HotmokaException} from "./internal/exception/HotmokaException"
+export {HotmokaException} from "./internal/exceptions/HotmokaException"
 
 // requests
 export {InstanceMethodCallTransactionRequestModel} from "./internal/models/requests/InstanceMethodCallTransactionRequestModel"

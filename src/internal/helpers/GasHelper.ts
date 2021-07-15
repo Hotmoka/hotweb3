@@ -2,7 +2,7 @@ import {RemoteNode} from "../RemoteNode";
 import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
 import {CodeSignature} from "../lang/CodeSignature";
 import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
-import {HotmokaException} from "../exception/HotmokaException";
+import {HotmokaException} from "../exceptions/HotmokaException";
 import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
 import {StorageValueModel} from "../models/values/StorageValueModel";
 

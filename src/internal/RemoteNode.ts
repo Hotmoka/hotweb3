@@ -19,7 +19,7 @@ import {InfoModel} from "./models/info/InfoModel";
 import {ManifestHelper} from "./helpers/ManifestHelper";
 import {NonceHelper} from "./helpers/NonceHelper";
 import {GasHelper} from "./helpers/GasHelper";
-import {HotmokaException} from "./exception/HotmokaException";
+import {HotmokaException} from "./exceptions/HotmokaException";
 import {Signer} from "./signature/Signer";
 
 /**

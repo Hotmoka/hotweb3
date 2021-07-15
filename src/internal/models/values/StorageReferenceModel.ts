@@ -1,7 +1,7 @@
 import {TransactionReferenceModel} from "./TransactionReferenceModel";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A reference to an object of class type that can be stored in the blockchain.

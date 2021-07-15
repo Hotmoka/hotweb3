@@ -3,7 +3,7 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {BasicType} from "../../lang/BasicType";
 import {ClassType} from "../../lang/ClassType";
 import {Selectors} from "../../marshalling/Selectors";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A value that can be stored in the blockchain, passed as argument to an entry

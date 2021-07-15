@@ -1,5 +1,5 @@
 import {Buffer} from "buffer";
-import {HotmokaException} from "../exception/HotmokaException";
+import {HotmokaException} from "../exceptions/HotmokaException";
 
 /**
  * A stream used to generate the bytes of the JS objects.

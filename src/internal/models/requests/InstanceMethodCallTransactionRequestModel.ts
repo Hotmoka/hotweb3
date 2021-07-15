@@ -7,7 +7,7 @@ import {CodeSignature} from "../../lang/CodeSignature";
 import {Selectors} from "../../marshalling/Selectors";
 import {AbstractInstanceMethodCallTransactionRequestModel} from "./AbstractInstanceMethodCallTransactionRequestModel";
 import {Signer} from "../../signature/Signer";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A request for calling an instance method of a storage object in a node.

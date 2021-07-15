@@ -2,7 +2,7 @@ import {SignatureModel} from "./SignatureModel";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {ClassType} from "../../lang/ClassType";
 import {BasicType} from "../../lang/BasicType";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * The signature of a field of a class.

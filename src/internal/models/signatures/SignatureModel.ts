@@ -4,7 +4,7 @@
 import {Marshallable} from "../../marshalling/Marshallable";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {ClassType} from "../../lang/ClassType";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 export abstract class SignatureModel extends Marshallable {
     /**

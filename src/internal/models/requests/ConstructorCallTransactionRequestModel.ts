@@ -6,7 +6,7 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {CodeExecutionTransactionRequestModel} from "./CodeExecutionTransactionRequestModel";
 import {Selectors} from "../../marshalling/Selectors";
 import {Signer} from "../../signature/Signer";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A request for calling a constructor of a storage class in a node.

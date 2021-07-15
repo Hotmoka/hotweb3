@@ -2,7 +2,7 @@ import {SignatureModel} from "./SignatureModel";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {BasicType} from "../../lang/BasicType";
 import {ClassType} from "../../lang/ClassType";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 
 /**

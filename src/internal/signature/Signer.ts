@@ -1,6 +1,6 @@
 import {Buffer} from "buffer";
 import {Algorithm} from "./Algorithm";
-import {HotmokaException} from "../exception/HotmokaException";
+import {HotmokaException} from "../exceptions/HotmokaException";
 import {eddsa} from "elliptic";
 
 /**

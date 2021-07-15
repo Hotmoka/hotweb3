@@ -1,5 +1,5 @@
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A transaction reference that refers to a transaction in the local store of a node.

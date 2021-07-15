@@ -1,6 +1,6 @@
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {InitialTransactionRequestModel} from "./InitialTransactionRequestModel";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * A request for creating an initial gamete. It is an account of class

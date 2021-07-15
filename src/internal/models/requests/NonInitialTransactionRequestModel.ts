@@ -2,7 +2,7 @@ import {StorageReferenceModel} from "../values/StorageReferenceModel";
 import {TransactionReferenceModel} from "../values/TransactionReferenceModel";
 import {TransactionRequestModel} from "./TransactionRequestModel";
 import {MarshallingContext} from "../../marshalling/MarshallingContext";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 export abstract class NonInitialTransactionRequestModel extends TransactionRequestModel {
     caller: StorageReferenceModel

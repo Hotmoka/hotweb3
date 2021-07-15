@@ -3,7 +3,7 @@ import {MarshallingContext} from "../../marshalling/MarshallingContext";
 import {Selectors} from "../../marshalling/Selectors";
 import {BasicType} from "../../lang/BasicType";
 import {ClassType} from "../../lang/ClassType";
-import {HotmokaException} from "../../exception/HotmokaException";
+import {HotmokaException} from "../../exceptions/HotmokaException";
 
 /**
  * The signature of a method of a class, that returns a value.
