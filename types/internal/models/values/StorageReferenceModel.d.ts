@@ -12,7 +12,7 @@ export declare class StorageReferenceModel {
     transaction: TransactionReferenceModel;
     /**
      * The progressive number of the object among those that have been created
-     * during the same transaction.
+     * during the same transaction. It must a value obtained from a radix of 16 (e.g. parseInt('10', 16))
      */
     progressive: string;
     /**
@@ -22,6 +22,12 @@ export declare class StorageReferenceModel {
      *                    during the same transaction
      */
     constructor(transaction: TransactionReferenceModel, progressive: string);
+    /**
+     * Yields a new {@link StorageReferenceModel} for a blockchain object.
+     * @param hash the hash of the object
+     * @param progressive the progressive of the object. It defaults to '0'
+     */
+    static newStorageReference(hash: string, progressive?: string): StorageReferenceModel;
     static into(context: MarshallingContext, storageReferenceModel: StorageReferenceModel): void;
     static intoWithoutSelector(context: MarshallingContext, storageReferenceModel: StorageReferenceModel): void;
 }

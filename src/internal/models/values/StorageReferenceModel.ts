@@ -43,9 +43,9 @@ export class StorageReferenceModel {
     /**
      * Yields a new {@link StorageReferenceModel} for a blockchain object.
      * @param hash the hash of the object
-     * @param progressive the progressive of the object
+     * @param progressive the progressive of the object. It defaults to '0'
      */
-    public static newStorageReference(hash: string, progressive: string = '0'): StorageReferenceModel {
+    public static newStorageReference(hash: string, progressive = '0'): StorageReferenceModel {
         return new StorageReferenceModel(new TransactionReferenceModel('local', hash), parseInt(progressive, 16).toString())
     }
 
