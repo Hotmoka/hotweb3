@@ -26,6 +26,50 @@ export class ManifestHelper {
     }
 
     /**
+     * Yields the chainId of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    async getChainId(): Promise<string> {
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const manifest = await this.remoteNode.getManifest()
+        const chainId = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_CHAIN_ID, manifest))
+
+        if (chainId && chainId.value) {
+            return chainId.value
+        } else {
+            throw new HotmokaException("Unable to retrieve the chainId")
+        }
+    }
+
+    /**
+     * Yields the gamete of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    async getGamete(): Promise<StorageReferenceModel> {
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const manifest = await this.remoteNode.getManifest()
+        const gamete = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_GAMETE, manifest))
+
+        if (gamete && gamete.reference) {
+            return gamete.reference
+        } else {
+            throw new HotmokaException("Unable to retrieve the gamete")
+        }
+    }
+
+    /**
      * Yields the info of a remote node.
      * @return the info of the node
      * @throws TransactionRejectedException if the transaction could not be executed

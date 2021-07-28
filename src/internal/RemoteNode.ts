@@ -266,6 +266,34 @@ export class RemoteNode implements Node {
         return gasPrice.value ?? '1'
     }
 
+    /**
+     * Yields the gamete of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    async getGamete(): Promise<StorageReferenceModel> {
+        return await new ManifestHelper(this).getGamete()
+    }
+
+    /**
+     * Yields the chainId of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    async getChainId(): Promise<string> {
+        return await new ManifestHelper(this).getChainId()
+    }
+
     private wait(milliseconds: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
