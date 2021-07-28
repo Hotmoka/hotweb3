@@ -8,6 +8,9 @@ export {GasStation} from "./internal/models/info/GasStation"
 export {Validators} from "./internal/models/info/Validators"
 export {Validator} from "./internal/models/info/Validator"
 
+// helpers
+export {AccountCreationHelper} from './internal/helpers/AccountCreationHelper'
+
 // signer
 export {Signer} from "./internal/signature/Signer";
 export {Algorithm} from "./internal/signature/Algorithm";
