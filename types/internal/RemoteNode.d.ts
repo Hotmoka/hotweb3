@@ -117,5 +117,27 @@ export declare class RemoteNode implements Node {
      * @throws HotmokaException if generic errors occur
      */
     getGasPrice(): Promise<string>;
+    /**
+     * Yields the gamete of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    getGamete(): Promise<StorageReferenceModel>;
+    /**
+     * Yields the chainId of the remote node.
+     * @return the storage reference of the gamete
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    getChainId(): Promise<string>;
     private wait;
 }
