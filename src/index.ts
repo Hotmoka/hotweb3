@@ -9,7 +9,7 @@ export {Validators} from "./internal/models/info/Validators"
 export {Validator} from "./internal/models/info/Validator"
 
 // helpers
-export {AccountCreationHelper} from './internal/helpers/AccountCreationHelper'
+export {AccountHelper} from './internal/helpers/AccountHelper'
 
 // signer
 export {Signer} from "./internal/signature/Signer";

@@ -13,7 +13,7 @@ import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSig
 import {StorageValueModel} from "../models/values/StorageValueModel";
 
 
-export class AccountCreationHelper {
+export class AccountHelper {
     private readonly remoteNode: RemoteNode
     private readonly manifestHelper: ManifestHelper
     private readonly nonceHelper: NonceHelper
@@ -77,8 +77,22 @@ export class AccountCreationHelper {
     }
 
     /**
+     * Checks whether the provided public key is equal to the public key
+     * generated from the given entropy and password.
+     * @param entropy the entropy encoded in hex
+     * @param password the password
+     * @param publicKey the public key to verify encoded in base64
+     * @return true if the provided public is equal to the public key generated from the given entropy and password,
+     *              false otherwise
+     */
+    public checkPublicKey(entropy: string, password: string, publicKey: string): boolean {
+        const internalPublicKey = this.generatePublicKey(entropy, password)
+        return internalPublicKey === publicKey
+    }
+
+    /**
      * It generates a 32 bytes entropy.
-     * @return the entropy encoded as hex
+     * @return the entropy encoded in hex
      */
     public generateEntropy(): string {
        return randomBytes(32).toString('hex')
@@ -91,7 +105,7 @@ export class AccountCreationHelper {
      * @return the public key encoded in base64
      */
     public generatePublicKey(entropy: string, password: string): string {
-        const keyPair = AccountCreationHelper.generateEd25519KeyPair(Buffer.from(entropy, 'hex'), Buffer.from(password))
+        const keyPair = AccountHelper.generateEd25519KeyPair(Buffer.from(entropy, 'hex'), Buffer.from(password))
         return Buffer.from(keyPair.getPublic()).toString('base64')
     }
 
