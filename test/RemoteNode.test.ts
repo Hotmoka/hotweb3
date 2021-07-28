@@ -1,5 +1,5 @@
 import {
-    AccountCreationHelper,
+    AccountHelper,
     Algorithm,
     BasicType,
     CodeSignature,
@@ -482,18 +482,46 @@ describe('Testing the Info of a remote hotmoka node', () => {
 })
 
 describe('Testing creation of a hotmoka account', () => {
+    let entropy = ''
+    let publicKey = ''
+    const password = "pippo"
 
     it('it should create a hotmoka account from faucet', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-        const accountHelper = new AccountCreationHelper(remoteNode)
-        const entropy = accountHelper.generateEntropy()
-        const publicKey = accountHelper.generatePublicKey(entropy, "pippo")
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        entropy = accountHelper.generateEntropy()
+        publicKey = accountHelper.generatePublicKey(entropy, password)
 
         const account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, publicKey, "10000000", "0")
         expect(account).to.be.not.undefined
-        expect(account.reference).to.be.not.undefined
+
+        if (!account.reference) {
+            assert.fail('account reference should be defined')
+        }
+        expect(account.reference.transaction).to.be.not.undefined
+        expect(account.reference.transaction.hash).to.be.not.undefined
+        expect(account.reference.transaction.type).to.be.eq('local')
         console.log(account)
     }).timeout(40000)
+
+    it('it should recreate the public key from the given entropy and password', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+
+        if (!accountHelper.checkPublicKey(entropy, password, publicKey)) {
+            assert.fail('the newly generated public key does not match the old public key')
+        }
+    })
+
+    it('it should fail recreating the public key from the given entropy and password', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+
+        if (accountHelper.checkPublicKey(entropy, "pippoooo", publicKey)) {
+            assert.fail('the newly generated public key should not match the old public key with the wrong password')
+        }
+
+        if (accountHelper.checkPublicKey(accountHelper.generateEntropy(), "pippo", publicKey)) {
+            assert.fail('the newly generated public key should not match the old public key with a different entropy')
+        }
+    })
 })
 
 
