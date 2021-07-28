@@ -1,29 +1,34 @@
-import {RemoteNode, Signer} from "../src"
+import {
+    AccountCreationHelper,
+    Algorithm,
+    BasicType,
+    CodeSignature,
+    ConstructorCallTransactionRequestModel,
+    ConstructorCallTransactionSuccessfulResponseModel,
+    ConstructorSignatureModel,
+    InfoModel,
+    InstanceMethodCallTransactionRequestModel,
+    JarStoreInitialTransactionResponseModel,
+    JarStoreTransactionRequestModel,
+    MethodCallTransactionSuccessfulResponseModel,
+    NonVoidMethodSignatureModel,
+    NoSuchElementException,
+    RemoteNode,
+    SignatureAlgorithmResponseModel,
+    Signer,
+    StateModel,
+    StaticMethodCallTransactionRequestModel,
+    StorageReferenceModel,
+    StorageValueModel,
+    TransactionReferenceModel,
+    TransactionRestResponseModel
+} from "../src"
 import {expect} from 'chai';
-import {TransactionReferenceModel} from "../src";
-import {StorageReferenceModel} from "../src";
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
-import {TransactionRestResponseModel} from "../src";
 import * as fs from "fs";
 import * as path from "path"
-import {JarStoreTransactionRequestModel} from "../src";
-import {InstanceMethodCallTransactionRequestModel} from "../src";
-import {SignatureAlgorithmResponseModel} from "../src";
-import {ConstructorCallTransactionRequestModel} from "../src";
-import {ConstructorSignatureModel} from "../src";
-import {StorageValueModel} from "../src";
-import {JarStoreInitialTransactionResponseModel} from "../src";
-import {NonVoidMethodSignatureModel} from "../src";
-import {CodeSignature} from "../src";
-import {BasicType} from "../src";
-import {Algorithm} from "../src";
-import {StaticMethodCallTransactionRequestModel} from "../src";
-import {ConstructorCallTransactionSuccessfulResponseModel} from "../src";
-import {MethodCallTransactionSuccessfulResponseModel} from "../src";
-import {InfoModel} from "../src";
 import assert = require("assert");
-import {StateModel} from "../src";
-import {NoSuchElementException} from "../src";
+
 
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
@@ -474,9 +479,23 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(Number(validator.power)).to.be.gte(1)
 
     }).timeout(40000)
-
-
 })
+
+describe('Testing creation of a hotmoka account', () => {
+
+    it('it should create a hotmoka account from faucet', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const accountHelper = new AccountCreationHelper(remoteNode)
+        const entropy = accountHelper.generateEntropy()
+        const publicKey = accountHelper.generatePublicKey(entropy, "pippo")
+
+        const account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, publicKey, "10000000", "0")
+        expect(account).to.be.not.undefined
+        expect(account.reference).to.be.not.undefined
+        console.log(account)
+    }).timeout(40000)
+})
+
 
 const getGamete = async (manifest: StorageReferenceModel, takamakaCode: TransactionReferenceModel): Promise<StorageValueModel> => {
     const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
