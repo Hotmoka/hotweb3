@@ -77,51 +77,45 @@ export class AccountHelper {
     }
 
     /**
-     * Checks whether the provided public key is equal to the public key
+     * Checks if the provided public and private key are equal to the public and private key
      * generated from the given entropy and password.
      * @param entropy the entropy encoded in hex
      * @param password the password
-     * @param publicKey the public key to verify encoded in base64
-     * @return true if the provided public is equal to the public key generated from the given entropy and password,
+     * @param publicKeyToCheck the public key to check encoded in base64
+     * @param privateKeyToCheck the private key to check encoded in base64
+     * @return true if the provided public and private key are equal to the public and private key generated from the given entropy and password,
      *              false otherwise
      */
-    public checkPublicKey(entropy: string, password: string, publicKey: string): boolean {
-        const internalPublicKey = this.generatePublicKey(entropy, password)
-        return internalPublicKey === publicKey
+    public static checkPassword(entropy: string, password: string, publicKeyToCheck: string, privateKeyToCheck: string): boolean {
+        const {publicKey, privateKey} = AccountHelper.generateEd25519KeyPair(entropy, password)
+        return publicKeyToCheck === publicKey && privateKeyToCheck === privateKey
     }
 
     /**
      * It generates a 32 bytes entropy.
      * @return the entropy encoded in hex
      */
-    public generateEntropy(): string {
+    public static generateEntropy(): string {
        return randomBytes(32).toString('hex')
     }
 
     /**
-     * It generates the public key of the account from the given entropy and password.
-     * @param entropy the entropy
-     * @param password the password
-     * @return the public key encoded in base64
-     */
-    public generatePublicKey(entropy: string, password: string): string {
-        const keyPair = AccountHelper.generateEd25519KeyPair(Buffer.from(entropy, 'hex'), Buffer.from(password))
-        return Buffer.from(keyPair.getPublic()).toString('base64')
-    }
-
-    /**
      * Creates a key pair from the given entropy and password.
-     * @param entropy random bytes
-     * @param password data that gets hashed into the entropy to get the private key data
-     * @return the key pair derived from entropy and password
+     * @param entropy random bytes encoded in hex
+     * @param password the password
+     * @return {{publicKey, privateKey}} the key pair in base64 derived from entropy and password
      */
-    private static generateEd25519KeyPair(entropy: Buffer, password: Buffer): eddsa.KeyPair {
+    public static generateEd25519KeyPair(entropy: string, password: string): { privateKey: string; publicKey: string } {
         const ec = new eddsa('ed25519')
-        const entropyWithPwd = Buffer.concat([entropy, password])
+        const entropyWithPwd = Buffer.concat([Buffer.from(entropy, 'hex'), Buffer.from(password)])
         const hash = createHash('sha256')
         hash.update(entropyWithPwd)
         const random = hash.digest('hex')
 
-        return ec.keyFromSecret(Buffer.from(random, 'hex'))
+        const keyPair = ec.keyFromSecret(Buffer.from(random, 'hex'))
+        return {
+            publicKey: Buffer.from(keyPair.getPublic()).toString('base64'),
+            privateKey: Buffer.from(keyPair.getSecret()).toString('base64')
+        }
     }
 }

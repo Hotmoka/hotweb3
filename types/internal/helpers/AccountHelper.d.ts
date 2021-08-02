@@ -26,32 +26,29 @@ export declare class AccountHelper {
      */
     createAccountFromFaucet(algorithm: Algorithm, publicKey: string, balance: string, balanceRed: string): Promise<StorageValueModel>;
     /**
-     * Checks whether the provided public key is equal to the public key
+     * Checks if the provided public and private key are equal to the public and private key
      * generated from the given entropy and password.
      * @param entropy the entropy encoded in hex
      * @param password the password
-     * @param publicKey the public key to verify encoded in base64
-     * @return true if the provided public is equal to the public key generated from the given entropy and password,
+     * @param publicKeyToCheck the public key to check encoded in base64
+     * @param privateKeyToCheck the private key to check encoded in base64
+     * @return true if the provided public and private key are equal to the public and private key generated from the given entropy and password,
      *              false otherwise
      */
-    checkPublicKey(entropy: string, password: string, publicKey: string): boolean;
+    static checkPassword(entropy: string, password: string, publicKeyToCheck: string, privateKeyToCheck: string): boolean;
     /**
      * It generates a 32 bytes entropy.
      * @return the entropy encoded in hex
      */
-    generateEntropy(): string;
-    /**
-     * It generates the public key of the account from the given entropy and password.
-     * @param entropy the entropy
-     * @param password the password
-     * @return the public key encoded in base64
-     */
-    generatePublicKey(entropy: string, password: string): string;
+    static generateEntropy(): string;
     /**
      * Creates a key pair from the given entropy and password.
-     * @param entropy random bytes
-     * @param password data that gets hashed into the entropy to get the private key data
-     * @return the key pair derived from entropy and password
+     * @param entropy random bytes encoded in hex
+     * @param password the password
+     * @return {{publicKey, privateKey}} the key pair in base64 derived from entropy and password
      */
-    private static generateEd25519KeyPair;
+    static generateEd25519KeyPair(entropy: string, password: string): {
+        privateKey: string;
+        publicKey: string;
+    };
 }
