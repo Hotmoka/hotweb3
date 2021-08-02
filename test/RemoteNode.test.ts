@@ -2,7 +2,6 @@ import {
     AccountHelper,
     Algorithm,
     BasicType,
-    CodeSignature,
     ConstructorCallTransactionRequestModel,
     ConstructorCallTransactionSuccessfulResponseModel,
     ConstructorSignatureModel,
@@ -176,26 +175,16 @@ describe('Testing the RUN methods of a remote hotmoka node', () => {
 
     it('runInstanceMethodCallTransaction - getGamete', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-        const manifest = await remoteNode.getManifest()
-        const takamakaCode = await remoteNode.getTakamakaCode()
-        const gamete = await getGamete(manifest, takamakaCode)
+        const gamete = await remoteNode.getGamete()
 
         expect(gamete).to.be.not.null
-        expect(gamete.reference).to.be.not.null
-        expect(gamete.reference?.transaction).to.be.not.null
-        expect(gamete.reference?.transaction.hash).to.be.not.null
+        expect(gamete.transaction.hash).to.be.not.null
     }).timeout(10000)
 
     it('runInstanceMethodCallTransaction - getNonceOf gamete', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-        const takamakaCode = await remoteNode.getTakamakaCode()
-        const manifest = await remoteNode.getManifest()
-        const gamete = await getGamete(manifest, takamakaCode)
-
-        if (!gamete.reference) {
-            assert.fail('missing gamete')
-        }
-        const nonceOfGamete = await remoteNode.getNonceOf(gamete.reference)
+        const gamete = await remoteNode.getGamete()
+        const nonceOfGamete = await remoteNode.getNonceOf(gamete)
 
         expect(Number(nonceOfGamete)).to.be.gt(1)
     }).timeout(10000)
@@ -521,20 +510,3 @@ describe('Testing creation of a hotmoka account', () => {
         }
     })
 })
-
-
-const getGamete = async (manifest: StorageReferenceModel, takamakaCode: TransactionReferenceModel): Promise<StorageValueModel> => {
-    const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
-    return remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
-        manifest,
-        "0",
-        chainId,
-        "100000",
-        "0",
-        takamakaCode,
-        CodeSignature.GET_GAMETE,
-        manifest,
-        []
-    ))
-}
-
