@@ -1,6 +1,6 @@
 {
   "name": "hotweb3",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A JavaScript/TypeScript client for a remote Hotmoka node",
   "main": "dist/hotweb3.js",
   "types": "./types/index.d.ts",
