@@ -1,6 +1,10 @@
+/// <reference types="node" />
 import { RemoteNode } from "../RemoteNode";
 import { Algorithm } from "../signature/Algorithm";
 import { StorageValueModel } from "../models/values/StorageValueModel";
+import { KeyPair } from "../bip39/KeyPair";
+import { Bip39Dictionary } from "../bip39/Bip39Dictionary";
+import { Account } from "../models/Account";
 export declare class AccountHelper {
     private readonly remoteNode;
     private readonly manifestHelper;
@@ -35,20 +39,22 @@ export declare class AccountHelper {
      * @return true if the provided public and private key are equal to the public and private key generated from the given entropy and password,
      *              false otherwise
      */
-    static checkPassword(entropy: string, password: string, publicKeyToCheck: string, privateKeyToCheck: string): boolean;
+    static verifyAccount(entropy: string, password: string, publicKeyToCheck: string, privateKeyToCheck: string): boolean;
     /**
-     * It generates a 32 bytes entropy.
-     * @return the entropy encoded in hex
-     */
-    static generateEntropy(): string;
-    /**
-     * Creates a key pair from the given entropy and password.
-     * @param entropy random bytes encoded in hex
+     * Creates a {@link KeyPair} from the given password, BIP39 dictionary and entropy.
      * @param password the password
-     * @return {{publicKey, privateKey}} the key pair in base64 derived from entropy and password
+     * @param bip39Dictionary the bip39 dictionary to use. Available options: "english"
+     * @param entropy the optional entropy. It will use a random 16 bytes entropy if not provided.
+     * @return a {@link KeyPair}
      */
-    static generateEd25519KeyPair(entropy: string, password: string): {
-        privateKey: string;
-        publicKey: string;
-    };
+    static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: Buffer): KeyPair;
+    /**
+     * Yields the account reconstructed from these BIP39 mnemonic words.
+     * This works only if the words were actually derived from an account.
+     * @param password the password of the account
+     * @param mnemonic the BIP39 mnemonic words
+     * @param bip39Dictionary the bi39 dictionary used
+     * @return the account
+     */
+    static generateAccountFrom(password: string, mnemonic: string, bip39Dictionary: Bip39Dictionary): Account;
 }
