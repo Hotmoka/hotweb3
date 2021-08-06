@@ -8,12 +8,15 @@ export {GasStation} from "./internal/models/info/GasStation"
 export {Validators} from "./internal/models/info/Validators"
 export {Validator} from "./internal/models/info/Validator"
 
-// helpers
+// account
 export {AccountHelper} from './internal/helpers/AccountHelper'
+export {KeyPair} from './internal/bip39/KeyPair'
+export {Bip39Dictionary} from './internal/bip39/Bip39Dictionary'
 
 // signer
 export {Signer} from "./internal/signature/Signer";
 export {Algorithm} from "./internal/signature/Algorithm";
+
 
 // exceptions
 export {HotmokaException} from "./internal/exceptions/HotmokaException"

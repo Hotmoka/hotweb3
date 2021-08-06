@@ -16,7 +16,8 @@
     "test:all": "mocha -r ts-node/register test/**/**.ts",
     "test:remoteNode": "mocha -r ts-node/register test/RemoteNode.test.ts",
     "test:marshallable": "mocha -r ts-node/register test/Marshallable.test.ts",
-    "test:signedRequests": "mocha -r ts-node/register test/SignedRequests.test.ts"
+    "test:signedRequests": "mocha -r ts-node/register test/SignedRequests.test.ts",
+    "test:accounts": "mocha -r ts-node/register test/Accounts.test.ts"
   },
   "engines": {
     "node": ">=12.0.0"

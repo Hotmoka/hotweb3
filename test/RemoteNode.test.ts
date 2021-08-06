@@ -2,6 +2,7 @@ import {
     AccountHelper,
     Algorithm,
     BasicType,
+    Bip39Dictionary,
     ConstructorCallTransactionRequestModel,
     ConstructorCallTransactionSuccessfulResponseModel,
     ConstructorSignatureModel,
@@ -9,6 +10,7 @@ import {
     InstanceMethodCallTransactionRequestModel,
     JarStoreInitialTransactionResponseModel,
     JarStoreTransactionRequestModel,
+    KeyPair,
     MethodCallTransactionSuccessfulResponseModel,
     NonVoidMethodSignatureModel,
     NoSuchElementException,
@@ -470,15 +472,14 @@ describe('Testing the Info of a remote hotmoka node', () => {
     }).timeout(40000)
 })
 
-describe('Testing creation of a hotmoka account', () => {
-    let entropy = ''
-    let keyPair: { publicKey: string, privateKey: string }
+
+/*describe('Testing creation of a hotmoka account', () => {
+    let keyPair: KeyPair
     const password = "pippo"
 
     it('it should create a hotmoka account from faucet', async () => {
         const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        entropy = AccountHelper.generateEntropy()
-        keyPair = AccountHelper.generateEd25519KeyPair(entropy, password)
+        keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
 
         const account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, keyPair.publicKey, "10000000", "0")
         expect(account).to.be.not.undefined
@@ -509,4 +510,5 @@ describe('Testing creation of a hotmoka account', () => {
             assert.fail('the newly generated public and private key should not match the old public and private key with a different entropy')
         }
     })
-})
+})*/
+
