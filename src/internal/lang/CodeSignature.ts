@@ -166,4 +166,9 @@ export class CodeSignature {
      * The method "id" of a validator.
      */
     public static readonly ID = new NonVoidMethodSignatureModel(ClassType.VALIDATOR.name,"id", ClassType.STRING.name, [])
+
+    /**
+     * The method publicKey of an externally owned account.
+     */
+    public static readonly PUBLIC_KEY = new NonVoidMethodSignatureModel(ClassType.EOA.name,"publicKey", ClassType.STRING.name, [])
 }
