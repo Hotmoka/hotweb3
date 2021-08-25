@@ -4,6 +4,7 @@ import {Buffer} from "buffer";
 import {Account} from "../models/Account";
 import {Bip39Params} from "./Bip39Params";
 import {getDictionary} from "./Bip39DictionaryWords";
+import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
 
 export class Bip39 {
     private readonly dictionary: Array<string>
@@ -106,7 +107,7 @@ export class Bip39 {
             throw new HotmokaException('illegal mnemonic phrase: checksum mismatch')
         }
 
-        return new Account(Buffer.from(entropy).toString('hex'), Buffer.from(accountHash).toString('hex'))
+        return new Account(Buffer.from(entropy).toString('hex'), '', '0', StorageReferenceModel.newStorageReference(Buffer.from(accountHash).toString('hex'), '0'))
     }
 
     /**

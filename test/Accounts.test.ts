@@ -45,7 +45,8 @@ describe('Testing Bip39', () => {
         ].join(' ')
         const account = new Bip39({dictionary: Bip39Dictionary.ENGLISH, mnemonic: mnemonic}).getAccount()
         expect(account.entropy).to.eql('8813550169346000cba90c3e690d6393')
-        expect(account.storageReference.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
+        expect(account.reference).to.be.not.undefined
+        expect(account.reference?.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
     })
 
 })
@@ -69,7 +70,8 @@ describe('Testing AccountHelper', () => {
 
         const account = new AccountHelper(new RemoteNode('')).generateAccountFrom('VERONA', mnemonic, Bip39Dictionary.ENGLISH)
         expect(account.entropy).to.eql('8813550169346000cba90c3e690d6393')
-        expect(account.storageReference.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
+        expect(account.reference).to.be.not.undefined
+        expect(account.reference?.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
     })
 
 })

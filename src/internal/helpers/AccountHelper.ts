@@ -15,6 +15,7 @@ import {Bip39Dictionary} from "../bip39/Bip39Dictionary";
 import {Account} from "../models/Account";
 import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
 import {CodeSignature} from "../lang/CodeSignature";
+import {Base58} from "../bip39/Base58";
 
 export class AccountHelper {
     private readonly remoteNode: RemoteNode
@@ -77,6 +78,15 @@ export class AccountHelper {
                 StorageValueModel.newStorageValue(publicKey, ClassType.STRING.name)
             ]
         ))
+    }
+
+    /**
+     * It creates a local account without the reference in the store of the remote node.
+     * @param keyPair the key pair generated
+     * @return a local account
+     */
+    public createLocalAccount(keyPair: KeyPair): Account {
+        return new Account(keyPair.entropy, Base58.encode(Buffer.from(keyPair.publicKey)), '0')
     }
 
     /**
