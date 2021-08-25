@@ -107,7 +107,7 @@ export class Bip39 {
             throw new HotmokaException('illegal mnemonic phrase: checksum mismatch')
         }
 
-        return new Account(Buffer.from(entropy).toString('hex'), '', '0', StorageReferenceModel.newStorageReference(Buffer.from(accountHash).toString('hex'), '0'))
+        return new Account(Buffer.from(entropy).toString('hex'), '','', '0', StorageReferenceModel.newStorageReference(Buffer.from(accountHash).toString('hex'), '0'))
     }
 
     /**

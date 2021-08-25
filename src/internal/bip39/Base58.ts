@@ -37,15 +37,16 @@ export class Base58 {
     }
 
     /**
-     * Encodes the given bytes as a base58 string (no checksum is appended).
-     * @param input the bytes to encode
+     * Encodes the given string in base58 string (no checksum is appended).
+     * @param inputStr the bytes to encode
      * @return the base58-encoded string
      */
-    public static encode(input: Buffer): string {
-        if (!input || input.length == 0) {
+    public static encode(inputStr: string): string {
+        if (!inputStr || inputStr.length == 0) {
             return ""
         }
 
+        const input = Buffer.from(inputStr)
         // Count leading zeros.
         let zeros = 0
         while (zeros < input.length && input[zeros] == 0) {
@@ -86,8 +87,8 @@ export class Base58 {
         // Convert the base58-encoded ASCII chars to a base58 byte sequence (base58 digits).
         const input58 = Buffer.alloc(input.length)
         for (let i = 0; i < input.length; ++i) {
-            let c = input.charAt(i).charCodeAt(0)
-            let digit = c < 128 ? Base58.INDEXES[c] : -1
+            const c = input.charAt(i).charCodeAt(0)
+            const digit = c < 128 ? Base58.INDEXES[c] : -1
             if (digit < 0) {
                 throw new HotmokaException("Invalid character in Base58 encoding: " + c)
             }

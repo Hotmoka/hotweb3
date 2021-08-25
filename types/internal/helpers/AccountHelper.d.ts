@@ -1,7 +1,6 @@
 /// <reference types="node" />
 import { RemoteNode } from "../RemoteNode";
 import { Algorithm } from "../signature/Algorithm";
-import { StorageValueModel } from "../models/values/StorageValueModel";
 import { KeyPair } from "../bip39/KeyPair";
 import { Bip39Dictionary } from "../bip39/Bip39Dictionary";
 import { Account } from "../models/Account";
@@ -19,17 +18,23 @@ export declare class AccountHelper {
     /**
      * Creates a new account by letting the faucet pay.
      * @param algorithm the signature algorithm for the new account
-     * @param publicKey the public key of the new account
+     * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
-     * @return the storage reference of the account
+     * @return the an account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
      *                                that is allowed to be thrown by the method
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    createAccountFromFaucet(algorithm: Algorithm, publicKey: string, balance: string, balanceRed: string): Promise<StorageValueModel>;
+    createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string): Promise<Account>;
+    /**
+     * It creates a local account without the reference in the store of the remote node.
+     * @param keyPair the key pair generated
+     * @return a local account
+     */
+    createLocalAccount(keyPair: KeyPair): Account;
     /**
      * Checks that the given account address is actually an account object in the remote node
      * with the same public key as the account.

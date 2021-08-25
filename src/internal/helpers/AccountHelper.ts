@@ -37,17 +37,17 @@ export class AccountHelper {
     /**
      * Creates a new account by letting the faucet pay.
      * @param algorithm the signature algorithm for the new account
-     * @param publicKey the public key of the new account
+     * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
-     * @return the storage reference of the account
+     * @return the an account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
      *                                that is allowed to be thrown by the method
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    async createAccountFromFaucet(algorithm: Algorithm, publicKey: string, balance: string, balanceRed: string): Promise<StorageValueModel> {
+    public async createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string): Promise<Account> {
         if (algorithm === Algorithm.SHA256DSA) {
             throw new HotmokaException("Algorithm not implemented")
         }
@@ -63,7 +63,7 @@ export class AccountHelper {
         const gasPriceValue = gasPrice.value ?? '0'
         const chainId = await this.manifestHelper.getChainId()
 
-        return this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const accountReference = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             gamete,
             nonceOfGameteValue,
             chainId,
@@ -75,9 +75,11 @@ export class AccountHelper {
             [
                 StorageValueModel.newStorageValue(balance, ClassType.BIG_INTEGER.name),
                 StorageValueModel.newStorageValue(balanceRed, ClassType.BIG_INTEGER.name),
-                StorageValueModel.newStorageValue(publicKey, ClassType.STRING.name)
+                StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
             ]
         ))
+
+        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, accountReference.reference))
     }
 
     /**
@@ -86,7 +88,7 @@ export class AccountHelper {
      * @return a local account
      */
     public createLocalAccount(keyPair: KeyPair): Account {
-        return new Account(keyPair.entropy, Base58.encode(Buffer.from(keyPair.publicKey)), '0')
+        return new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), '0')
     }
 
     /**
