@@ -37,9 +37,9 @@ const getPrivateKey = (pathFile: string): string => {
 
 const chainId = "chain-btmZzq"
 const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
-const basicJarClasspath = new TransactionReferenceModel("local", "ff2dd2f864e24892ac52cdc3543a3a2f7093260a13172a8a1594ecbc73f3e60b")
+const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
-const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "a7879e0abaa9e2dcd76f937dd8eb73f1bef6a003aa0ddb62bb36c26e2ad6c828"), "0")
+const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "42e7860ecd335a9411fb6507b8e08a02b3dd77493ff13ea65993b983502c4958"), "0")
 const gasLimit = "500000"
 
 
@@ -421,7 +421,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('missing versions reference')
         }
 
-        expect(info.takamakaCode.hash).to.be.eql('8d834e9893f7ff7933b7854880143cc0edf1f02ab644a0c681f0380083e49c44')
+        expect(info.takamakaCode.hash).to.be.eql('56e46353158a66f893460554be026e3fc15d1a215bc59606ea5fac585527ff1a')
         expect(info.chainId).to.be.eql(chainId)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
@@ -431,13 +431,13 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(info.skipsVerification).to.be.eql(false)
         expect(info.signature).to.be.eql('ed25519')
         expect(info.verificationVersion).to.be.eql('0')
-        expect(info.versions.transaction.hash).to.be.eql('6add5d5423a3c76e6701334d037f8370c037b6fc7ff090fd9f434accdd4f4f04')
+        expect(info.versions.transaction.hash).to.be.eql('4fddb139c1d376a1e3da3c54c3cab0f98410d151d9284c092f256496b5ba1ab3')
 
         // gamete
         expect(gameteInfo.gamete).to.be.not.undefined
         expect(gameteInfo.balanceOfGamete).to.be.not.undefined
         expect(gameteInfo.redBalance).to.be.eql('0')
-        expect(gameteInfo.maxFaucet).to.be.eql('100000000000000000000')
+        expect(gameteInfo.maxFaucet).to.be.eql('1000000000000')
         expect(gameteInfo.maxRedFaucet).to.be.eql('0')
 
         // gasStation
@@ -463,7 +463,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('validator not defined')
         }
         expect(validator.validator).to.be.not.undefined
-        expect(validator.validator.transaction.hash).to.be.eql('6add5d5423a3c76e6701334d037f8370c037b6fc7ff090fd9f434accdd4f4f04')
+        expect(validator.validator.transaction.hash).to.be.eql('4fddb139c1d376a1e3da3c54c3cab0f98410d151d9284c092f256496b5ba1ab3')
         expect(validator.id).to.be.not.undefined
         expect(validator.id).to.be.eql('016C31DDFCD28FC55653279891B1A57EAB2824F2')
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
