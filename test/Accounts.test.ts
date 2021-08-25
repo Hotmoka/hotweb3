@@ -3,7 +3,20 @@ import {Bip39} from "../src/internal/bip39/Bip39";
 import {AccountHelper} from "../src";
 import {Bip39Dictionary} from "../src";
 import {RemoteNode} from "../src";
+import {Base58} from "../src/internal/bip39/Base58";
 
+describe('Testing Base58', () => {
+
+    it('it should encode bytes to base58 string', async () => {
+        const encoded = Base58.encode(Buffer.from('helloworld124'))
+        expect(encoded).to.eql('9hLF3DCKexERxQyEQT')
+    })
+
+    it('it should decode a base58 string', async () => {
+        const decoded = Base58.decode('9hLF3DCKexERxQyEQT')
+        expect(decoded).to.eql(Buffer.from('helloworld124'))
+    })
+})
 
 describe('Testing Bip39', () => {
 
