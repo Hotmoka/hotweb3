@@ -8,7 +8,7 @@ import {Base58} from "../src/internal/bip39/Base58";
 describe('Testing Base58', () => {
 
     it('it should encode bytes to base58 string', async () => {
-        const encoded = Base58.encode(Buffer.from('helloworld124'))
+        const encoded = Base58.encode('helloworld124')
         expect(encoded).to.eql('9hLF3DCKexERxQyEQT')
     })
 

@@ -36,6 +36,13 @@ export declare class AccountHelper {
      */
     createLocalAccount(keyPair: KeyPair): Account;
     /**
+     * It imports a Hotmoka account.
+     * @param name the name of the account
+     * @param mnemonic the mnemonic
+     * @param password the password
+     */
+    importAccount(name: string, mnemonic: string, password: string): Promise<Account>;
+    /**
      * Checks that the given account address is actually an account object in the remote node
      * with the same public key as the account.
      * @param accountAddress the address of the account
@@ -67,4 +74,10 @@ export declare class AccountHelper {
      * @return the public key
      */
     private getPublicKey;
+    /**
+     * It returns the balance of the given account reference from the remote node.
+     * @param reference the reference of the account
+     * @return the balance
+     */
+    private getBalance;
 }
