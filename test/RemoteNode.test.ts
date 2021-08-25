@@ -473,15 +473,16 @@ describe('Testing the Info of a remote hotmoka node', () => {
 })
 
 
-/*describe('Testing creation of a hotmoka account', () => {
+describe('Testing creation of a hotmoka account', () => {
     let keyPair: KeyPair
+    let account: StorageValueModel
     const password = "pippo"
 
     it('it should create a hotmoka account from faucet', async () => {
         const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
+        keyPair = accountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
 
-        const account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, keyPair.publicKey, "10000000", "0")
+        account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, keyPair.publicKey, "10000000", "0")
         expect(account).to.be.not.undefined
 
         if (!account.reference) {
@@ -493,22 +494,16 @@ describe('Testing the Info of a remote hotmoka node', () => {
 
     }).timeout(40000)
 
-    it('it should recreate the public and private key from the given entropy and password', async () => {
-
-        if (!AccountHelper.checkPassword(entropy, password, keyPair.publicKey, keyPair.privateKey)) {
-            assert.fail('the newly generated public key does not match the old public key')
-        }
+    it('it should verify correctly the created public key in the node', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        const isVerified = await accountHelper.verifyAccount(account.reference!, keyPair.publicKey)
+        expect(isVerified).to.eql(true)
     })
 
-    it('it should fail recreating the public and private key from the given entropy and password', async () => {
-
-        if (AccountHelper.checkPassword(entropy, "pippoooo", keyPair.publicKey, keyPair.privateKey)) {
-            assert.fail('the newly generated public and private key should not match the old public and private key with the wrong password')
-        }
-
-        if (AccountHelper.checkPassword(AccountHelper.generateEntropy(), "pippo", keyPair.publicKey, keyPair.privateKey)) {
-            assert.fail('the newly generated public and private key should not match the old public and private key with a different entropy')
-        }
+    it('it should fail verifying the created public key in the node when providing a wrong public key', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        const isVerified = await accountHelper.verifyAccount(account.reference!, '_' + keyPair.publicKey.substr(1))
+        expect(isVerified).to.eql(false)
     })
-})*/
+})
 
