@@ -13,6 +13,8 @@ import {KeyPair} from "../bip39/KeyPair";
 import {KeyPairGenerator} from "../bip39/KeyPairGenerator";
 import {Bip39Dictionary} from "../bip39/Bip39Dictionary";
 import {Account} from "../models/Account";
+import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
+import {CodeSignature} from "../lang/CodeSignature";
 
 export class AccountHelper {
     private readonly remoteNode: RemoteNode
@@ -78,18 +80,16 @@ export class AccountHelper {
     }
 
     /**
-     * Checks if the provided public and private key are equal to the public and private key
-     * generated from the given entropy and password.
-     * @param entropy the entropy encoded in hex
-     * @param password the password
+     * Checks that the given account address is actually an account object in the remote node
+     * with the same public key as the account.
+     * @param accountAddress the address of the account
      * @param publicKeyToCheck the public key to check encoded in base64
-     * @param privateKeyToCheck the private key to check encoded in base64
-     * @return true if the provided public and private key are equal to the public and private key generated from the given entropy and password,
+     * @return true if the provided public key is equal to the public key stored in the remote node,
      *              false otherwise
      */
-    public static verifyAccount(entropy: string, password: string, publicKeyToCheck: string, privateKeyToCheck: string): boolean {
-        const {publicKey, privateKey} = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
-        return publicKeyToCheck === publicKey && privateKeyToCheck === privateKey
+    public async verifyAccount(accountAddress: StorageReferenceModel, publicKeyToCheck: string): Promise<boolean> {
+        const publicKey = await this.getPublicKey(accountAddress)
+        return Promise.resolve(publicKey === publicKeyToCheck)
     }
 
 
@@ -100,7 +100,7 @@ export class AccountHelper {
      * @param entropy the optional entropy. It will use a random 16 bytes entropy if not provided.
      * @return a {@link KeyPair}
      */
-    public static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: Buffer): KeyPair {
+    public generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: Buffer): KeyPair {
         return KeyPairGenerator.generateEd25519KeyPair(password, bip39Dictionary, entropy)
     }
 
@@ -112,7 +112,34 @@ export class AccountHelper {
      * @param bip39Dictionary the bi39 dictionary used
      * @return the account
      */
-    public static generateAccountFrom(password: string, mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
+    public generateAccountFrom(password: string, mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
         return new Bip39({dictionary: bip39Dictionary, mnemonic: mnemonic}).getAccount()
+    }
+
+    /**
+     * It returns the public key from the remote node of the given account reference.
+     * @param reference the reference of the account
+     * @return the public key
+     */
+    private async getPublicKey(reference: StorageReferenceModel): Promise<string> {
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+            reference,
+            "0",
+            "",
+            "100000",
+            "0",
+            takamakaCode,
+            CodeSignature.PUBLIC_KEY,
+            reference,
+            []
+            )
+        )
+
+        if (result && result.value) {
+            return result.value
+        } else {
+            throw new HotmokaException("Unable to get the public key of " + reference.transaction.hash)
+        }
     }
  }

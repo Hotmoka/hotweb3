@@ -132,4 +132,8 @@ export declare class CodeSignature {
      * The method "id" of a validator.
      */
     static readonly ID: NonVoidMethodSignatureModel;
+    /**
+     * The method publicKey of an externally owned account.
+     */
+    static readonly PUBLIC_KEY: NonVoidMethodSignatureModel;
 }
