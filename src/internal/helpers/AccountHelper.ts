@@ -92,6 +92,27 @@ export class AccountHelper {
     }
 
     /**
+     * It imports a Hotmoka account.
+     * @param name the name of the account
+     * @param mnemonic the mnemonic
+     * @param password the password
+     */
+    public async importAccount(name: string, mnemonic: string, password: string): Promise<Account> {
+        const account = new Bip39({dictionary: Bip39Dictionary.ENGLISH, mnemonic: mnemonic}).getAccount()
+        if (!account.reference) {
+            throw new HotmokaException('Unable to reconstruct the storage reference of the account')
+        }
+        const keyPair = this.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH, Buffer.from(account.entropy, 'hex'))
+        const accountIsVerified = await this.verifyAccount(account.reference, keyPair.publicKey)
+        if (!accountIsVerified) {
+            throw new HotmokaException('The public key of the account does not match its entropy')
+        }
+
+        const balance = await this.getBalance(account.reference)
+        return Promise.resolve(new Account(account.entropy, keyPair.publicKey, name, balance, account.reference))
+    }
+
+    /**
      * Checks that the given account address is actually an account object in the remote node
      * with the same public key as the account.
      * @param accountAddress the address of the account
@@ -152,6 +173,33 @@ export class AccountHelper {
             return result.value
         } else {
             throw new HotmokaException("Unable to get the public key of " + reference.transaction.hash)
+        }
+    }
+
+    /**
+     * It returns the balance of the given account reference from the remote node.
+     * @param reference the reference of the account
+     * @return the balance
+     */
+    private async getBalance(reference: StorageReferenceModel): Promise<string> {
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+            reference,
+            "0",
+            "",
+            "100000",
+            "0",
+            takamakaCode,
+            CodeSignature.BALANCE,
+            reference,
+            []
+            )
+        )
+
+        if (result && result.value) {
+            return result.value
+        } else {
+            throw new HotmokaException("Unable to get the balance of " + reference.transaction.hash)
         }
     }
  }
