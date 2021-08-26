@@ -16,8 +16,7 @@ import * as fs from "fs";
 import * as path from "path"
 import {InstanceMethodCallTransactionRequestModel} from "../src";
 import {CodeSignature} from "../src";
-
-const HOTMOKA_VERSION = "1.0.1"
+import {HOTMOKA_VERSION} from "./RemoteNode.test";
 
 describe('Testing the marshalling of the JS objects', () => {
 

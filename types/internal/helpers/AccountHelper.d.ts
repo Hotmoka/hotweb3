@@ -9,8 +9,6 @@ export declare class AccountHelper {
     private static readonly EXTRA_GAS_FOR_ANONYMOUS;
     private static readonly _100_000;
     private readonly remoteNode;
-    private readonly manifestHelper;
-    private readonly nonceHelper;
     /**
      * Builds an object that helps with the creation of new accounts.
      * @param remoteNode the remote node

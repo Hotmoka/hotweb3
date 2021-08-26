@@ -1,10 +1,8 @@
 import {RemoteNode} from "../RemoteNode";
 import {Algorithm} from "../signature/Algorithm";
-import {ManifestHelper} from "./ManifestHelper";
 import {ClassType} from "../lang/ClassType";
 import {HotmokaException} from "../exceptions/HotmokaException";
 import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
-import {NonceHelper} from "./NonceHelper";
 import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSignatureModel";
 import {StorageValueModel} from "../models/values/StorageValueModel";
 import {Bip39} from "../bip39/Bip39";
@@ -23,10 +21,8 @@ import {ConstructorSignatureModel} from "../models/signatures/ConstructorSignatu
 export class AccountHelper {
     private static readonly EXTRA_GAS_FOR_ANONYMOUS = 500000
     private static readonly _100_000 = 100000
-
     private readonly remoteNode: RemoteNode
-    private readonly manifestHelper: ManifestHelper
-    private readonly nonceHelper: NonceHelper
+
 
     /**
      * Builds an object that helps with the creation of new accounts.
@@ -34,8 +30,6 @@ export class AccountHelper {
      */
     constructor(remoteNode: RemoteNode) {
         this.remoteNode = remoteNode
-        this.manifestHelper = new ManifestHelper(this.remoteNode)
-        this.nonceHelper = new NonceHelper(this.remoteNode)
     }
 
     /**
@@ -64,10 +58,9 @@ export class AccountHelper {
             throw new HotmokaException("can only store ed25519 accounts into the ledger of the manifest")
         }
 
-        const chainId = await this.manifestHelper.getChainId()
+        const chainId = await this.remoteNode.getChainId()
         const takamakaCode = await this.remoteNode.getTakamakaCode()
-        const nonceOfPayer = await this.nonceHelper.getNonceOf(payer)
-        const nonceOfPayerValue = nonceOfPayer.value ?? '0'
+        const nonceOfPayer = await this.remoteNode.getNonceOf(payer)
         const signatureAlgorithmOfPayer = await this.getSignatureAlgorithm(payer)
         const signatureOfPayer = new Signer(signatureAlgorithmOfPayer, keyPairOfPayer.privateKey)
         const gas1 = AccountHelper._100_000
@@ -80,7 +73,7 @@ export class AccountHelper {
             const gas = gas1 + gas2 + AccountHelper.EXTRA_GAS_FOR_ANONYMOUS
             const accountResult = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
                 payer,
-                nonceOfPayerValue,
+                nonceOfPayer,
                 chainId,
                 gas.toString(),
                 gasPrice,
@@ -99,7 +92,7 @@ export class AccountHelper {
             const gas = gas1 + gas2
             account = await this.remoteNode.addConstructorCallTransaction(new ConstructorCallTransactionRequestModel(
                 payer,
-                nonceOfPayerValue,
+                nonceOfPayer,
                 chainId,
                 gas.toString(),
                 gasPrice,
@@ -136,18 +129,17 @@ export class AccountHelper {
         }
 
         const takamakaCode = await this.remoteNode.getTakamakaCode()
-        const gamete = await this.manifestHelper.getGamete()
-        const nonceOfGamete = await this.nonceHelper.getNonceOf(gamete)
-        const nonceOfGameteValue = nonceOfGamete.value ?? '0'
+        const gamete = await this.remoteNode.getGamete()
+        const nonceOfGamete = await this.remoteNode.getNonceOf(gamete)
         const methodName = "faucet" + Algorithm[algorithm]
         const eoaType = new ClassType(ClassType.EOA.name + Algorithm[algorithm])
         const gas = AccountHelper._100_000.toString()
         const gasPrice = await this.remoteNode.getGasPrice()
-        const chainId = await this.manifestHelper.getChainId()
+        const chainId = await this.remoteNode.getChainId()
 
         const account = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             gamete,
-            nonceOfGameteValue,
+            nonceOfGamete,
             chainId,
             gas,
             gasPrice,

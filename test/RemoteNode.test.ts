@@ -31,6 +31,7 @@ import * as path from "path"
 import assert = require("assert");
 
 
+export const HOTMOKA_VERSION = "1.0.3"
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }

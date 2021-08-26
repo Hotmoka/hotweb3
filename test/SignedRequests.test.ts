@@ -16,11 +16,11 @@ import {NonVoidMethodSignatureModel} from "../src";
 import {ConstructorSignatureModel} from "../src";
 import {ConstructorCallTransactionRequestModel} from "../src";
 import {Algorithm} from "../src";
+import {HOTMOKA_VERSION} from "./RemoteNode.test";
 
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
-const HOTMOKA_VERSION = "1.0.1"
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/gameteED25519.pri"))
 
 describe('Testing the signed requests of the Hotmoka JS objects', () => {

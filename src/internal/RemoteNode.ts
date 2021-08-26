@@ -247,8 +247,7 @@ export class RemoteNode implements Node {
      * @throws HotmokaException if generic errors occur
      */
     async getNonceOf(account: StorageReferenceModel): Promise<string> {
-        const nonce = await new NonceHelper(this).getNonceOf(account)
-        return nonce.value ?? '0'
+        return await new NonceHelper(this).getNonceOf(account)
     }
 
     /**

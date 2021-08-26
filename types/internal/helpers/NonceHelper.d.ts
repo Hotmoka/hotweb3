@@ -1,6 +1,5 @@
 import { RemoteNode } from "../RemoteNode";
 import { StorageReferenceModel } from "../models/values/StorageReferenceModel";
-import { StorageValueModel } from "../models/values/StorageValueModel";
 export declare class NonceHelper {
     private static readonly GAS_LIMIT;
     private readonly remoteNode;
@@ -16,5 +15,5 @@ export declare class NonceHelper {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    getNonceOf(account: StorageReferenceModel): Promise<StorageValueModel>;
+    getNonceOf(account: StorageReferenceModel): Promise<string>;
 }

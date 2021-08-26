@@ -1,6 +1,5 @@
 import {RemoteNode} from "../RemoteNode";
 import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
-import {StorageValueModel} from "../models/values/StorageValueModel";
 import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
 import {CodeSignature} from "../lang/CodeSignature";
 
@@ -24,9 +23,9 @@ export class NonceHelper {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    public async getNonceOf(account: StorageReferenceModel): Promise<StorageValueModel> {
+    public async getNonceOf(account: StorageReferenceModel): Promise<string> {
         const classTag = await this.remoteNode.getClassTag(account)
-        return this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             account,
             "0",
             "",
@@ -37,5 +36,7 @@ export class NonceHelper {
             account,
             []
         ))
+
+        return (result && result.value) ?? '0'
     }
 }
