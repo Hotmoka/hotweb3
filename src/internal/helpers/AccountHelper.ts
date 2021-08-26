@@ -5,7 +5,6 @@ import {ClassType} from "../lang/ClassType";
 import {HotmokaException} from "../exceptions/HotmokaException";
 import {InstanceMethodCallTransactionRequestModel} from "../models/requests/InstanceMethodCallTransactionRequestModel";
 import {NonceHelper} from "./NonceHelper";
-import {GasHelper} from "./GasHelper";
 import {NonVoidMethodSignatureModel} from "../models/signatures/NonVoidMethodSignatureModel";
 import {StorageValueModel} from "../models/values/StorageValueModel";
 import {Bip39} from "../bip39/Bip39";
@@ -28,7 +27,6 @@ export class AccountHelper {
     private readonly remoteNode: RemoteNode
     private readonly manifestHelper: ManifestHelper
     private readonly nonceHelper: NonceHelper
-    private readonly gasHelper: GasHelper
 
     /**
      * Builds an object that helps with the creation of new accounts.
@@ -38,7 +36,6 @@ export class AccountHelper {
         this.remoteNode = remoteNode
         this.manifestHelper = new ManifestHelper(this.remoteNode)
         this.nonceHelper = new NonceHelper(this.remoteNode)
-        this.gasHelper = new GasHelper(this.remoteNode)
     }
 
     /**
@@ -75,8 +72,7 @@ export class AccountHelper {
         const signatureOfPayer = new Signer(signatureAlgorithmOfPayer, keyPairOfPayer.privateKey)
         const gas1 = AccountHelper._100_000
         const gas2 = AccountHelper._100_000
-        const gasPrice = await this.gasHelper.getGasPrice()
-        const gasPriceValue = gasPrice.value ?? '0'
+        const gasPrice = await this.remoteNode.getGasPrice()
 
         let account: StorageReferenceModel | undefined;
         if (addToLedger) {
@@ -87,7 +83,7 @@ export class AccountHelper {
                 nonceOfPayerValue,
                 chainId,
                 gas.toString(),
-                gasPriceValue,
+                gasPrice,
                 takamakaCode,
                 new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "add", ClassType.EOA_ED25519.name, [ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
                 accountsLedger,
@@ -106,7 +102,7 @@ export class AccountHelper {
                 nonceOfPayerValue,
                 chainId,
                 gas.toString(),
-                gasPriceValue,
+                gasPrice,
                 takamakaCode,
                 new ConstructorSignatureModel(ClassType.EOA_ED25519.name,[ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
                 [
@@ -146,8 +142,7 @@ export class AccountHelper {
         const methodName = "faucet" + Algorithm[algorithm]
         const eoaType = new ClassType(ClassType.EOA.name + Algorithm[algorithm])
         const gas = AccountHelper._100_000.toString()
-        const gasPrice = await this.gasHelper.getGasPrice()
-        const gasPriceValue = gasPrice.value ?? '0'
+        const gasPrice = await this.remoteNode.getGasPrice()
         const chainId = await this.manifestHelper.getChainId()
 
         const account = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
@@ -155,7 +150,7 @@ export class AccountHelper {
             nonceOfGameteValue,
             chainId,
             gas,
-            gasPriceValue,
+            gasPrice,
             takamakaCode,
             new NonVoidMethodSignatureModel(ClassType.GAMETE.name, methodName, eoaType.name, [ClassType.BIG_INTEGER.name, ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
             gamete,

@@ -55,7 +55,7 @@ export class GasHelper {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    public async getGasPrice(): Promise<StorageValueModel> {
+    public async getGasPrice(): Promise<string> {
         const {takamakaCode, manifest, gasStation} = await this.getGasStation()
 
         const ignoresGasPrice = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
@@ -71,10 +71,10 @@ export class GasHelper {
         ))
 
         if (ignoresGasPrice.value && ignoresGasPrice.value === 'true') {
-            return Promise.resolve(StorageValueModel.newStorageValue("1", "int"))
+            return Promise.resolve('1')
         }
 
-        return await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const gasPrice = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             manifest,
             "0",
             "",
@@ -85,6 +85,8 @@ export class GasHelper {
             gasStation,
             []
         ))
+
+        return (gasPrice && gasPrice.value) ?? '1'
     }
 }
 

@@ -262,8 +262,7 @@ export class RemoteNode implements Node {
      * @throws HotmokaException if generic errors occur
      */
     async getGasPrice(): Promise<string> {
-        const gasPrice = await new GasHelper(this).getGasPrice()
-        return gasPrice.value ?? '1'
+        return await new GasHelper(this).getGasPrice()
     }
 
     /**

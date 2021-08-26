@@ -1,5 +1,4 @@
 import { RemoteNode } from "../RemoteNode";
-import { StorageValueModel } from "../models/values/StorageValueModel";
 export declare class GasHelper {
     private static readonly GAS_LIMIT;
     private readonly remoteNode;
@@ -20,5 +19,5 @@ export declare class GasHelper {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    getGasPrice(): Promise<StorageValueModel>;
+    getGasPrice(): Promise<string>;
 }

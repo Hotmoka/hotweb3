@@ -6,17 +6,18 @@ import { Bip39Dictionary } from "../bip39/Bip39Dictionary";
 import { Account } from "../models/Account";
 import { StorageReferenceModel } from "../models/values/StorageReferenceModel";
 export declare class AccountHelper {
+    private static readonly EXTRA_GAS_FOR_ANONYMOUS;
+    private static readonly _100_000;
     private readonly remoteNode;
     private readonly manifestHelper;
     private readonly nonceHelper;
-    private readonly gasHelper;
     /**
      * Builds an object that helps with the creation of new accounts.
      * @param remoteNode the remote node
      */
     constructor(remoteNode: RemoteNode);
     /**
-     * Creates a new account by letting the faucet pay.
+     * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer
      * @param keyPairOfPayer the key pair of the payer
@@ -107,6 +108,7 @@ export declare class AccountHelper {
     private getSignatureAlgorithm;
     /**
      * It returns the accounts ledger of the manifest.
+     * @param takamakaCode the reference of takamakaCode
      * @return the reference of the accounts ledger
      */
     private getAccountsLedger;
