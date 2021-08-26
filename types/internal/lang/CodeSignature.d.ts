@@ -136,4 +136,8 @@ export declare class CodeSignature {
      * The method publicKey of an externally owned account.
      */
     static readonly PUBLIC_KEY: NonVoidMethodSignatureModel;
+    /**
+     * The method {@code getAccountsLedger} of the manifest.
+     */
+    static readonly GET_ACCOUNTS_LEDGER: NonVoidMethodSignatureModel;
 }

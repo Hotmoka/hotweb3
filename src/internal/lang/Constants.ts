@@ -46,4 +46,14 @@ export class Constants {
      * The name of the class type for {@link io.takamaka.code.util.StorageMapView}.
      */
     public static readonly STORAGE_MAP_VIEW_NAME = "io.takamaka.code.util.StorageMapView"
+
+    /**
+     * The name of the class type for {@link io.takamaka.code.lang.ExternallyOwnedAccountED25519}.
+     */
+    public static readonly EOA_ED25519_NAME = "io.takamaka.code.lang.ExternallyOwnedAccountED25519"
+
+    /**
+     * The name of the class type for {@link io.takamaka.code.governance.AccountsLedger}.
+     */
+    public static readonly ACCOUNTS_LEDGER_NAME = "io.takamaka.code.governance.AccountsLedger"
 }

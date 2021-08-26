@@ -253,6 +253,16 @@ export class ClassType extends Marshallable {
     public static readonly SHARED_ENTITY_VIEW = new ClassType("io.takamaka.code.dao.SharedEntityView")
 
     /**
+     * The frequently used class type for {@link io.takamaka.code.lang.ExternallyOwnedAccountED25519}.
+     */
+    public static readonly EOA_ED25519 = new ClassType(Constants.EOA_ED25519_NAME)
+
+    /**
+     * The frequently used class type for {@link io.takamaka.code.governance.AccountsLedger}.
+     */
+    public static readonly ACCOUNTS_LEDGER = new ClassType(Constants.ACCOUNTS_LEDGER_NAME)
+
+    /**
      * The name of the class type.
      */
     public readonly name: string

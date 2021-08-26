@@ -171,4 +171,9 @@ export class CodeSignature {
      * The method publicKey of an externally owned account.
      */
     public static readonly PUBLIC_KEY = new NonVoidMethodSignatureModel(ClassType.EOA.name,"publicKey", ClassType.STRING.name, [])
+
+    /**
+     * The method {@code getAccountsLedger} of the manifest.
+     */
+    public static readonly GET_ACCOUNTS_LEDGER = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "getAccountsLedger", ClassType.ACCOUNTS_LEDGER.name, [])
 }
