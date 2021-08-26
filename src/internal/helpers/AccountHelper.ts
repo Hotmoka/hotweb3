@@ -16,6 +16,10 @@ import {Account} from "../models/Account";
 import {StorageReferenceModel} from "../models/values/StorageReferenceModel";
 import {CodeSignature} from "../lang/CodeSignature";
 import {Base58} from "../bip39/Base58";
+import {Signer} from "../signature/Signer";
+import {TransactionReferenceModel} from "../models/values/TransactionReferenceModel";
+import {ConstructorCallTransactionRequestModel} from "../models/requests/ConstructorCallTransactionRequestModel";
+import {ConstructorSignatureModel} from "../models/signatures/ConstructorSignatureModel";
 
 export class AccountHelper {
     private readonly remoteNode: RemoteNode
@@ -37,10 +41,88 @@ export class AccountHelper {
     /**
      * Creates a new account by letting the faucet pay.
      * @param algorithm the signature algorithm for the new account
+     * @param payer the storage reference of the payer
+     * @param keyPairOfPayer the key pair of the payer
      * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
-     * @return the an account
+     * @param addToLedger adds the new account to the ledger of the manifest, bound to its {@code publicKey}; if an account already
+     *                    exists for {@code publicKey}, that account gets funded with {@code balance} and {@code balanceRed} coins and returned
+     * @return the account
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     */
+    public async createAccountFromPayer(algorithm: Algorithm, payer: StorageReferenceModel, keyPairOfPayer: KeyPair, keyPair: KeyPair, balance: string, balanceRed: string, addToLedger: boolean): Promise<Account> {
+        if (algorithm === Algorithm.SHA256DSA) {
+            throw new HotmokaException("Algorithm not implemented")
+        }
+
+        if (addToLedger && algorithm !== Algorithm.ED25519) {
+            throw new HotmokaException("can only store ed25519 accounts into the ledger of the manifest")
+        }
+
+        const chainId = await this.manifestHelper.getChainId()
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const nonceOfPayer = await this.nonceHelper.getNonceOf(payer)
+        const nonceOfPayerValue = nonceOfPayer.value ?? '0'
+        const signatureOfPayer = new Signer(Algorithm.ED25519, keyPairOfPayer.privateKey)
+
+        const gas = "100000"
+        const gasPrice = await this.gasHelper.getGasPrice()
+        const gasPriceValue = gasPrice.value ?? '0'
+
+        let account: StorageReferenceModel | undefined;
+        if (addToLedger) {
+            const accountsLedger = await this.getAccountsLedger(takamakaCode)
+
+            const accountResult = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+                payer,
+                nonceOfPayerValue,
+                chainId,
+                gas,
+                gasPriceValue,
+                takamakaCode,
+                new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "add", ClassType.EOA_ED25519.name, [ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
+                accountsLedger,
+                [
+                    StorageValueModel.newStorageValue(balance, ClassType.BIG_INTEGER.name),
+                    StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
+                ],
+                signatureOfPayer
+            ))
+            account = accountResult.reference
+
+        } else {
+            account = await this.remoteNode.addConstructorCallTransaction(new ConstructorCallTransactionRequestModel(
+                payer,
+                nonceOfPayerValue,
+                chainId,
+                gas,
+                gasPriceValue,
+                takamakaCode,
+                new ConstructorSignatureModel(ClassType.EOA_ED25519.name,[ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
+                [
+                    StorageValueModel.newStorageValue(balance, ClassType.BIG_INTEGER.name),
+                    StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
+                ],
+                signatureOfPayer
+            ))
+        }
+
+        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account))
+    }
+
+
+    /**
+     * Creates a new account by letting the faucet pay.
+     * @param algorithm the signature algorithm for the new account
+     * @param keyPair the key pair of the new account
+     * @param balance the balance of the new account
+     * @param balanceRed the red balance of the new account
+     * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
      *                                that is allowed to be thrown by the method
@@ -200,6 +282,48 @@ export class AccountHelper {
             return result.value
         } else {
             throw new HotmokaException("Unable to get the balance of " + reference.transaction.hash)
+        }
+    }
+
+    /**
+     * It returns the signature algorithm of the payer.
+     * @param reference the reference of the account of the payer
+     * @return the signature algorithm
+     * @throws HotmokaException if the signature algorithm of the payer is unmanaged
+     */
+    private async getSignatureAlgorithm(reference: StorageReferenceModel): Promise<Algorithm> {
+        const classTag = await this.remoteNode.getClassTag(reference)
+
+        if (classTag && classTag.className === ClassType.EOA_ED25519.name) {
+            return Algorithm.ED25519
+        } else {
+            throw new HotmokaException("Unmanaged payer signature algorithm")
+        }
+    }
+
+    /**
+     * It returns the accounts ledger of the manifest.
+     * @return the reference of the accounts ledger
+     */
+    private async getAccountsLedger(takamakaCode: TransactionReferenceModel): Promise<StorageReferenceModel> {
+        const manifest = await this.remoteNode.getManifest()
+        const accountsLedger = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+                manifest,
+                "0",
+                "",
+                "100000",
+                "0",
+                takamakaCode,
+                CodeSignature.GET_ACCOUNTS_LEDGER,
+                manifest,
+                []
+            )
+        )
+
+        if (accountsLedger && accountsLedger.reference) {
+            return accountsLedger.reference
+        } else {
+            throw new HotmokaException("Unable to retrieve the accounts ledger")
         }
     }
  }

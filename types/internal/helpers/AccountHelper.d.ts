@@ -18,10 +18,28 @@ export declare class AccountHelper {
     /**
      * Creates a new account by letting the faucet pay.
      * @param algorithm the signature algorithm for the new account
+     * @param payer the storage reference of the payer
+     * @param keyPairOfPayer the key pair of the payer
      * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
-     * @return the an account
+     * @param addToLedger adds the new account to the ledger of the manifest, bound to its {@code publicKey}; if an account already
+     *                    exists for {@code publicKey}, that account gets funded with {@code balance} and {@code balanceRed} coins and returned
+     * @return the account
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     */
+    createAccountFromPayer(algorithm: Algorithm, payer: StorageReferenceModel, keyPairOfPayer: KeyPair, keyPair: KeyPair, balance: string, balanceRed: string, addToLedger: boolean): Promise<Account>;
+    /**
+     * Creates a new account by letting the faucet pay.
+     * @param algorithm the signature algorithm for the new account
+     * @param keyPair the key pair of the new account
+     * @param balance the balance of the new account
+     * @param balanceRed the red balance of the new account
+     * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
      *                                that is allowed to be thrown by the method
@@ -80,4 +98,16 @@ export declare class AccountHelper {
      * @return the balance
      */
     private getBalance;
+    /**
+     * It returns the signature algorithm of the payer.
+     * @param reference the reference of the account of the payer
+     * @return the signature algorithm
+     * @throws HotmokaException if the signature algorithm of the payer is unmanaged
+     */
+    private getSignatureAlgorithm;
+    /**
+     * It returns the accounts ledger of the manifest.
+     * @return the reference of the accounts ledger
+     */
+    private getAccountsLedger;
 }
