@@ -39,7 +39,7 @@ export class AccountHelper {
     }
 
     /**
-     * Creates a new account by letting the faucet pay.
+     * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer
      * @param keyPairOfPayer the key pair of the payer
@@ -138,14 +138,14 @@ export class AccountHelper {
         const gamete = await this.manifestHelper.getGamete()
         const nonceOfGamete = await this.nonceHelper.getNonceOf(gamete)
         const nonceOfGameteValue = nonceOfGamete.value ?? '0'
-        const methodName = "faucet" + Algorithm[algorithm];
-        const eoaType = new ClassType(ClassType.EOA.name + Algorithm[algorithm]);
+        const methodName = "faucet" + Algorithm[algorithm]
+        const eoaType = new ClassType(ClassType.EOA.name + Algorithm[algorithm])
         const gas = "100000"
         const gasPrice = await this.gasHelper.getGasPrice()
         const gasPriceValue = gasPrice.value ?? '0'
         const chainId = await this.manifestHelper.getChainId()
 
-        const accountReference = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const account = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             gamete,
             nonceOfGameteValue,
             chainId,
@@ -161,7 +161,7 @@ export class AccountHelper {
             ]
         ))
 
-        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, accountReference.reference))
+        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account.reference))
     }
 
     /**
