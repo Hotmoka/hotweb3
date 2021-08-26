@@ -22,6 +22,9 @@ import {ConstructorCallTransactionRequestModel} from "../models/requests/Constru
 import {ConstructorSignatureModel} from "../models/signatures/ConstructorSignatureModel";
 
 export class AccountHelper {
+    private static readonly EXTRA_GAS_FOR_ANONYMOUS = 500000
+    private static readonly _100_000 = 100000
+
     private readonly remoteNode: RemoteNode
     private readonly manifestHelper: ManifestHelper
     private readonly nonceHelper: NonceHelper
@@ -68,21 +71,22 @@ export class AccountHelper {
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const nonceOfPayer = await this.nonceHelper.getNonceOf(payer)
         const nonceOfPayerValue = nonceOfPayer.value ?? '0'
-        const signatureOfPayer = new Signer(Algorithm.ED25519, keyPairOfPayer.privateKey)
-
-        const gas = "100000"
+        const signatureAlgorithmOfPayer = await this.getSignatureAlgorithm(payer)
+        const signatureOfPayer = new Signer(signatureAlgorithmOfPayer, keyPairOfPayer.privateKey)
+        const gas1 = AccountHelper._100_000
+        const gas2 = AccountHelper._100_000
         const gasPrice = await this.gasHelper.getGasPrice()
         const gasPriceValue = gasPrice.value ?? '0'
 
         let account: StorageReferenceModel | undefined;
         if (addToLedger) {
             const accountsLedger = await this.getAccountsLedger(takamakaCode)
-
+            const gas = gas1 + gas2 + AccountHelper.EXTRA_GAS_FOR_ANONYMOUS
             const accountResult = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
                 payer,
                 nonceOfPayerValue,
                 chainId,
-                gas,
+                gas.toString(),
                 gasPriceValue,
                 takamakaCode,
                 new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "add", ClassType.EOA_ED25519.name, [ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
@@ -96,11 +100,12 @@ export class AccountHelper {
             account = accountResult.reference
 
         } else {
+            const gas = gas1 + gas2
             account = await this.remoteNode.addConstructorCallTransaction(new ConstructorCallTransactionRequestModel(
                 payer,
                 nonceOfPayerValue,
                 chainId,
-                gas,
+                gas.toString(),
                 gasPriceValue,
                 takamakaCode,
                 new ConstructorSignatureModel(ClassType.EOA_ED25519.name,[ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
@@ -140,7 +145,7 @@ export class AccountHelper {
         const nonceOfGameteValue = nonceOfGamete.value ?? '0'
         const methodName = "faucet" + Algorithm[algorithm]
         const eoaType = new ClassType(ClassType.EOA.name + Algorithm[algorithm])
-        const gas = "100000"
+        const gas = AccountHelper._100_000.toString()
         const gasPrice = await this.gasHelper.getGasPrice()
         const gasPriceValue = gasPrice.value ?? '0'
         const chainId = await this.manifestHelper.getChainId()
@@ -242,7 +247,7 @@ export class AccountHelper {
             reference,
             "0",
             "",
-            "100000",
+            AccountHelper._100_000.toString(),
             "0",
             takamakaCode,
             CodeSignature.PUBLIC_KEY,
@@ -269,7 +274,7 @@ export class AccountHelper {
             reference,
             "0",
             "",
-            "100000",
+            AccountHelper._100_000.toString(),
             "0",
             takamakaCode,
             CodeSignature.BALANCE,
@@ -303,6 +308,7 @@ export class AccountHelper {
 
     /**
      * It returns the accounts ledger of the manifest.
+     * @param takamakaCode the reference of takamakaCode
      * @return the reference of the accounts ledger
      */
     private async getAccountsLedger(takamakaCode: TransactionReferenceModel): Promise<StorageReferenceModel> {
@@ -311,7 +317,7 @@ export class AccountHelper {
                 manifest,
                 "0",
                 "",
-                "100000",
+                AccountHelper._100_000.toString(),
                 "0",
                 takamakaCode,
                 CodeSignature.GET_ACCOUNTS_LEDGER,
