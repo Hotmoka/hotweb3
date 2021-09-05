@@ -395,6 +395,11 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
 
 describe('Testing the Info of a remote hotmoka node', () => {
 
+    it('it should respond with allowsUnsignedFaucet to true', async () => {
+        const allowsUnsignedFaucet = await new RemoteNode(REMOTE_NODE_URL).allowsUnsignedFaucet()
+        expect(allowsUnsignedFaucet).to.eql(true)
+    })
+
     it('info - it should respond with all the info of the remote node', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL)
         const info: InfoModel = await remoteNode.info()

@@ -26,6 +26,23 @@ export class ManifestHelper {
     }
 
     /**
+     * Checks if the remote node allows an unsigned faucet.
+     * @return true if the remote node allows an unsigned faucet false otherwise
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
+     * @throws HotmokaException if generic errors occur
+     */
+    async allowsUnsignedFaucet(): Promise<boolean> {
+        const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const manifest = await this.remoteNode.getManifest()
+        const allowsUnsignedFaucet = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ALLOWS_UNSIGNED_FAUCET, manifest))
+        return Promise.resolve((allowsUnsignedFaucet && allowsUnsignedFaucet.value) ? 'true' === allowsUnsignedFaucet.value : false)
+    }
+
+    /**
      * Yields the chainId of the remote node.
      * @return the storage reference of the gamete
      * @throws TransactionRejectedException if the transaction could not be executed
