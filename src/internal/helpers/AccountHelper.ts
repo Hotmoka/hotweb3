@@ -176,7 +176,7 @@ export class AccountHelper {
         if (!account.reference) {
             throw new HotmokaException('Unable to reconstruct the storage reference of the account')
         }
-        const keyPair = this.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH, Buffer.from(account.entropy, 'hex'))
+        const keyPair = this.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH, account.entropy)
         const accountIsVerified = await this.verifyAccount(account.reference, keyPair.publicKey)
         if (!accountIsVerified) {
             throw new HotmokaException('The public key of the account does not match its entropy')
@@ -204,23 +204,34 @@ export class AccountHelper {
      * Creates a {@link KeyPair} from the given password, BIP39 dictionary and entropy.
      * @param password the password
      * @param bip39Dictionary the bip39 dictionary to use. Available options: "english"
-     * @param entropy the optional entropy. It will use a random 16 bytes entropy if not provided.
+     * @param entropy the optional entropy encoded in HEX. It will use a random 16 bytes entropy if not provided.
      * @return a {@link KeyPair}
      */
-    public generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: Buffer): KeyPair {
-        return KeyPairGenerator.generateEd25519KeyPair(password, bip39Dictionary, entropy)
+    public generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair {
+        return KeyPairGenerator.generateEd25519KeyPair(password, bip39Dictionary, entropy ? Buffer.from(entropy, 'hex') : undefined)
     }
 
     /**
      * Yields the account reconstructed from these BIP39 mnemonic words.
      * This works only if the words were actually derived from an account.
-     * @param password the password of the account
      * @param mnemonic the BIP39 mnemonic words
      * @param bip39Dictionary the bi39 dictionary used
      * @return the account
      */
-    public generateAccountFrom(password: string, mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
+    public generateAccountFrom(mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
         return new Bip39({dictionary: bip39Dictionary, mnemonic: mnemonic}).getAccount()
+    }
+
+    /**
+     * Yields the 36 mnemonic words reconstructed from the given entropy and storage reference of an account.
+     * @param entropy the entropy encoded in HEX
+     * @param storageReferenceHash the hash of the storage reference of the account
+     * @param bip39Dictionary the bi39 dictionary used
+     * @return an array with the 36 mnemonic words
+     */
+    public generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string> {
+        const mnemonic = new Bip39({dictionary: bip39Dictionary, entropy: entropy, hashOfTransactionReference: storageReferenceHash}).getMnemonic()
+        return mnemonic.split(" ")
     }
 
     /**
