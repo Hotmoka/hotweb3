@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { RemoteNode } from "../RemoteNode";
 import { Algorithm } from "../signature/Algorithm";
 import { KeyPair } from "../bip39/KeyPair";
@@ -72,19 +71,26 @@ export declare class AccountHelper {
      * Creates a {@link KeyPair} from the given password, BIP39 dictionary and entropy.
      * @param password the password
      * @param bip39Dictionary the bip39 dictionary to use. Available options: "english"
-     * @param entropy the optional entropy. It will use a random 16 bytes entropy if not provided.
+     * @param entropy the optional entropy encoded in HEX. It will use a random 16 bytes entropy if not provided.
      * @return a {@link KeyPair}
      */
-    generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: Buffer): KeyPair;
+    static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair;
     /**
      * Yields the account reconstructed from these BIP39 mnemonic words.
      * This works only if the words were actually derived from an account.
-     * @param password the password of the account
      * @param mnemonic the BIP39 mnemonic words
      * @param bip39Dictionary the bi39 dictionary used
      * @return the account
      */
-    generateAccountFrom(password: string, mnemonic: string, bip39Dictionary: Bip39Dictionary): Account;
+    static generateAccountFrom(mnemonic: string, bip39Dictionary: Bip39Dictionary): Account;
+    /**
+     * Yields the 36 mnemonic words reconstructed from the given entropy and storage reference of an account.
+     * @param entropy the entropy encoded in HEX
+     * @param storageReferenceHash the hash of the storage reference of the account
+     * @param bip39Dictionary the bi39 dictionary used
+     * @return an array with the 36 mnemonic words
+     */
+    static generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string>;
     /**
      * It returns the public key from the remote node of the given account reference.
      * @param reference the reference of the account

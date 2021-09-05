@@ -2,7 +2,6 @@ import {expect} from 'chai';
 import {Bip39} from "../src/internal/bip39/Bip39";
 import {AccountHelper} from "../src";
 import {Bip39Dictionary} from "../src";
-import {RemoteNode} from "../src";
 import {Base58} from "../src/internal/bip39/Base58";
 
 describe('Testing Base58', () => {
@@ -55,7 +54,7 @@ describe('Testing Bip39', () => {
 describe('Testing AccountHelper', () => {
 
     it('it should build a valid account from the given mnemonic and password', async () => {
-        const keyPair = new AccountHelper(new RemoteNode('')).generateEd25519KeyPairFrom(
+        const keyPair = AccountHelper.generateEd25519KeyPairFrom(
             'VERONA',
             Bip39Dictionary.ENGLISH,
             '8813550169346000cba90c3e690d6393'
@@ -73,14 +72,14 @@ describe('Testing AccountHelper', () => {
             "vivid", "arrive", "pony", "hire"
         ].join(' ')
 
-        const account = new AccountHelper(new RemoteNode('')).generateAccountFrom(mnemonic, Bip39Dictionary.ENGLISH)
+        const account = AccountHelper.generateAccountFrom(mnemonic, Bip39Dictionary.ENGLISH)
         expect(account.entropy).to.eql('8813550169346000cba90c3e690d6393')
         expect(account.reference).to.be.not.undefined
         expect(account.reference?.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
     })
 
     it('it should reconstruct the 36 mnemonic words from the given entropy and storage reference', async () => {
-        const words = new AccountHelper(new RemoteNode('')).generateMnemonicWordsFrom(
+        const words = AccountHelper.generateMnemonicWordsFrom(
             '8813550169346000cba90c3e690d6393',
             '782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f',
             Bip39Dictionary.ENGLISH

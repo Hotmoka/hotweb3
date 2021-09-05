@@ -176,7 +176,7 @@ export class AccountHelper {
         if (!account.reference) {
             throw new HotmokaException('Unable to reconstruct the storage reference of the account')
         }
-        const keyPair = this.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH, account.entropy)
+        const keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH, account.entropy)
         const accountIsVerified = await this.verifyAccount(account.reference, keyPair.publicKey)
         if (!accountIsVerified) {
             throw new HotmokaException('The public key of the account does not match its entropy')
@@ -207,7 +207,7 @@ export class AccountHelper {
      * @param entropy the optional entropy encoded in HEX. It will use a random 16 bytes entropy if not provided.
      * @return a {@link KeyPair}
      */
-    public generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair {
+    public static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair {
         return KeyPairGenerator.generateEd25519KeyPair(password, bip39Dictionary, entropy ? Buffer.from(entropy, 'hex') : undefined)
     }
 
@@ -218,7 +218,7 @@ export class AccountHelper {
      * @param bip39Dictionary the bi39 dictionary used
      * @return the account
      */
-    public generateAccountFrom(mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
+    public static generateAccountFrom(mnemonic: string, bip39Dictionary: Bip39Dictionary): Account {
         return new Bip39({dictionary: bip39Dictionary, mnemonic: mnemonic}).getAccount()
     }
 
@@ -229,7 +229,7 @@ export class AccountHelper {
      * @param bip39Dictionary the bi39 dictionary used
      * @return an array with the 36 mnemonic words
      */
-    public generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string> {
+    public static generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string> {
         const mnemonic = new Bip39({dictionary: bip39Dictionary, entropy: entropy, hashOfTransactionReference: storageReferenceHash}).getMnemonic()
         return mnemonic.split(" ")
     }

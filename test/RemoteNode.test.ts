@@ -481,7 +481,7 @@ describe('Testing creation of a hotmoka account', () => {
 
     it('it should create a hotmoka account from faucet', async () => {
         const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        keyPair = accountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
+        keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
 
         account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, keyPair, "10000000", "0")
         expect(account).to.be.not.undefined
