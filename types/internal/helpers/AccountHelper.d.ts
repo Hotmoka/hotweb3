@@ -102,7 +102,7 @@ export declare class AccountHelper {
      * @param reference the reference of the account
      * @return the balance
      */
-    private getBalance;
+    getBalance(reference: StorageReferenceModel): Promise<string>;
     /**
      * It returns the signature algorithm of the payer.
      * @param reference the reference of the account of the payer

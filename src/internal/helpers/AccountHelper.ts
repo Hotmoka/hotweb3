@@ -266,7 +266,7 @@ export class AccountHelper {
      * @param reference the reference of the account
      * @return the balance
      */
-    private async getBalance(reference: StorageReferenceModel): Promise<string> {
+    public async getBalance(reference: StorageReferenceModel): Promise<string> {
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             reference,
