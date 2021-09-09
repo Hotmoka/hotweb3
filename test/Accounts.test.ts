@@ -53,7 +53,7 @@ describe('Testing Bip39', () => {
 
 describe('Testing AccountHelper', () => {
 
-    it('it should build a valid account from the given mnemonic and password', async () => {
+    it('it should build a valid keypair the given password and entropy', async () => {
         const keyPair = AccountHelper.generateEd25519KeyPairFrom(
             'VERONA',
             Bip39Dictionary.ENGLISH,
@@ -65,7 +65,7 @@ describe('Testing AccountHelper', () => {
         expect(keyPair.publicKey).to.eql('LLsyS8F5YToc0uB/yZqgf+fRnHy9r6BfArqVsGU0GC4=')
     })
 
-    it('it should build a valid account from the given mnemonic and password', async () => {
+    it('it should build a valid account from the given mnemonic', async () => {
         const mnemonic = ["marine", "one", "doctor", "sponsor", "ecology", "about", "concert", "canoe",
             "dinosaur", "embody", "flight", "cheap", "little", "lizard", "space", "north", "nothing", "where", "tomorrow",
             "dress", "pupil", "axis", "spoil", "clap", "coral", "napkin", "style", "nasty", "warm", "ball", "viable", "science",
