@@ -96,7 +96,7 @@ export declare class AccountHelper {
      * @param reference the reference of the account
      * @return the public key
      */
-    private getPublicKey;
+    getPublicKey(reference: StorageReferenceModel): Promise<string>;
     /**
      * It returns the balance of the given account reference from the remote node.
      * @param reference the reference of the account

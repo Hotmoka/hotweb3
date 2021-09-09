@@ -239,7 +239,7 @@ export class AccountHelper {
      * @param reference the reference of the account
      * @return the public key
      */
-    private async getPublicKey(reference: StorageReferenceModel): Promise<string> {
+    public async getPublicKey(reference: StorageReferenceModel): Promise<string> {
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
             reference,
