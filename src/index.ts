@@ -12,6 +12,7 @@ export {Validator} from "./internal/models/info/Validator"
 export {AccountHelper} from './internal/helpers/AccountHelper'
 export {KeyPair} from './internal/bip39/KeyPair'
 export {Bip39Dictionary} from './internal/bip39/Bip39Dictionary'
+export {Base58} from  './internal/bip39/Base58'
 
 // signer
 export {Signer} from "./internal/signature/Signer";
