@@ -14,6 +14,39 @@ export declare class AccountHelper {
      */
     constructor(remoteNode: RemoteNode);
     /**
+     * Creates a {@link KeyPair} from the given password, BIP39 dictionary and entropy.
+     * @param password the password
+     * @param bip39Dictionary the bip39 dictionary to use. Available options: "english"
+     * @param entropy the optional entropy encoded in HEX. It will use a random 16 bytes entropy if not provided.
+     * @return a {@link KeyPair}
+     */
+    static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair;
+    /**
+     * Yields the 36 mnemonic words reconstructed from the given entropy and storage reference of an account.
+     * @param entropy the entropy encoded in HEX
+     * @param storageReferenceHash the hash of the storage reference of the account
+     * @param bip39Dictionary the bi39 dictionary used
+     * @return an array with the 36 mnemonic words
+     */
+    static generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string>;
+    /**
+     * It creates a key for a local account without the reference in the store of the remote node.
+     * @param password the password of the key
+     * @param bip39Dictionary the bip39 dictionary to use
+     * @return a local account
+     */
+    static createKey(password: string, bip39Dictionary: Bip39Dictionary): Account;
+    /**
+     * Checks that the provided public key is equal to a generated public key from a
+     * password, entropy and bip39Dictionary.
+     * @param password the password
+     * @param entropy the entropy
+     * @param bip39Dictionary the bip39 dictionary
+     * @param publicKeyToCheck the public key provided, encoded in base64
+     * @return true if the generated public key is equal to the public key provided, false otherwise
+     */
+    static verifyPublicKey(password: string, entropy: string, bip39Dictionary: Bip39Dictionary, publicKeyToCheck: string): boolean;
+    /**
      * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer
@@ -46,13 +79,6 @@ export declare class AccountHelper {
      */
     createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string): Promise<Account>;
     /**
-     * It creates a key for a local account without the reference in the store of the remote node.
-     * @param password the password of the key
-     * @param bip39Dictionary the bip39 dictionary to use
-     * @return a local account
-     */
-    static createKey(password: string, bip39Dictionary: Bip39Dictionary): Account;
-    /**
      * It imports a Hotmoka account.
      * @param name the name of the account
      * @param mnemonic the mnemonic
@@ -68,32 +94,6 @@ export declare class AccountHelper {
      * @return true if the public key to check is equal to the public key stored in the remote node, false otherwise
      */
     verifyAccount(accountAddress: StorageReferenceModel, publicKeyToCheck: string): Promise<boolean>;
-    /**
-     * Checks that the provided public key is equal to a generated public key from a
-     * password, entropy and bip39Dictionary.
-     * @param password the password
-     * @param entropy the entropy
-     * @param bip39Dictionary the bip39 dictionary
-     * @param publicKeyToCheck the public key provided, encoded in base64
-     * @return true if the generated public key is equal to the public key provided, false otherwise
-     */
-    static verifyPublicKey(password: string, entropy: string, bip39Dictionary: Bip39Dictionary, publicKeyToCheck: string): boolean;
-    /**
-     * Creates a {@link KeyPair} from the given password, BIP39 dictionary and entropy.
-     * @param password the password
-     * @param bip39Dictionary the bip39 dictionary to use. Available options: "english"
-     * @param entropy the optional entropy encoded in HEX. It will use a random 16 bytes entropy if not provided.
-     * @return a {@link KeyPair}
-     */
-    static generateEd25519KeyPairFrom(password: string, bip39Dictionary: Bip39Dictionary, entropy?: string): KeyPair;
-    /**
-     * Yields the 36 mnemonic words reconstructed from the given entropy and storage reference of an account.
-     * @param entropy the entropy encoded in HEX
-     * @param storageReferenceHash the hash of the storage reference of the account
-     * @param bip39Dictionary the bi39 dictionary used
-     * @return an array with the 36 mnemonic words
-     */
-    static generateMnemonicWordsFrom(entropy: string, storageReferenceHash: string, bip39Dictionary: Bip39Dictionary): Array<string>;
     /**
      * It returns the public key from the remote node of the given account reference.
      * @param reference the reference of the account

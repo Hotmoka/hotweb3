@@ -39,7 +39,7 @@ export class ManifestHelper {
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const manifest = await this.remoteNode.getManifest()
         const allowsUnsignedFaucet = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ALLOWS_UNSIGNED_FAUCET, manifest))
-        return Promise.resolve((allowsUnsignedFaucet && allowsUnsignedFaucet.value) ? 'true' === allowsUnsignedFaucet.value : false)
+        return (allowsUnsignedFaucet && allowsUnsignedFaucet.value) ? 'true' === allowsUnsignedFaucet.value : false
     }
 
     /**
@@ -191,7 +191,7 @@ export class ManifestHelper {
             info.validators.validators.push(validator)
         }
 
-        return Promise.resolve(info)
+        return info
     }
 
     private buildInstanceMethodCallTransactionModel(
@@ -242,6 +242,6 @@ export class ManifestHelper {
             )
         )
 
-        return Promise.resolve(new Validator(validator.reference, id.value, balanceOfValidator.value, power.value, i))
+        return new Validator(validator.reference, id.value, balanceOfValidator.value, power.value, i)
     }
 }

@@ -10,6 +10,7 @@ export {Validator} from "./internal/models/info/Validator"
 
 // account
 export {AccountHelper} from './internal/helpers/AccountHelper'
+export {Account} from './internal/models/Account'
 export {KeyPair} from './internal/bip39/KeyPair'
 export {Bip39Dictionary} from './internal/bip39/Bip39Dictionary'
 export {Base58} from  './internal/bip39/Base58'

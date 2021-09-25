@@ -126,24 +126,24 @@ export class RemoteNode implements Node {
 
     // get
 
-    async getClassTag(object: StorageReferenceModel): Promise<ClassTagModel> {
-        return await RemoteNode.post<ClassTagModel, StorageReferenceModel>(this.url + '/get/classTag', object)
+    getClassTag(object: StorageReferenceModel): Promise<ClassTagModel> {
+        return RemoteNode.post<ClassTagModel, StorageReferenceModel>(this.url + '/get/classTag', object)
     }
 
-    async getManifest(): Promise<StorageReferenceModel> {
-        return await RemoteNode.get<StorageReferenceModel>(this.url + '/get/manifest')
+    getManifest(): Promise<StorageReferenceModel> {
+        return RemoteNode.get<StorageReferenceModel>(this.url + '/get/manifest')
     }
 
-    async getState(object: StorageReferenceModel): Promise<StateModel> {
-        return await RemoteNode.post<StateModel, StorageReferenceModel>(this.url + '/get/state', object)
+    getState(object: StorageReferenceModel): Promise<StateModel> {
+        return RemoteNode.post<StateModel, StorageReferenceModel>(this.url + '/get/state', object)
     }
 
-    async getTakamakaCode(): Promise<TransactionReferenceModel> {
-        return await RemoteNode.get<TransactionReferenceModel>(this.url + '/get/takamakaCode')
+    getTakamakaCode(): Promise<TransactionReferenceModel> {
+        return RemoteNode.get<TransactionReferenceModel>(this.url + '/get/takamakaCode')
     }
 
-    async getNameOfSignatureAlgorithmForRequests(): Promise<SignatureAlgorithmResponseModel> {
-        return await RemoteNode.get<SignatureAlgorithmResponseModel>(this.url + '/get/nameOfSignatureAlgorithmForRequests')
+    getNameOfSignatureAlgorithmForRequests(): Promise<SignatureAlgorithmResponseModel> {
+        return RemoteNode.get<SignatureAlgorithmResponseModel>(this.url + '/get/nameOfSignatureAlgorithmForRequests')
     }
 
     async getRequestAt(reference: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>> {
@@ -153,70 +153,70 @@ export class RemoteNode implements Node {
 
     async getResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
         await this.wait(1000)
-        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/response', reference)
+        return RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/response', reference)
     }
 
     async getPolledResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
         await this.wait(1000)
-        return await RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/polledResponse', reference)
+        return RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/polledResponse', reference)
     }
 
     // add
 
-    async addJarStoreInitialTransaction(request: JarStoreInitialTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, JarStoreInitialTransactionRequestModel>(this.url + '/add/jarStoreInitialTransaction', request)
+    addJarStoreInitialTransaction(request: JarStoreInitialTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, JarStoreInitialTransactionRequestModel>(this.url + '/add/jarStoreInitialTransaction', request)
     }
 
-    async addRedGreenGameteCreationTransaction(request: GameteCreationTransactionRequestModel): Promise<StorageReferenceModel> {
-        return await RemoteNode.post<StorageReferenceModel, GameteCreationTransactionRequestModel>(this.url + '/add/gameteCreationTransaction', request)
+    addRedGreenGameteCreationTransaction(request: GameteCreationTransactionRequestModel): Promise<StorageReferenceModel> {
+        return RemoteNode.post<StorageReferenceModel, GameteCreationTransactionRequestModel>(this.url + '/add/gameteCreationTransaction', request)
     }
 
-    async addInitializationTransaction(request: InitializationTransactionRequestModel): Promise<void> {
-        return await RemoteNode.post<void, InitializationTransactionRequestModel>(this.url + '/add/initializationTransaction', request)
+    addInitializationTransaction(request: InitializationTransactionRequestModel): Promise<void> {
+        return RemoteNode.post<void, InitializationTransactionRequestModel>(this.url + '/add/initializationTransaction', request)
     }
 
-    async addJarStoreTransaction(request: JarStoreTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, JarStoreTransactionRequestModel>(this.url + '/add/jarStoreTransaction', request)
+    addJarStoreTransaction(request: JarStoreTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, JarStoreTransactionRequestModel>(this.url + '/add/jarStoreTransaction', request)
     }
 
-    async addConstructorCallTransaction(request: ConstructorCallTransactionRequestModel): Promise<StorageReferenceModel> {
-        return await RemoteNode.post<StorageReferenceModel, ConstructorCallTransactionRequestModel>(this.url + '/add/constructorCallTransaction', request)
+    addConstructorCallTransaction(request: ConstructorCallTransactionRequestModel): Promise<StorageReferenceModel> {
+        return RemoteNode.post<StorageReferenceModel, ConstructorCallTransactionRequestModel>(this.url + '/add/constructorCallTransaction', request)
     }
 
-    async addInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<StorageValueModel> {
-        return await RemoteNode.post<StorageValueModel, InstanceMethodCallTransactionRequestModel>(this.url + '/add/instanceMethodCallTransaction', request)
+    addInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<StorageValueModel> {
+        return RemoteNode.post<StorageValueModel, InstanceMethodCallTransactionRequestModel>(this.url + '/add/instanceMethodCallTransaction', request)
     }
 
-    async addStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<StorageValueModel> {
-        return await RemoteNode.post<StorageValueModel, StaticMethodCallTransactionRequestModel>(this.url + '/add/staticMethodCallTransaction', request)
+    addStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<StorageValueModel> {
+        return RemoteNode.post<StorageValueModel, StaticMethodCallTransactionRequestModel>(this.url + '/add/staticMethodCallTransaction', request)
     }
 
     // post
 
-    async postJarStoreTransaction(request: JarStoreTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, JarStoreTransactionRequestModel>(this.url + '/post/jarStoreTransaction', request)
+    postJarStoreTransaction(request: JarStoreTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, JarStoreTransactionRequestModel>(this.url + '/post/jarStoreTransaction', request)
     }
 
-    async postConstructorCallTransaction(request: ConstructorCallTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, ConstructorCallTransactionRequestModel>(this.url + '/post/constructorCallTransaction', request)
+    postConstructorCallTransaction(request: ConstructorCallTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, ConstructorCallTransactionRequestModel>(this.url + '/post/constructorCallTransaction', request)
     }
 
-    async postInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, InstanceMethodCallTransactionRequestModel>(this.url + '/post/instanceMethodCallTransaction', request)
+    postInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, InstanceMethodCallTransactionRequestModel>(this.url + '/post/instanceMethodCallTransaction', request)
     }
 
-    async postStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<TransactionReferenceModel> {
-        return await RemoteNode.post<TransactionReferenceModel, StaticMethodCallTransactionRequestModel>(this.url + '/post/staticMethodCallTransaction', request)
+    postStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<TransactionReferenceModel> {
+        return RemoteNode.post<TransactionReferenceModel, StaticMethodCallTransactionRequestModel>(this.url + '/post/staticMethodCallTransaction', request)
     }
 
     // run
 
-    async runInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<StorageValueModel> {
-        return await RemoteNode.post<StorageValueModel, InstanceMethodCallTransactionRequestModel>(this.url + '/run/instanceMethodCallTransaction', request)
+    runInstanceMethodCallTransaction(request: InstanceMethodCallTransactionRequestModel): Promise<StorageValueModel> {
+        return RemoteNode.post<StorageValueModel, InstanceMethodCallTransactionRequestModel>(this.url + '/run/instanceMethodCallTransaction', request)
     }
 
-    async runStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<StorageValueModel> {
-        return await RemoteNode.post<StorageValueModel, StaticMethodCallTransactionRequestModel>(this.url + '/run/staticMethodCallTransaction', request)
+    runStaticMethodCallTransaction(request: StaticMethodCallTransactionRequestModel): Promise<StorageValueModel> {
+        return RemoteNode.post<StorageValueModel, StaticMethodCallTransactionRequestModel>(this.url + '/run/staticMethodCallTransaction', request)
     }
 
     // helpers
@@ -231,8 +231,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async info(): Promise<InfoModel> {
-       return await new ManifestHelper(this).info()
+    info(): Promise<InfoModel> {
+       return new ManifestHelper(this).info()
     }
 
     /**
@@ -246,8 +246,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async getNonceOf(account: StorageReferenceModel): Promise<string> {
-        return await new NonceHelper(this).getNonceOf(account)
+    getNonceOf(account: StorageReferenceModel): Promise<string> {
+        return new NonceHelper(this).getNonceOf(account)
     }
 
     /**
@@ -260,8 +260,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async getGasPrice(): Promise<string> {
-        return await new GasHelper(this).getGasPrice()
+    getGasPrice(): Promise<string> {
+        return new GasHelper(this).getGasPrice()
     }
 
     /**
@@ -274,8 +274,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async getGamete(): Promise<StorageReferenceModel> {
-        return await new ManifestHelper(this).getGamete()
+    getGamete(): Promise<StorageReferenceModel> {
+        return new ManifestHelper(this).getGamete()
     }
 
     /**
@@ -288,8 +288,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async getChainId(): Promise<string> {
-        return await new ManifestHelper(this).getChainId()
+    getChainId(): Promise<string> {
+        return new ManifestHelper(this).getChainId()
     }
 
     /**
@@ -302,8 +302,8 @@ export class RemoteNode implements Node {
      *                              or that is not allowed to be thrown by the method
      * @throws HotmokaException if generic errors occur
      */
-    async allowsUnsignedFaucet(): Promise<boolean> {
-        return await new ManifestHelper(this).allowsUnsignedFaucet()
+    allowsUnsignedFaucet(): Promise<boolean> {
+        return new ManifestHelper(this).allowsUnsignedFaucet()
     }
 
     private wait(milliseconds: number): Promise<void> {

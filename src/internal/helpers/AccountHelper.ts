@@ -155,7 +155,7 @@ export class AccountHelper {
             ))
         }
 
-        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account))
+        return new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account)
     }
 
     /**
@@ -201,7 +201,7 @@ export class AccountHelper {
             ]
         ))
 
-        return Promise.resolve(new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account.reference))
+        return new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account.reference)
     }
 
     /**
@@ -223,7 +223,7 @@ export class AccountHelper {
         }
 
         const balance = await this.getBalance(account.reference)
-        return Promise.resolve(new Account(account.entropy, keyPair.publicKey, name, balance, account.reference))
+        return new Account(account.entropy, keyPair.publicKey, name, balance, account.reference)
     }
 
     /**
@@ -237,7 +237,6 @@ export class AccountHelper {
         const publicKey = await this.getPublicKey(accountAddress)
         return publicKey === publicKeyToCheck
     }
-
 
     /**
      * It returns the public key from the remote node of the given account reference.
