@@ -112,7 +112,7 @@ export declare class AccountHelper {
      * @return the signature algorithm
      * @throws HotmokaException if the signature algorithm of the payer is unmanaged
      */
-    private getSignatureAlgorithm;
+    getSignatureAlgorithm(reference: StorageReferenceModel): Promise<Algorithm>;
     /**
      * It returns the accounts ledger of the manifest.
      * @param takamakaCode the reference of takamakaCode

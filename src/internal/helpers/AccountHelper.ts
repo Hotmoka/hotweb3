@@ -298,7 +298,7 @@ export class AccountHelper {
      * @return the signature algorithm
      * @throws HotmokaException if the signature algorithm of the payer is unmanaged
      */
-    private async getSignatureAlgorithm(reference: StorageReferenceModel): Promise<Algorithm> {
+    public async getSignatureAlgorithm(reference: StorageReferenceModel): Promise<Algorithm> {
         const classTag = await this.remoteNode.getClassTag(reference)
 
         if (classTag && classTag.className === ClassType.EOA_ED25519.name) {
