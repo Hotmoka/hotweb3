@@ -31,7 +31,7 @@ import * as path from "path"
 import assert = require("assert");
 
 
-export const HOTMOKA_VERSION = "1.0.3"
+export const HOTMOKA_VERSION = "1.0.4"
 const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
@@ -480,6 +480,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
 
 
 describe('Testing creation of a hotmoka account', () => {
+    let accountCreationTransaction: TransactionReferenceModel | null = null
     let keyPair: KeyPair
     let account: StorageValueModel
     const password = "pippo"
@@ -488,8 +489,15 @@ describe('Testing creation of a hotmoka account', () => {
         const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
         keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
 
-        account = await accountHelper.createAccountFromFaucet(Algorithm.ED25519, keyPair, "10000000", "0")
+        account = await accountHelper.createAccountFromFaucet(
+            Algorithm.ED25519,
+            keyPair,
+            "2",
+            "0",
+            resultTransaction => accountCreationTransaction = resultTransaction
+        )
         expect(account).to.be.not.undefined
+        expect(accountCreationTransaction).to.be.not.null
 
         if (!account.reference) {
             assert.fail('account reference should be defined')
@@ -499,6 +507,41 @@ describe('Testing creation of a hotmoka account', () => {
         expect(account.reference.transaction.type).to.be.eq('local')
 
     }).timeout(40000)
+
+    it('it should return a valid request for the transaction reference of the account created', async () => {
+        if (!accountCreationTransaction) {
+            assert.fail('transaction reference should be defined')
+        }
+
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const result: TransactionRestRequestModel<unknown> = await remoteNode.getRequestAt(accountCreationTransaction)
+        expect(result).to.be.not.null
+        expect(result).to.be.not.undefined
+
+        const request = result.transactionRequestModel as InstanceMethodCallTransactionRequestModel
+        expect(request).to.be.not.null
+        expect(request.method).to.be.not.null
+        expect(request.method.methodName).to.be.not.null
+        expect(request.method.methodName).to.be.eql('faucetED25519')
+
+    }).timeout(10000)
+
+    it('it should return a valid response for the transaction reference of the account created', async () => {
+        if (!accountCreationTransaction) {
+            assert.fail('transaction reference should be defined')
+        }
+
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const result: TransactionRestResponseModel<unknown> = await remoteNode.getResponseAt(accountCreationTransaction)
+        expect(result).to.be.not.null
+        expect(result).to.be.not.undefined
+
+        const response = result.transactionResponseModel as MethodCallTransactionSuccessfulResponseModel
+        expect(response).to.be.not.null
+        expect(response.result).to.be.not.null
+        expect(response.result.reference).to.be.not.null
+
+    }).timeout(10000)
 
     it('it should verify correctly the created public key in the node', async () => {
         const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))

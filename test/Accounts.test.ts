@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {Bip39} from "../src/internal/bip39/Bip39";
 import {AccountHelper, Bip39Dictionary} from "../src";
-import {Base58} from "../src/internal/bip39/Base58";
+import {Base58} from "../src";
 
 describe('Testing Base58', () => {
 
