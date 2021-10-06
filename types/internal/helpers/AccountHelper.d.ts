@@ -4,8 +4,9 @@ import { KeyPair } from "../bip39/KeyPair";
 import { Bip39Dictionary } from "../bip39/Bip39Dictionary";
 import { Account } from "../models/Account";
 import { StorageReferenceModel } from "../models/values/StorageReferenceModel";
+import { TransactionReferenceModel } from "../models/values/TransactionReferenceModel";
 export declare class AccountHelper {
-    private static readonly EXTRA_GAS_FOR_ANONYMOUS;
+    static readonly EXTRA_GAS_FOR_ANONYMOUS = 500000;
     private static readonly _100_000;
     private readonly remoteNode;
     /**
@@ -56,6 +57,7 @@ export declare class AccountHelper {
      * @param balanceRed the red balance of the new account
      * @param addToLedger adds the new account to the ledger of the manifest, bound to its {@code publicKey}; if an account already
      *                    exists for {@code publicKey}, that account gets funded with {@code balance} and {@code balanceRed} coins and returned
+     * @param resultTransactionsCallback a function to consume the result transactions of this request
      * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
@@ -63,13 +65,14 @@ export declare class AccountHelper {
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    createAccountFromPayer(algorithm: Algorithm, payer: StorageReferenceModel, keyPairOfPayer: KeyPair, keyPair: KeyPair, balance: string, balanceRed: string, addToLedger: boolean): Promise<Account>;
+    createAccountFromPayer(algorithm: Algorithm, payer: StorageReferenceModel, keyPairOfPayer: KeyPair, keyPair: KeyPair, balance: string, balanceRed: string, addToLedger: boolean, resultTransactionsCallback?: (resultTransactions: TransactionReferenceModel[]) => void): Promise<Account>;
     /**
      * Creates a new account by letting the faucet pay.
      * @param algorithm the signature algorithm for the new account
      * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
+     * @param resultTransactionCallback a function to consume the result transaction of this request
      * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
@@ -77,7 +80,7 @@ export declare class AccountHelper {
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string): Promise<Account>;
+    createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string, resultTransactionCallback?: (resultTransaction: TransactionReferenceModel | null) => void): Promise<Account>;
     /**
      * It imports a Hotmoka account.
      * @param name the name of the account

@@ -17,6 +17,10 @@ export declare class CodeSignature {
      */
     static readonly RECEIVE_BIG_INTEGER: VoidMethodSignatureModel;
     /**
+     * The method receiveRed of a payable contract, with a big integer argument.
+     */
+    static readonly RECEIVE_RED_BIG_INTEGER: VoidMethodSignatureModel;
+    /**
      * The method "getGamete" of the manifest.
      */
     static readonly GET_GAMETE: NonVoidMethodSignatureModel;
