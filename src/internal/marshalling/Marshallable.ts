@@ -11,11 +11,21 @@ export abstract class Marshallable {
      * @return the buffer of bytes
      */
     protected marshall(): Buffer {
-        const marshallingContext = new MarshallingContext()
-        this.into(marshallingContext)
+        const marshallingContext = this.marshallObject()
         marshallingContext.flush()
 
         return marshallingContext.getBuffer()
+    }
+
+    /**
+     * Marshals this object into a marshalling context without flushing.
+     * @return the marshalling Context
+     */
+    protected marshallObject(): MarshallingContext {
+        const marshallingContext = new MarshallingContext()
+        this.into(marshallingContext)
+
+        return marshallingContext
     }
 
     /**
