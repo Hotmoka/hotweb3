@@ -23,6 +23,11 @@ export class CodeSignature {
     public static readonly RECEIVE_BIG_INTEGER = new VoidMethodSignatureModel(ClassType.PAYABLE_CONTRACT.name,"receive",[ClassType.BIG_INTEGER.name])
 
     /**
+     * The method receiveRed of a payable contract, with a big integer argument.
+     */
+    public static readonly RECEIVE_RED_BIG_INTEGER = new VoidMethodSignatureModel(ClassType.PAYABLE_CONTRACT.name, "receiveRed", [ClassType.BIG_INTEGER.name])
+
+    /**
      * The method "getGamete" of the manifest.
      */
     public static readonly GET_GAMETE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getGamete", ClassType.ACCOUNT.name,[])

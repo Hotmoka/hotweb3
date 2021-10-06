@@ -19,7 +19,7 @@ import {ConstructorCallTransactionRequestModel} from "../models/requests/Constru
 import {ConstructorSignatureModel} from "../models/signatures/ConstructorSignatureModel";
 
 export class AccountHelper {
-    private static readonly EXTRA_GAS_FOR_ANONYMOUS = 500000
+    public static readonly EXTRA_GAS_FOR_ANONYMOUS = 500000
     private static readonly _100_000 = 100000
     private readonly remoteNode: RemoteNode
 
@@ -91,6 +91,7 @@ export class AccountHelper {
      * @param balanceRed the red balance of the new account
      * @param addToLedger adds the new account to the ledger of the manifest, bound to its {@code publicKey}; if an account already
      *                    exists for {@code publicKey}, that account gets funded with {@code balance} and {@code balanceRed} coins and returned
+     * @param resultTransactionsCallback a function to consume the result transactions of this request
      * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
@@ -98,7 +99,15 @@ export class AccountHelper {
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    public async createAccountFromPayer(algorithm: Algorithm, payer: StorageReferenceModel, keyPairOfPayer: KeyPair, keyPair: KeyPair, balance: string, balanceRed: string, addToLedger: boolean): Promise<Account> {
+    public async createAccountFromPayer(algorithm: Algorithm,
+                                        payer: StorageReferenceModel,
+                                        keyPairOfPayer: KeyPair,
+                                        keyPair: KeyPair,
+                                        balance: string,
+                                        balanceRed: string,
+                                        addToLedger: boolean,
+                                        resultTransactionsCallback?: (resultTransactions: TransactionReferenceModel[]) => void): Promise<Account> {
+
         if (algorithm === Algorithm.SHA256DSA) {
             throw new HotmokaException("Algorithm not implemented")
         }
@@ -109,18 +118,20 @@ export class AccountHelper {
 
         const chainId = await this.remoteNode.getChainId()
         const takamakaCode = await this.remoteNode.getTakamakaCode()
-        const nonceOfPayer = await this.remoteNode.getNonceOf(payer)
+        let nonceOfPayer = await this.remoteNode.getNonceOf(payer)
         const signatureAlgorithmOfPayer = await this.getSignatureAlgorithm(payer)
         const signatureOfPayer = new Signer(signatureAlgorithmOfPayer, keyPairOfPayer.privateKey)
         const gas1 = AccountHelper._100_000
         const gas2 = AccountHelper._100_000
         const gasPrice = await this.remoteNode.getGasPrice()
+        const transactions: TransactionReferenceModel[] = []
 
-        let account: StorageReferenceModel | undefined;
+        let accountCreationRequest: InstanceMethodCallTransactionRequestModel | ConstructorCallTransactionRequestModel
+        let account: StorageReferenceModel | undefined
         if (addToLedger) {
             const accountsLedger = await this.getAccountsLedger(takamakaCode)
             const gas = gas1 + gas2 + AccountHelper.EXTRA_GAS_FOR_ANONYMOUS
-            const accountResult = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+            accountCreationRequest = new InstanceMethodCallTransactionRequestModel(
                 payer,
                 nonceOfPayer,
                 chainId,
@@ -134,12 +145,13 @@ export class AccountHelper {
                     StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
                 ],
                 signatureOfPayer
-            ))
+            )
+            const accountResult = await this.remoteNode.addInstanceMethodCallTransaction(accountCreationRequest)
             account = accountResult.reference
 
         } else {
             const gas = gas1 + gas2
-            account = await this.remoteNode.addConstructorCallTransaction(new ConstructorCallTransactionRequestModel(
+            accountCreationRequest = new ConstructorCallTransactionRequestModel(
                 payer,
                 nonceOfPayer,
                 chainId,
@@ -152,8 +164,43 @@ export class AccountHelper {
                     StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
                 ],
                 signatureOfPayer
-            ))
+            )
+            account = await this.remoteNode.addConstructorCallTransaction(accountCreationRequest)
         }
+
+        if (resultTransactionsCallback) {
+            const accountCreationTransaction = accountCreationRequest.getReference(accountCreationRequest.signature)
+            if (accountCreationTransaction) {
+                transactions.push(accountCreationTransaction)
+            }
+        }
+
+        if (balanceRed && parseInt(balanceRed) > 0 && account) {
+            nonceOfPayer = await this.remoteNode.getNonceOf(payer)
+
+            const addBalanceRedRequest = new InstanceMethodCallTransactionRequestModel(
+                payer,
+                nonceOfPayer,
+                chainId,
+                gas2.toString(),
+                gasPrice,
+                takamakaCode,
+                CodeSignature.RECEIVE_RED_BIG_INTEGER,
+                account,
+                [StorageValueModel.newStorageValue(balanceRed, ClassType.BIG_INTEGER.name)],
+                signatureOfPayer
+            )
+           await this.remoteNode.addInstanceMethodCallTransaction(addBalanceRedRequest)
+
+            if (resultTransactionsCallback) {
+                const addBalanceRedTransaction = addBalanceRedRequest.getReference(addBalanceRedRequest.signature)
+                if (addBalanceRedTransaction) {
+                    transactions.push(addBalanceRedTransaction)
+                }
+            }
+        }
+
+        resultTransactionsCallback?.(transactions)
 
         return new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account)
     }
@@ -164,6 +211,7 @@ export class AccountHelper {
      * @param keyPair the key pair of the new account
      * @param balance the balance of the new account
      * @param balanceRed the red balance of the new account
+     * @param resultTransactionCallback a function to consume the result transaction of this request
      * @return the account
      * @throws TransactionRejectedException if the transaction could not be executed
      * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
@@ -171,7 +219,12 @@ export class AccountHelper {
      * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
      *                              or that is not allowed to be thrown by the method
      */
-    public async createAccountFromFaucet(algorithm: Algorithm, keyPair: KeyPair, balance: string, balanceRed: string): Promise<Account> {
+    public async createAccountFromFaucet(algorithm: Algorithm,
+                                         keyPair: KeyPair,
+                                         balance: string,
+                                         balanceRed: string,
+                                         resultTransactionCallback?: (resultTransaction: TransactionReferenceModel | null) => void): Promise<Account> {
+
         if (algorithm === Algorithm.SHA256DSA) {
             throw new HotmokaException("Algorithm not implemented")
         }
@@ -185,7 +238,7 @@ export class AccountHelper {
         const gasPrice = await this.remoteNode.getGasPrice()
         const chainId = await this.remoteNode.getChainId()
 
-        const account = await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const request = new InstanceMethodCallTransactionRequestModel(
             gamete,
             nonceOfGamete,
             chainId,
@@ -199,7 +252,10 @@ export class AccountHelper {
                 StorageValueModel.newStorageValue(balanceRed, ClassType.BIG_INTEGER.name),
                 StorageValueModel.newStorageValue(keyPair.publicKey, ClassType.STRING.name)
             ]
-        ))
+        )
+
+        const account = await this.remoteNode.addInstanceMethodCallTransaction(request)
+        resultTransactionCallback?.(request.getReference(request.signature))
 
         return new Account(keyPair.entropy, keyPair.publicKey, Base58.encode(keyPair.publicKey), balance, account.reference)
     }

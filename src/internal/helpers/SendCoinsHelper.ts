@@ -30,39 +30,80 @@ export class SendCoinsHelper {
      * @param destination the destination account
      * @param amount the balance to transfer
      * @param amountRed the red balance to transfer
+     * @param resultTransactionsCallback a function to consume the result transactions of this request
+     * @return {Promise<void>} a promise that resolves to void
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
      */
-    public async fromPayer(payer: StorageReferenceModel, keysOfPayer: KeyPair, destination: StorageReferenceModel, amount: string, amountRed: string) {
+    public async fromPayer(payer: StorageReferenceModel,
+                           keysOfPayer: KeyPair,
+                           destination: StorageReferenceModel,
+                           amount: string,
+                           amountRed: string,
+                           resultTransactionsCallback?: (resultTransactions: TransactionReferenceModel[]) => void): Promise<void> {
+
         if (!amount || parseInt(amount) < 1) {
-            throw new HotmokaException("Invalid amount")
+            throw new HotmokaException("Invalid amount. Value must be greater than 1")
         }
 
         const accountHelper = new AccountHelper(this.remoteNode)
         const signatureAlgorithmOfPayer = await accountHelper.getSignatureAlgorithm(payer)
         const signatureOfPayer = new Signer(signatureAlgorithmOfPayer, keysOfPayer.privateKey)
-        const nonceOfPayer = await this.remoteNode.getNonceOf(payer)
+        let nonceOfPayer = await this.remoteNode.getNonceOf(payer)
         const chainId = await this.remoteNode.getChainId()
         const gasPrice = await this.remoteNode.getGasPrice()
         const takamakaCode = await this.remoteNode.getTakamakaCode()
+        const transactions: TransactionReferenceModel[] = []
 
-        await this.sendCoins(payer,
+        const sendAmountRequest = new InstanceMethodCallTransactionRequestModel(
+            payer,
             nonceOfPayer,
             chainId,
+            SendCoinsHelper._100_000.toString(),
             gasPrice,
             takamakaCode,
+            CodeSignature.RECEIVE_BIG_INTEGER,
             destination,
-            amount,
-            signatureOfPayer)
+            [StorageValueModel.newStorageValue(amount, ClassType.BIG_INTEGER.name)],
+            signatureOfPayer
+        )
+        await this.remoteNode.addInstanceMethodCallTransaction(sendAmountRequest)
+
+        if (resultTransactionsCallback) {
+            const sendAmountTransaction = sendAmountRequest.getReference(sendAmountRequest.signature)
+            if (sendAmountTransaction) {
+                transactions.push(sendAmountTransaction)
+            }
+        }
 
         if (amountRed && parseInt(amountRed) > 0) {
-            await this.sendCoins(payer,
+            nonceOfPayer = await this.remoteNode.getNonceOf(payer)
+            const sendAmountRedRequest = new InstanceMethodCallTransactionRequestModel(
+                payer,
                 nonceOfPayer,
                 chainId,
+                SendCoinsHelper._100_000.toString(),
                 gasPrice,
                 takamakaCode,
+                CodeSignature.RECEIVE_RED_BIG_INTEGER,
                 destination,
-                amountRed,
-                signatureOfPayer)
+                [StorageValueModel.newStorageValue(amountRed, ClassType.BIG_INTEGER.name)],
+                signatureOfPayer
+            )
+
+            await this.remoteNode.addInstanceMethodCallTransaction(sendAmountRedRequest)
+            if (resultTransactionsCallback) {
+                const sendAmountRedTransaction = sendAmountRedRequest.getReference(sendAmountRedRequest.signature)
+                if (sendAmountRedTransaction) {
+                    transactions.push(sendAmountRedTransaction)
+                }
+            }
         }
+
+        resultTransactionsCallback?.(transactions)
     }
 
     /**
@@ -70,8 +111,15 @@ export class SendCoinsHelper {
      * @param destination the destination account
      * @param amount the balance to transfer
      * @param amountRed the red balance to transfer
+     * @param resultTransactionCallback a function to consume the result transaction of this request
+     * @return {Promise<void>} a promise that resolves to void
+     * @throws TransactionRejectedException if the transaction could not be executed
+     * @throws CodeExecutionException if the transaction could be executed but led to an exception in the user code in blockchain,
+     *                                that is allowed to be thrown by the method
+     * @throws TransactionException if the transaction could be executed but led to an exception outside the user code in blockchain,
+     *                              or that is not allowed to be thrown by the method
      */
-    public async fromFaucet(destination: StorageReferenceModel, amount: string, amountRed: string) {
+    public async fromFaucet(destination: StorageReferenceModel, amount: string, amountRed: string, resultTransactionCallback?: (resultTransaction: TransactionReferenceModel | null) => void): Promise<void> {
 
         const takamakaCode = await this.remoteNode.getTakamakaCode()
         const gamete = await this.remoteNode.getGamete()
@@ -79,7 +127,7 @@ export class SendCoinsHelper {
         const chainId = await this.remoteNode.getChainId()
         const gasPrice = await this.remoteNode.getGasPrice()
 
-        await this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+        const request = new InstanceMethodCallTransactionRequestModel(
             gamete,
             nonceOfGamete,
             chainId,
@@ -93,28 +141,9 @@ export class SendCoinsHelper {
                 StorageValueModel.newStorageValue(amount, ClassType.BIG_INTEGER.name),
                 StorageValueModel.newStorageValue(amountRed, ClassType.BIG_INTEGER.name)
             ]
-        ))
-    }
+        )
+        await this.remoteNode.addInstanceMethodCallTransaction(request)
 
-    private sendCoins(payer: StorageReferenceModel,
-                           nonceOfPayer: string,
-                           chainId: string,
-                           gasPrice: string,
-                           takamakaCode: TransactionReferenceModel,
-                           destination: StorageReferenceModel,
-                           amount: string,
-                           signatureOfPayer: Signer) {
-        return this.remoteNode.addInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
-            payer,
-            nonceOfPayer,
-            chainId,
-            SendCoinsHelper._100_000.toString(),
-            gasPrice,
-            takamakaCode,
-            CodeSignature.RECEIVE_BIG_INTEGER,
-            destination,
-            [StorageValueModel.newStorageValue(amount, ClassType.BIG_INTEGER.name)],
-            signatureOfPayer
-        ))
+        resultTransactionCallback?.(request.getReference(request.signature))
     }
 }
