@@ -48,6 +48,12 @@ export declare class AccountHelper {
      */
     static verifyPublicKey(password: string, entropy: string, bip39Dictionary: Bip39Dictionary, publicKeyToCheck: string): boolean;
     /**
+     * Checks if the provided base58 public key can be decoded to a ed25519 public key.
+     * @param base58PublicKey the base58 public key
+     * @return true if the provided base58 public key can be decoded to a ed25519 public key, false otherwise
+     */
+    static isEd25519PublicKey(base58PublicKey: string): boolean;
+    /**
      * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer

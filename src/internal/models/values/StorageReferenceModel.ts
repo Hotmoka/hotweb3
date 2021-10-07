@@ -57,4 +57,21 @@ export class StorageReferenceModel {
     public static intoWithoutSelector(context: MarshallingContext, storageReferenceModel: StorageReferenceModel): void {
         context.writeStorageReference(storageReferenceModel)
     }
+
+    /**
+     * Checks if the provided storage reference is a valid storage reference.
+     * @param storageReference the storage reference
+     * @return true if the provided storage reference is a valid storage reference, false otherwise
+     */
+    public static isStorageReference(storageReference: string): boolean {
+        try {
+            if (storageReference.indexOf('#') === -1) {
+                return storageReference.length === 64
+            } else {
+                return storageReference.split('#')[0].length === 64
+            }
+        } catch (e) {
+            return false
+        }
+    }
 }

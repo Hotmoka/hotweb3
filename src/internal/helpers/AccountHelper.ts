@@ -82,6 +82,19 @@ export class AccountHelper {
     }
 
     /**
+     * Checks if the provided base58 public key can be decoded to a ed25519 public key.
+     * @param base58PublicKey the base58 public key
+     * @return true if the provided base58 public key can be decoded to a ed25519 public key, false otherwise
+     */
+    public static isEd25519PublicKey(base58PublicKey: string): boolean {
+        try {
+            return Buffer.from(Base58.decode(base58PublicKey).toString(), 'base64').length === 32
+        } catch (e) {
+            return false
+        }
+    }
+
+    /**
      * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer

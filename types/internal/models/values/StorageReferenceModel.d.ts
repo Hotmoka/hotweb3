@@ -30,4 +30,10 @@ export declare class StorageReferenceModel {
     static newStorageReference(hash: string, progressive?: string): StorageReferenceModel;
     static into(context: MarshallingContext, storageReferenceModel: StorageReferenceModel): void;
     static intoWithoutSelector(context: MarshallingContext, storageReferenceModel: StorageReferenceModel): void;
+    /**
+     * Checks if the provided storage reference is a valid storage reference.
+     * @param storageReference the storage reference
+     * @return true if the provided storage reference is a valid storage reference, false otherwise
+     */
+    static isStorageReference(storageReference: string): boolean;
 }
