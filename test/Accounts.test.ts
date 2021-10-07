@@ -14,6 +14,16 @@ describe('Testing Base58', () => {
         const decoded = Base58.decode('9hLF3DCKexERxQyEQT')
         expect(decoded).to.eql(Buffer.from('helloworld124'))
     })
+
+    it('it should encode a ed25519 publicKey', async () => {
+        const encoded = Base58.encode('Goy0mEM97sWRuTdNDxUyJ/gYAnn9FPuWi3FsPeQsLNo=')
+        expect(encoded).to.eql('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
+    })
+
+    it('it should decode a base58 publicKey to a ed25519 publicKey', async () => {
+        const decoded = Base58.decode('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
+        expect(Buffer.from(decoded.toString(), 'base64').toString('base64')).to.eql('Goy0mEM97sWRuTdNDxUyJ/gYAnn9FPuWi3FsPeQsLNo=')
+    })
 })
 
 describe('Testing Bip39', () => {
@@ -51,6 +61,11 @@ describe('Testing Bip39', () => {
 
 
 describe('Testing AccountHelper', () => {
+
+    it('it should verify that a base58 public key can be decode to a valid ed25519 public key', async () => {
+        const isPublicKey = AccountHelper.isEd25519PublicKey('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
+        expect(isPublicKey).to.be.true
+    })
 
     it('it should build a valid keypair the given password and entropy', async () => {
         const keyPair = AccountHelper.generateEd25519KeyPairFrom(
