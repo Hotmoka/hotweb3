@@ -1,26 +1,27 @@
 import {expect} from "chai";
-import {Signer} from "../src"
-import {InstanceMethodCallTransactionRequestModel} from "../src";
-import {StorageReferenceModel} from "../src";
-import {TransactionReferenceModel} from "../src";
-import {CodeSignature} from "../src";
-import {VoidMethodSignatureModel} from "../src";
-import {ClassType} from "../src";
-import {BasicType} from "../src";
-import {StorageValueModel} from "../src";
-import {JarStoreTransactionRequestModel} from "../src";
+import {
+    Algorithm,
+    BasicType,
+    ClassType,
+    CodeSignature,
+    ConstructorCallTransactionRequestModel,
+    ConstructorSignatureModel,
+    InstanceMethodCallTransactionRequestModel,
+    JarStoreTransactionRequestModel,
+    NonVoidMethodSignatureModel,
+    RemoteNode,
+    Signer,
+    StaticMethodCallTransactionRequestModel,
+    StorageReferenceModel,
+    StorageValueModel,
+    TransactionReferenceModel,
+    VoidMethodSignatureModel
+} from "../src"
 import * as fs from "fs";
 import * as path from "path";
-import {StaticMethodCallTransactionRequestModel} from "../src";
-import {NonVoidMethodSignatureModel} from "../src";
-import {ConstructorSignatureModel} from "../src";
-import {ConstructorCallTransactionRequestModel} from "../src";
-import {Algorithm} from "../src";
-import {HOTMOKA_VERSION} from "./RemoteNode.test";
+import {chainId, EOA, getPrivateKey, HOTMOKA_VERSION, REMOTE_NODE_URL} from "./RemoteNode.test";
+import assert = require("assert");
 
-const getPrivateKey = (pathFile: string): string => {
-    return fs.readFileSync(path.resolve(pathFile), "utf8");
-}
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/gameteED25519.pri"))
 
 describe('Testing the signed requests of the Hotmoka JS objects', () => {
@@ -206,6 +207,34 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
 
         expect(request.signature).to.be.eq('n5KOY/VWbm5fcUP7qYnJogfaxanj2997EJSpREKBDXOG+PC2FXllXttYl0pHtlDUJ41JzqEJ9KkKsBVTC7kZAA==')
     })
+
+    it('it should build a valid transaction reference from a request', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri")))
+
+        const nonceOfPayer = "1"
+        const gasPrice = await remoteNode.getGasPrice()
+        const takamakaCode = await remoteNode.getTakamakaCode()
+
+        const sendAmountRequest = new InstanceMethodCallTransactionRequestModel(
+            EOA,
+            nonceOfPayer,
+            chainId,
+            "100000",
+            gasPrice,
+            takamakaCode,
+            CodeSignature.RECEIVE_BIG_INTEGER,
+            StorageReferenceModel.newStorageReference('9c35d9584b03ecdbbe6be33953ccd1ccdcd3f73955dde1c6a1e46a3a1da1fbd1'),
+            [StorageValueModel.newStorageValue("100", ClassType.BIG_INTEGER.name)],
+            remoteNode.signer
+        )
+
+        const transactionReference = sendAmountRequest.getReference(sendAmountRequest.signature)
+        if (!transactionReference) {
+            assert.fail('transactionReference cannot be null')
+        }
+        expect(transactionReference.hash).to.eql('f0eb5cffb4b28ba7f90304506ba197536d6f4570626fe1abe9ec566c80d74e69')
+
+    }).timeout(10000)
 })
 
 

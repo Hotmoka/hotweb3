@@ -30,17 +30,16 @@ import * as fs from "fs";
 import * as path from "path"
 import assert = require("assert");
 
-
-export const HOTMOKA_VERSION = "1.0.4"
-const getPrivateKey = (pathFile: string): string => {
+export const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
 
-const chainId = "chain-btmZzq"
-const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
-const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
+export const HOTMOKA_VERSION = "1.0.4"
+export const chainId = "chain-btmZzq"
+export const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "42e7860ecd335a9411fb6507b8e08a02b3dd77493ff13ea65993b983502c4958"), "0")
+export const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
-const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "42e7860ecd335a9411fb6507b8e08a02b3dd77493ff13ea65993b983502c4958"), "0")
+const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
 const gasLimit = "500000"
 
 
