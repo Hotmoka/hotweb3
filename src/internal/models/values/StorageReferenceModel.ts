@@ -66,9 +66,16 @@ export class StorageReferenceModel {
     public static isStorageReference(storageReference: string): boolean {
         try {
             if (storageReference.indexOf('#') === -1) {
-                return storageReference.length === 64
+                return false
             } else {
-                return storageReference.split('#')[0].length === 64
+                const splitted = storageReference.split('#')
+                if (splitted.length !== 2) {
+                    return false
+                }
+                const hash = splitted[0].trim()
+                const progressive = splitted[1].trim()
+
+                return hash.length === 64 && !isNaN(parseInt(progressive, 16))
             }
         } catch (e) {
             return false
