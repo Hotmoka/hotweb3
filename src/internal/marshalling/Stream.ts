@@ -103,6 +103,37 @@ export class Stream {
         this.offset = 0
     }
 
+    private writeStringInternal(s: string): void {
+        const endoff = s.length
+        let cpos = 0
+        let csize = 0
+        for (let off = 0; off < endoff; ) {
+            if (cpos >= csize) {
+                cpos = 0
+                csize = Math.min(endoff - off, this.CHAR_BUF_SIZE)
+                this.toCharBuffer(s, off, off + csize)
+            }
+            if (this.offset >= this.MAX_BLOCK_SIZE) {
+                this.drain()
+            }
+            let n = Math.min(csize - cpos, this.MAX_BLOCK_SIZE - this.offset)
+            let stop = this.offset + n
+            while (this.offset < stop) {
+                this.writeByte(this.charBuffer[cpos++])
+            }
+            off += n
+        }
+    }
+
+    private toCharBuffer(str: string, srcBegin: number, srcEnd: number): void {
+        let dstBegin = 0
+        const chars = Array.from(str)
+
+        for (let i = srcBegin; i < srcEnd; i++) {
+            this.charBuffer[dstBegin++] = chars[i].charCodeAt(0)
+        }
+    }
+
     /**
      * It returns the buffer.
      * @return the buffer
@@ -139,37 +170,6 @@ export class Stream {
         this.writeStringInternal(str)
     }
 
-    private writeStringInternal(s: string): void {
-        const endoff = s.length
-        let cpos = 0
-        let csize = 0
-        for (let off = 0; off < endoff; ) {
-            if (cpos >= csize) {
-                cpos = 0
-                csize = Math.min(endoff - off, this.CHAR_BUF_SIZE)
-                this.toCharBuffer(s, off, off + csize)
-            }
-            if (this.offset >= this.MAX_BLOCK_SIZE) {
-                this.drain()
-            }
-            let n = Math.min(csize - cpos, this.MAX_BLOCK_SIZE - this.offset)
-            let stop = this.offset + n
-            while (this.offset < stop) {
-                this.writeByte(this.charBuffer[cpos++])
-            }
-            off += n
-        }
-    }
-
-    private toCharBuffer(str: string, srcBegin: number, srcEnd: number): void {
-        let dstBegin = 0
-        const chars = Array.from(str)
-
-        for (let i = srcBegin; i < srcEnd; i++) {
-            this.charBuffer[dstBegin++] = chars[i].charCodeAt(0)
-        }
-    }
-
     /**
      * Writes 16 bit char.
      * @param val the value
@@ -178,8 +178,14 @@ export class Stream {
         if (val && val.length > 1) {
             throw new HotmokaException("Value should have length 1")
         }
-        this.writeByte(val.charCodeAt(0) >>> 8)
-        this.writeByte(val.charCodeAt(0))
+
+        if (this.offset + 2 <= this.MAX_BLOCK_SIZE) {
+            this.writeByte(val.charCodeAt(0) >>> 8)
+            this.writeByte(val.charCodeAt(0))
+        } else {
+            this.bufferedStream.writeByte(Stream.toByte(val.charCodeAt(0) >>> 8))
+            this.bufferedStream.writeByte(Stream.toByte(val.charCodeAt(0)))
+        }
     }
 
     /**
@@ -187,6 +193,9 @@ export class Stream {
      * @param val the value
      */
     public writeBoolean(val: boolean): void {
+        if (this.offset >= this.MAX_BLOCK_SIZE) {
+            this.drain()
+        }
         this.writeByte(val ? 1 : 0)
     }
 
@@ -195,8 +204,12 @@ export class Stream {
      * @param val the value
      */
     public writeShort(val: number): void {
-        this.writeByte(val >>> 8)
-        this.writeByte(val)
+        if (this.offset + 2 <= this.MAX_BLOCK_SIZE) {
+            this.writeByte(val >>> 8)
+            this.writeByte(val)
+        }  else {
+            this.bufferedStream.writeShort(val)
+        }
     }
 
     /**
@@ -204,8 +217,12 @@ export class Stream {
      * @param val the value
      */
     public writeInt(val: number): void {
-        this.buffer.writeInt32BE(val, this.offset)
-        this.offset += 4
+        if (this.offset + 4 <= this.MAX_BLOCK_SIZE) {
+            this.buffer.writeInt32BE(val, this.offset)
+            this.offset += 4
+        } else {
+           this.bufferedStream.writeInt(val)
+        }
     }
 
     /**
@@ -213,8 +230,12 @@ export class Stream {
      * @param val the value
      */
     public writeFloat(val: number): void {
-        this.buffer.writeFloatBE(val, this.offset)
-        this.offset += 4
+        if (this.offset + 4 <= this.MAX_BLOCK_SIZE) {
+            this.buffer.writeFloatBE(val, this.offset)
+            this.offset += 4
+        } else {
+           this.bufferedStream.writeFloat(val)
+        }
     }
 
     /**
@@ -222,8 +243,12 @@ export class Stream {
      * @param val the value
      */
     public writeDouble(val: number): void {
-        this.buffer.writeDoubleBE(val, this.offset)
-        this.offset += 8
+        if (this.offset + 8 <= this.MAX_BLOCK_SIZE) {
+            this.buffer.writeDoubleBE(val, this.offset)
+            this.offset += 8
+        } else {
+            this.bufferedStream.writeDouble(val)
+        }
     }
 
     /**
@@ -231,8 +256,12 @@ export class Stream {
      * @param val the value
      */
     public writeLong(val: number): void {
-        this.buffer.writeBigInt64BE(BigInt(val), this.offset)
-        this.offset += 8
+        if (this.offset + 8 <= this.MAX_BLOCK_SIZE) {
+            this.buffer.writeBigInt64BE(BigInt(val), this.offset)
+            this.offset += 8
+        } else {
+           this.bufferedStream.writeLong(val)
+        }
     }
 
     /**
@@ -248,8 +277,28 @@ export class Stream {
      * @param buff the buffer
      */
     public writeBuffer(buff: Buffer): void {
-        buff.copy(this.buffer, this.offset, 0, buff.length)
-        this.offset += buff.length
+        let off = 0
+        let len = buff.length
+
+        while (len > 0) {
+            if (this.offset >= this.MAX_BLOCK_SIZE) {
+                this.drain()
+            }
+
+            if (len >= this.MAX_BLOCK_SIZE && this.offset == 0) {
+                // avoid unnecessary copy
+                this.writeBlockHeader(this.MAX_BLOCK_SIZE)
+                this.bufferedStream.write(buff, off, this.MAX_BLOCK_SIZE)
+                off += this.MAX_BLOCK_SIZE
+                len -= this.MAX_BLOCK_SIZE
+            } else {
+                const wlen = Math.min(len, this.MAX_BLOCK_SIZE - this.offset)
+                buff.copy(this.buffer, this.offset, off, off + wlen)
+                this.offset += wlen
+                off += wlen
+                len -= wlen
+            }
+        }
     }
 
     /**
