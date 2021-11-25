@@ -1,5 +1,6 @@
 import {Buffer} from "buffer";
 import {HotmokaException} from "../exceptions/HotmokaException";
+import {BufferedStream} from "./BufferedStream";
 
 /**
  * A stream used to generate the bytes of the JS objects.
@@ -18,6 +19,11 @@ export class Stream {
     private readonly MAX_BLOCK_SIZE = 1024
 
     /**
+     * Length of char buffer to write strings.
+     */
+    private readonly CHAR_BUF_SIZE = 256
+
+    /**
      * Block of optional data. Byte following tag indicates number of bytes in this block data.
      */
     private readonly TC_BLOCKDATA = 119
@@ -27,53 +33,74 @@ export class Stream {
     private readonly TC_BLOCKDATALONG = 122
 
     /**
-     * The buffer to write to.
+     * The general/block buffer to write to.
      */
     private buffer = Buffer.alloc(this.MAX_BLOCK_SIZE)
 
     /**
-     * The offset of the block body buffer.
+     * The offset of the general/block buffer.
      */
     private offset = 0
 
-    // TODO: add big data stream implementation
+    /**
+     * The header buffer.
+     */
+    private headerBuffer = Buffer.alloc(5)
+
+    /**
+     * The char buffer to write strings.
+     */
+    private charBuffer = Buffer.alloc(this.CHAR_BUF_SIZE)
+
+    /**
+     * The final buffer which wraps the header and the general/block buffer.
+     */
+    private bufferedStream = new BufferedStream()
+
+    constructor() {
+        this.writeStreamHeader()
+    }
+
+
+    private drain() {
+        if (this.offset === 0) {
+            return
+        }
+
+        this.writeBlockHeader(this.offset)
+        this.bufferedStream.write(this.buffer, 0, this.offset)
+        this.offset = 0
+    }
+
 
     /**
      * Writes block data header. Data blocks shorter than 256 bytes
-     * are prefixed with a 2-byte header; all others start with
-     * a 5-byte header.
-     * @return the block data header buffer
+     * are prefixed with a 2-byte header; all others start with a 5-byte header.
      */
-    private writeBlockHeader(len: number): Buffer {
-        let buffer: Buffer;
-
+    private writeBlockHeader(len: number): void {
         if (len <= 255) {
-            buffer = Buffer.alloc(2)
-            Stream.writeByte(buffer, this.TC_BLOCKDATA, 0)
-            Stream.writeByte(buffer, len, 1)
+            Stream.writeByte(this.headerBuffer, this.TC_BLOCKDATA, 0)
+            Stream.writeByte(this.headerBuffer, len, 1)
+            this.bufferedStream.write(this.headerBuffer, 0, 2)
         } else {
-            buffer = Buffer.alloc(5)
-            Stream.writeByte(buffer, this.TC_BLOCKDATALONG, 0)
-            Stream.writeByte(buffer, len >>> 24, 1)
-            Stream.writeByte(buffer, len >>> 16, 2)
-            Stream.writeByte(buffer, len >>> 8, 3)
-            Stream.writeByte(buffer, len, 4)
+            Stream.writeByte(this.headerBuffer, this.TC_BLOCKDATALONG, 0)
+            Stream.writeByte(this.headerBuffer, len >>> 24, 1)
+            Stream.writeByte(this.headerBuffer, len >>> 16, 2)
+            Stream.writeByte(this.headerBuffer, len >>> 8, 3)
+            Stream.writeByte(this.headerBuffer, len, 4)
+            this.bufferedStream.write(this.headerBuffer, 0, 5)
         }
-
-        return buffer
     }
 
     /**
      * It writes the magic number and version to the stream.
-     * @return the stream header buffer
      */
-    private writeStreamHeader(): Buffer {
-        const buffer = Buffer.alloc(4)
-        Stream.writeByte(buffer, this.STREAM_MAGIC >>> 8, 0)
-        Stream.writeByte(buffer, this.STREAM_MAGIC, 1)
-        Stream.writeByte(buffer, this.STREAM_VERSION >>> 8, 2)
-        Stream.writeByte(buffer, this.STREAM_VERSION, 3)
-        return buffer
+    private writeStreamHeader(): void {
+        this.writeShort(this.STREAM_MAGIC)
+        this.writeShort(this.STREAM_VERSION)
+
+        this.bufferedStream.write(this.buffer, 0, this.offset)
+        this.offset = 0
     }
 
     /**
@@ -81,7 +108,7 @@ export class Stream {
      * @return the buffer
      */
     public getBuffer(): Buffer {
-        return this.buffer
+        return this.bufferedStream.getBuffer()
     }
 
     /**
@@ -89,19 +116,14 @@ export class Stream {
      * @return the base64 string representation of the buffer
      */
     public toBase64(): string {
-        return this.buffer.toString('base64')
+        return this.getBuffer().toString('base64')
     }
 
     /**
      * Flushes the stream. This will write any buffered output bytes and flush through to the underlying stream.
      */
     public flush(): void {
-        const streamHeaderBuffer = this.writeStreamHeader()
-        const blockHeaderBuffer = this.writeBlockHeader(this.offset)
-        const blockBodyBuffer = Buffer.alloc(this.offset)
-        this.buffer.copy(blockBodyBuffer, 0, 0, this.offset)
-
-        this.buffer = Buffer.concat([streamHeaderBuffer, blockHeaderBuffer, blockBodyBuffer])
+        this.drain()
     }
 
     /**
@@ -114,8 +136,38 @@ export class Stream {
         }
 
         this.writeShort(str.length)
-        const written = this.buffer.write(str, this.offset)
-        this.offset += written
+        this.writeStringInternal(str)
+    }
+
+    private writeStringInternal(s: string): void {
+        const endoff = s.length
+        let cpos = 0
+        let csize = 0
+        for (let off = 0; off < endoff; ) {
+            if (cpos >= csize) {
+                cpos = 0
+                csize = Math.min(endoff - off, this.CHAR_BUF_SIZE)
+                this.toCharBuffer(s, off, off + csize)
+            }
+            if (this.offset >= this.MAX_BLOCK_SIZE) {
+                this.drain()
+            }
+            let n = Math.min(csize - cpos, this.MAX_BLOCK_SIZE - this.offset)
+            let stop = this.offset + n
+            while (this.offset < stop) {
+                this.writeByte(this.charBuffer[cpos++])
+            }
+            off += n
+        }
+    }
+
+    private toCharBuffer(str: string, srcBegin: number, srcEnd: number): void {
+        let dstBegin = 0
+        const chars = Array.from(str)
+
+        for (let i = srcBegin; i < srcEnd; i++) {
+            this.charBuffer[dstBegin++] = chars[i].charCodeAt(0)
+        }
     }
 
     /**
