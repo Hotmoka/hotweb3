@@ -17,9 +17,7 @@ import {
     TransactionReferenceModel,
     VoidMethodSignatureModel
 } from "../src"
-import * as fs from "fs";
-import * as path from "path";
-import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL, HOTMOKA_VERSION} from "./constants";
+import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL,  getLocalJar} from "./constants";
 import assert = require("assert");
 
 
@@ -189,7 +187,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         expect(request.signature).to.be.eq('gNJAD15DKlQeMqqgPAKQv2jx2V7loNfkLIvJhpvUeYIxrImlyk6OmdLaAb49bHrNYY2MJoI/ujd9SBDvbK7HAA==')
     })
 
-    it.skip('new JarStoreTransactionRequestModel(..)', async () => {
+    it('new JarStoreTransactionRequestModel(..)', async () => {
 
         const request = new JarStoreTransactionRequestModel(
             new StorageReferenceModel(new TransactionReferenceModel(
@@ -206,7 +204,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('n5KOY/VWbm5fcUP7qYnJogfaxanj2997EJSpREKBDXOG+PC2FXllXttYl0pHtlDUJ41JzqEJ9KkKsBVTC7kZAA==')
+        expect(request.signature).to.be.eq('B34nPZfRdMwweVuPN1zHuWauZAysCjIW6WlK2LT4ssidWpxfoT+CobryY9QSyRzF5osivl6sqFTVnr6pl2tbBw==')
     })
 
     it('it should build a valid transaction reference from a request', async () => {
@@ -237,13 +235,3 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
 
     }).timeout(10000)
 })
-
-
-const getLocalJar = (jarName: string): Buffer => {
-    return fs.readFileSync(
-        path.join(
-            __dirname,
-            "../../../io-hotmoka-examples/target/io-hotmoka-examples-" + HOTMOKA_VERSION + "-" + jarName
-        )
-    )
-}

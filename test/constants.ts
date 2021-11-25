@@ -10,3 +10,12 @@ export const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
 export const getPrivateKey = (pathFile: string): string => {
     return fs.readFileSync(path.resolve(pathFile), "utf8");
 }
+
+export const getLocalJar = (jarName: string): Buffer => {
+    return fs.readFileSync(
+        path.join(
+            __dirname,
+            "../../../hotmoka/io-hotmoka-examples/target/io-hotmoka-examples-" + HOTMOKA_VERSION + "-" + jarName
+        )
+    )
+}
