@@ -1,4 +1,5 @@
 import {Buffer} from "buffer";
+import {Stream} from "./Stream";
 
 /**
  * A class to write a stream to a buffer with automatic grow of the capacity.
@@ -23,7 +24,7 @@ export class BufferedStream {
      */
     public write(buff: Buffer, offset: number, length: number): void {
         this.ensureCapacity(this.count + length)
-        buff.copy(this.buffer, this.count, offset, length)
+        buff.copy(this.buffer, this.count, offset, length + offset)
         this.count += length
     }
 
@@ -33,6 +34,44 @@ export class BufferedStream {
      */
     public writeBuffer(buff: Buffer): void {
         this.write(buff, 0, buff.length)
+    }
+
+    /**
+     * Writes a byte to the internal buffer.
+     * @param value the byte value
+     */
+    public writeByte(value: number): void {
+        this.ensureCapacity(this.count + 1)
+        this.buffer.writeInt8(value, this.count++)
+    }
+
+    public writeShort(value: number): void {
+        this.writeByte(Stream.toByte(value >>> 8))
+        this.writeByte(Stream.toByte(value))
+    }
+
+    public writeInt(value: number): void {
+        this.ensureCapacity(this.count + 4)
+        this.buffer.writeInt32BE(value, this.count)
+        this.count += 4
+    }
+
+    public writeFloat(value: number): void {
+        this.ensureCapacity(this.count + 4)
+        this.buffer.writeFloatBE(value, this.count)
+        this.count += 4
+    }
+
+    public writeLong(value: number): void {
+        this.ensureCapacity(this.count + 8)
+        this.buffer.writeBigInt64BE(BigInt(value), this.count)
+        this.count += 8
+    }
+
+    public writeDouble(value: number): void {
+        this.ensureCapacity(this.count + 8)
+        this.buffer.writeDoubleBE(value, this.count)
+        this.count += 8
     }
 
     /**
