@@ -19,8 +19,9 @@ import {
 } from "../src"
 import * as fs from "fs";
 import * as path from "path";
-import {chainId, EOA, getPrivateKey, HOTMOKA_VERSION, REMOTE_NODE_URL} from "./RemoteNode.test";
+import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL, HOTMOKA_VERSION} from "./constants";
 import assert = require("assert");
+
 
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/gameteED25519.pri"))
 
@@ -218,7 +219,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         const sendAmountRequest = new InstanceMethodCallTransactionRequestModel(
             EOA,
             nonceOfPayer,
-            chainId,
+            CHAIN_ID,
             "100000",
             gasPrice,
             takamakaCode,

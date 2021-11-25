@@ -26,18 +26,11 @@ import {
 } from "../src"
 import {expect} from 'chai';
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
-import * as fs from "fs";
-import * as path from "path"
+
 import assert = require("assert");
+import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL} from "./constants";
 
-export const getPrivateKey = (pathFile: string): string => {
-    return fs.readFileSync(path.resolve(pathFile), "utf8");
-}
 
-export const HOTMOKA_VERSION = "1.0.4"
-export const chainId = "chain-btmZzq"
-export const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "42e7860ecd335a9411fb6507b8e08a02b3dd77493ff13ea65993b983502c4958"), "0")
-export const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
 const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
 const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
 const gasLimit = "500000"
@@ -205,7 +198,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -234,7 +227,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new InstanceMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -266,7 +259,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -296,7 +289,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -332,7 +325,7 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestConstructorCall = new ConstructorCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -366,7 +359,7 @@ describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka no
         const requestInstanceMethodCall = new StaticMethodCallTransactionRequestModel(
             EOA,
             nonceOfEOA,
-            chainId,
+            CHAIN_ID,
             gasLimit,
             gasPrice,
             basicJarClasspath,
@@ -427,7 +420,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
         }
 
         expect(info.takamakaCode.hash).to.be.eql('56e46353158a66f893460554be026e3fc15d1a215bc59606ea5fac585527ff1a')
-        expect(info.chainId).to.be.eql(chainId)
+        expect(info.chainId).to.be.eql(CHAIN_ID)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
         expect(info.maxDependencies).to.be.eql(20)
