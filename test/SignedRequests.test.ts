@@ -30,7 +30,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         expect(result).to.be.eq("fDxLbGEt5t0of52uPvmawILvCkv/RjjfzDlZ1fNW8/5ab1aA5ZbuyeJn6ORtglMzKMmfwZEXD9El5U/dnN5dAQ==")
     })
 
-    it('new ConstructorCallTransactionRequestModel(..)', async () => {
+    it('new ConstructorCallTransactionRequestModel(..) manifest', async () => {
 
         const constructorSignature = new ConstructorSignatureModel(
             ClassType.MANIFEST.name,
@@ -186,7 +186,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         expect(request.signature).to.be.eq('2ayYF3hfqesk7ihTWbrzu3l2NBDKq1O10oVxfADuvmvQKbFROT/+6aXIDXmJaql67nPPi4PtMBCe1TJatD/3Ag==')
     })
 
-    it('new JarStoreTransactionRequestModel(..)', async () => {
+    it('new JarStoreTransactionRequestModel(..) lambdas jar', async () => {
 
         const request = new JarStoreTransactionRequestModel(
             new StorageReferenceModel(new TransactionReferenceModel(

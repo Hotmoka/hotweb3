@@ -109,6 +109,16 @@ describe('Testing the marshalling of the JS objects', () => {
         expect(result).to.be.eq('rO0ABXcYAxY5MDA3MTk5MjU0NzQwOTkxNzY1ODk2')
     })
 
+    it('writeDouble(33.8)', async () => {
+
+        const marshallingContext = new MarshallingContext()
+        marshallingContext.writeDouble(33.8)
+        marshallingContext.flush()
+
+        const result = marshallingContext.toBase64()
+        expect(result).to.be.eq('rO0ABXcIQEDmZmZmZmY=')
+    })
+
     it('writeFloat(33.8)', async () => {
 
         const marshallingContext = new MarshallingContext()
@@ -343,7 +353,7 @@ describe('Testing the marshalling of the JS objects', () => {
         expect(result).to.be.eq('rO0ABXcFBUG9mZo=')
     })
 
-    it('new ConstructorCallTransactionRequestModel(..)', async () => {
+    it('new ConstructorCallTransactionRequestModel(..) manifest', async () => {
         const marshallingContext = new MarshallingContext()
 
         const constructorSignature = new ConstructorSignatureModel(
@@ -372,7 +382,7 @@ describe('Testing the marshalling of the JS objects', () => {
         expect(result).to.be.eq('rO0ABXdABAAJY2hhaW50ZXN0///Q5JZGjCX8pZF5iF+nxf9PRA770ODJbCQmt5lzNmGYggQALOwAAfQABQEGAAPnABMBGg==')
     })
 
-    it('new ConstructorSignatureModel(..)', async () => {
+    it('new ConstructorSignatureModel(..) manifest', async () => {
         const marshallingContext = new MarshallingContext()
 
         const constructorSignature = new ConstructorSignatureModel(

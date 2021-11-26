@@ -1,3 +1,5 @@
+import {expect} from 'chai';
+import assert = require("assert");
 import {
     AccountHelper,
     Algorithm,
@@ -24,14 +26,10 @@ import {
     TransactionReferenceModel,
     TransactionRestResponseModel
 } from "../src"
-import {expect} from 'chai';
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
+import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey} from "./constants";
 
-import assert = require("assert");
-import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL} from "./constants";
-
-
-const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri"))
+const signer = new Signer(Algorithm.ED25519, getPrivateKey())
 const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
 const gasLimit = "500000"
 
@@ -185,7 +183,7 @@ describe('Testing the RUN methods of a remote hotmoka node', () => {
     }).timeout(10000)
 })
 
-describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka node [ADD version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar of a remote hotmoka node [ADD version]', () => {
    let simpleStorageReference: StorageReferenceModel
 
     it('addConstructorCallTransaction - it should invoke new Simple(13)', async () => {
@@ -311,9 +309,7 @@ describe('Testing the io-hotmoka-examples-1.0.1-basic.jar of a remote hotmoka no
 
 })
 
-
-
-describe('Testing the io-hotmoka-examples-1.0.0-basic.jar of a remote hotmoka node [POST version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar of a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
@@ -470,8 +466,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
     }).timeout(40000)
 })
 
-
-describe('Testing creation of a hotmoka account', () => {
+describe('Testing the account creation of hotmoka', () => {
     let accountCreationTransaction: TransactionReferenceModel | null = null
     let keyPair: KeyPair
     let account: StorageValueModel
