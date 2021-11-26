@@ -203,7 +203,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('nABhCadnAMRkb2Ceh7fwmBl5WbpTJvEALSXUKEEz43bHrvrHY8oheSus3gOHnc0S2aUCxl2eCbG3cgAD1szsDA==')
+        expect(request.signature).to.be.eq('p8eOIXuYQEv/K7qvgxRacUhwUIBo4XWPrHHc0G6Fv9dnlniuJY+sbNZOoAglB14QOASOD/q1rTSjiYRiOQvWCw==')
     })
 
     it('it should build a valid transaction reference from a request', async () => {

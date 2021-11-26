@@ -183,7 +183,7 @@ describe('Testing the RUN methods of a remote hotmoka node', () => {
     }).timeout(10000)
 })
 
-describe('Testing the io-hotmoka-examples-X-basic.jar of a remote hotmoka node [ADD version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmoka node [ADD version]', () => {
    let simpleStorageReference: StorageReferenceModel
 
     it('addConstructorCallTransaction - it should invoke new Simple(13)', async () => {
@@ -309,7 +309,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar of a remote hotmoka node [
 
 })
 
-describe('Testing the io-hotmoka-examples-X-basic.jar of a remote hotmoka node [POST version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar installed to a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)

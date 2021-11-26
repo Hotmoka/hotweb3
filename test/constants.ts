@@ -20,7 +20,7 @@ export const getLocalJar = (jarName: string): Buffer => {
     return fs.readFileSync(
         path.join(
             __dirname,
-            "../../../hotmoka/io-hotmoka-examples/target/io-hotmoka-examples-" + HOTMOKA_VERSION + "-" + jarName
+            "./jars/" + jarName
         )
     )
 }
