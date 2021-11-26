@@ -57,11 +57,14 @@ export class Stream {
      */
     private bufferedStream = new BufferedStream()
 
+
     constructor() {
         this.writeStreamHeader()
     }
 
-
+    /**
+     * Writes all buffered data to the bufferedStream stream.
+     */
     private drain() {
         if (this.offset === 0) {
             return
@@ -71,7 +74,6 @@ export class Stream {
         this.bufferedStream.write(this.buffer, 0, this.offset)
         this.offset = 0
     }
-
 
     /**
      * Writes block data header. Data blocks shorter than 256 bytes
@@ -103,6 +105,10 @@ export class Stream {
         this.offset = 0
     }
 
+    /**
+     * It writes a string to the buffer.
+     * @param s the string
+     */
     private writeStringInternal(s: string): void {
         const endoff = s.length
         let cpos = 0
@@ -125,6 +131,12 @@ export class Stream {
         }
     }
 
+    /**
+     * It writes a string to a char buffer.
+     * @param str the string
+     * @param srcBegin the start position from where to copy the chars from str
+     * @param srcEnd the end position where to stop copying the chars from str
+     */
     private toCharBuffer(str: string, srcBegin: number, srcEnd: number): void {
         let dstBegin = 0
         const chars = Array.from(str)
