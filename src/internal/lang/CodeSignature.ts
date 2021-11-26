@@ -30,7 +30,7 @@ export class CodeSignature {
     /**
      * The method "getGamete" of the manifest.
      */
-    public static readonly GET_GAMETE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getGamete", ClassType.ACCOUNT.name,[])
+    public static readonly GET_GAMETE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "getGamete", ClassType.GAMETE.name,[])
 
     /**
      * The method "nonce" of an account.
