@@ -1,12 +1,30 @@
-import {Buffer} from "buffer";
+import {Buffer, kMaxLength} from "buffer";
 import {Stream} from "./Stream";
 
 /**
  * A class to write a stream to a buffer with automatic grow of the capacity.
  */
 export class BufferedStream {
+
+    /**
+     * The buffer where data is stored.
+     */
     private buffer = Buffer.alloc(32)
+
+    /**
+     * The number of valid bytes in the buffer.
+     */
     private count = 0
+
+    /**
+     * The maximum safe size of the buffer to allocate.
+     */
+    private readonly MAX_SAFE_BUFFER_SIZE = (kMaxLength / 2) - 8
+
+    /**
+     * The maximum size of the buffer to allocate.
+     */
+    private readonly MAX_BUFFER_SIZE = (kMaxLength / 2)
 
     /**
      * Returns the used content of the buffer.
@@ -23,6 +41,7 @@ export class BufferedStream {
      * @param length the length bytes to be copied from buff
      */
     public write(buff: Buffer, offset: number, length: number): void {
+        this.checkFromIndexSize(offset, length, buff.length);
         this.ensureCapacity(this.count + length)
         buff.copy(this.buffer, this.count, offset, length + offset)
         this.count += length
@@ -84,6 +103,13 @@ export class BufferedStream {
         }
     }
 
+    private hugeCapacity(minCapacity: number): number {
+        if (minCapacity < 0) {
+            throw new Error("Out of memory")
+        }
+        return (minCapacity > this.MAX_SAFE_BUFFER_SIZE) ? this.MAX_BUFFER_SIZE : this.MAX_SAFE_BUFFER_SIZE
+    }
+
     /**
      * Increases the capacity to ensure that it can hold at least the number of elements specified by the minimum capacity argument.
      * @param minCapacity the desired minimum capacity
@@ -95,8 +121,23 @@ export class BufferedStream {
         if (newCapacity - minCapacity < 0) {
             newCapacity = minCapacity
         }
-
+        if (newCapacity - this.MAX_SAFE_BUFFER_SIZE > 0) {
+            newCapacity = this.hugeCapacity(minCapacity)
+        }
         this.buffer = this.copyOf(this.buffer, newCapacity)
+    }
+
+    /**
+     * Checks if the sub-range from fromIndex (inclusive) to fromIndex + size (exclusive) is within the bounds of range from 0 (inclusive) to length (exclusive).
+     * @param fromIndex the lower-bound (inclusive) of the sub-interval
+     * @param size the size of the sub-range
+     * @param length the upper-bound (exclusive) of the range
+     * @throws Error if the sub-range is out of bounds
+     */
+    private checkFromIndexSize(fromIndex: number, size: number, length: number) {
+        if (length < 0 || fromIndex < 0 || size < 0 || size > length - fromIndex) {
+            throw new Error("Out of bounds")
+        }
     }
 
     /**
