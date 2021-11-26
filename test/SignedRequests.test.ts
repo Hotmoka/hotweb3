@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import assert = require("assert");
 import {
     Algorithm,
     BasicType,
@@ -17,18 +18,16 @@ import {
     TransactionReferenceModel,
     VoidMethodSignatureModel
 } from "../src"
-import {CHAIN_ID, EOA, getPrivateKey, REMOTE_NODE_URL,  getLocalJar} from "./constants";
-import assert = require("assert");
+import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, getLocalJar} from "./constants";
 
 
-const signer = new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/gameteED25519.pri"))
+const signer = new Signer(Algorithm.ED25519, getPrivateKey())
 
 describe('Testing the signed requests of the Hotmoka JS objects', () => {
 
     it('Signed string', async () => {
-
         const result = signer.sign(Buffer.from("hello"))
-        expect(result).to.be.eq("mn+Rt4DL1EVH/kBtVm8l9y/7l5S7kJRz4XpqT6vf9ohOQFm2RSkqP8ucTh03KaOBKQclxfaOugfkeCYI9Dt7BA==")
+        expect(result).to.be.eq("fDxLbGEt5t0of52uPvmawILvCkv/RjjfzDlZ1fNW8/5ab1aA5ZbuyeJn6ORtglMzKMmfwZEXD9El5U/dnN5dAQ==")
     })
 
     it('new ConstructorCallTransactionRequestModel(..)', async () => {
@@ -53,10 +52,10 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('P9PDt2/BL/pBVcFVwf9LvsTyb65O0SRzNC8ZeAe9Zbmn4AqTYJcFdltrWBYOFSej2I/TU3ejQyqKpPfCfp/vDA==')
+        expect(request.signature).to.be.eq('8xMW6vu9SYIFmZkGq906s7rvsclXTTJmA2mpc7QTf9Tgz7WeuJMByAX5ihBKbq5m8dmR9PD/Uv7ALmSL0iJGDg==')
     })
 
-    it('new InstanceMethodCallTransactionRequestModel(..) NonVoidMethod', async () => {
+    it('new InstanceMethodCallTransactionRequestModel(..) getGamete', async () => {
 
         const request = new InstanceMethodCallTransactionRequestModel(
             new StorageReferenceModel(new TransactionReferenceModel(
@@ -77,10 +76,10 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('vqn3qcfi3MMgJiSmLKcAtCJuX3bna3Qa+rgIku0owEhT3GaA7WwojtthtcmRKVuFj1wV+fVdgweqjNTH+FxDAg==')
+        expect(request.signature).to.be.eq('xHZjYO3/yKgYum/cBXFrjNFe8uzS01Sf0EDWcqGNKnkLG+LvdcqbL7BrRgX0IqWq42rlhht6nl9ZwN3sPGfaDg==')
     })
 
-    it('new InstanceMethodCallTransactionRequestModel(..) VoidMethod', async () => {
+    it('new InstanceMethodCallTransactionRequestModel(..) receive', async () => {
 
         const RECEIVE_INT = new VoidMethodSignatureModel(
             ClassType.PAYABLE_CONTRACT.name,
@@ -107,11 +106,11 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('8G7sgR0yhpRyS4dZc0sDiMRZZIkCh8m1eoFChSxWo5lL8SPtuxtoBLw4gwbN9dGLCUfqk3DpqUf5S0bwtVdMAA==')
+        expect(request.signature).to.be.eq('FLCa/ygo2zc6gPcVt/px+uU//fK2d/4hosJhzA9B+ZxGlyXdIfV4hP1vqDTzpndKANOqGyZwfglCqv5fCr1ZBw==')
     })
 
 
-    it('new StaticMethodCallTransactionRequestModel(..) NonVoidMethod', async () => {
+    it('new StaticMethodCallTransactionRequestModel(..) nonce', async () => {
 
         const request = new StaticMethodCallTransactionRequestModel(
             new StorageReferenceModel(new TransactionReferenceModel(
@@ -128,10 +127,10 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('Q4oCMaptE+bLL5p5p+Uei6uINJ3TuB4/k3miqwjviKQ5ki0/oJ6hJI3xulbhaAhT5AV15P6Zy1XI2SjF9pPbDg==')
+        expect(request.signature).to.be.eq('E6i4z6oj8/iUtHBRaLJyJ+w9erPqpy6B5Frtee2nWScfF00QOJCPGPMeXIRCUA8pw1s639dX3Mn0C0TlkYHsAQ==')
     })
 
-    it('new StaticMethodCallTransactionRequestModel(..) VoidMethod', async () => {
+    it('new StaticMethodCallTransactionRequestModel(..) receive', async () => {
 
         const RECEIVE_INT = new VoidMethodSignatureModel(
             ClassType.PAYABLE_CONTRACT.name,
@@ -154,10 +153,10 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('0NwNhHIZCf3TFj5OQupJruLlRGsiR91uPhUsHTpxADgTYgIGJTULSoUAYRak1WNBUBMDG8Icx2xz3gnzhgDzBA==')
+        expect(request.signature).to.be.eq('/klFrbZfosMu3IRHpT351OuL1lyS+WnBh+puBlR70ryziPXrA88NbC8QVt0l+UPovE/7R+5eDx/7u07fX7tHCA==')
     })
 
-    it('new StaticMethodCallTransactionRequestModel(..) NonVoidMethod gas station', async () => {
+    it('new StaticMethodCallTransactionRequestModel(..) balance of gas station', async () => {
 
         const nonVoidMethodSignature = new NonVoidMethodSignatureModel(
             ClassType.GAS_STATION.name,
@@ -184,7 +183,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('gNJAD15DKlQeMqqgPAKQv2jx2V7loNfkLIvJhpvUeYIxrImlyk6OmdLaAb49bHrNYY2MJoI/ujd9SBDvbK7HAA==')
+        expect(request.signature).to.be.eq('2ayYF3hfqesk7ihTWbrzu3l2NBDKq1O10oVxfADuvmvQKbFROT/+6aXIDXmJaql67nPPi4PtMBCe1TJatD/3Ag==')
     })
 
     it('new JarStoreTransactionRequestModel(..)', async () => {
@@ -204,11 +203,11 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
             signer
         )
 
-        expect(request.signature).to.be.eq('B34nPZfRdMwweVuPN1zHuWauZAysCjIW6WlK2LT4ssidWpxfoT+CobryY9QSyRzF5osivl6sqFTVnr6pl2tbBw==')
+        expect(request.signature).to.be.eq('nABhCadnAMRkb2Ceh7fwmBl5WbpTJvEALSXUKEEz43bHrvrHY8oheSus3gOHnc0S2aUCxl2eCbG3cgAD1szsDA==')
     })
 
     it('it should build a valid transaction reference from a request', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, new Signer(Algorithm.ED25519, getPrivateKey("./test/keys/eoa.pri")))
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
 
         const nonceOfPayer = "1"
         const gasPrice = await remoteNode.getGasPrice()
@@ -231,7 +230,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         if (!transactionReference) {
             assert.fail('transactionReference cannot be null')
         }
-        expect(transactionReference.hash).to.eql('f0eb5cffb4b28ba7f90304506ba197536d6f4570626fe1abe9ec566c80d74e69')
+        expect(transactionReference.hash).to.eql('14f96faef92e8533ae9107d83b7b126da488dbfff1770b0dddc2231a10b10a8e')
 
     }).timeout(10000)
 })
