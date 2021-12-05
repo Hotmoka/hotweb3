@@ -83,6 +83,11 @@ export class CodeSignature {
     public static readonly ALLOWS_UNSIGNED_FAUCET = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"allowsUnsignedFaucet", BasicType.BOOLEAN.name, [])
 
     /**
+     * The method {@code allowsMintBurnFromGamete} of the manifest.
+     */
+    public static readonly ALLOWS_MINT_BURN_FROM_GAMETE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "allowsMintBurnFromGamete", BasicType.BOOLEAN.name, [])
+
+    /**
      * The method "skipsVerification" of the manifest.
      */
     public static readonly SKIPS_VERIFICATION = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"skipsVerification", BasicType.BOOLEAN.name,[])
@@ -90,7 +95,7 @@ export class CodeSignature {
     /**
      * The method "getSignature" of the manifest.
      */
-    public static readonly GET_SIGNATURE = new NonVoidMethodSignatureModel( ClassType.MANIFEST.name,"getSignature", ClassType.STRING.name,[])
+    public static readonly GET_SIGNATURE = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getSignature", ClassType.STRING.name,[])
 
     /**
      * The method "balance" of a contract.
@@ -135,7 +140,7 @@ export class CodeSignature {
     /**
      * The method "getTargetGasAtReward" of the gas station.
      */
-    public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel( ClassType.GAS_STATION.name,"getTargetGasAtReward", ClassType.BIG_INTEGER.name,[])
+    public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getTargetGasAtReward", ClassType.BIG_INTEGER.name,[])
 
     /**
      * The method "getInflation" of the gas station.
@@ -193,9 +198,9 @@ export class CodeSignature {
     public static readonly ID = new NonVoidMethodSignatureModel(ClassType.VALIDATOR.name,"id", ClassType.STRING.name, [])
 
     /**
-     * The method publicKey of an externally owned account.
+     * The method publicKey of an account.
      */
-    public static readonly PUBLIC_KEY = new NonVoidMethodSignatureModel(ClassType.EOA.name,"publicKey", ClassType.STRING.name, [])
+    public static readonly PUBLIC_KEY = new NonVoidMethodSignatureModel(ClassType.ACCOUNT.name,"publicKey", ClassType.STRING.name, [])
 
     /**
      * The method {@code getAccountsLedger} of the manifest.

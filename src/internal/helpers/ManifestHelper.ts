@@ -112,6 +112,7 @@ export class ManifestHelper {
         const gasStation = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_GAS_STATION, manifest))
         const versions = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_VERSIONS, manifest))
         const gamete = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_GAMETE, manifest))
+        const accountsLedger = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_ACCOUNTS_LEDGER, manifest))
 
         if (!gamete.reference) {
             throw new HotmokaException("Gamete not found")
@@ -129,6 +130,10 @@ export class ManifestHelper {
             throw new HotmokaException("Versions not found")
         }
 
+        if (!accountsLedger.reference) {
+            throw new HotmokaException("Accounts Ledger not found")
+        }
+
         const chainId = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_CHAIN_ID, manifest))
         const verificationVersion = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_VERIFICATION_VERSION, versions.reference))
         const maxErrorLength = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_MAX_ERROR_LENGTH, manifest))
@@ -136,6 +141,7 @@ export class ManifestHelper {
         const maxCumulativeSizeOfDependencies = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(gamete.reference, takamakaCode, CodeSignature.GET_MAX_CUMULATIVE_SIZE_OF_DEPENDENCIES, manifest))
         const allowsSelfCharged = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ALLOWS_SELF_CHARGED, manifest))
         const allowsUnsignedFaucet = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ALLOWS_UNSIGNED_FAUCET, manifest))
+        const allowsMintBurnFromGamete = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ALLOWS_MINT_BURN_FROM_GAMETE, manifest))
         const skipsVerification = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.SKIPS_VERIFICATION, manifest))
         const signature = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_SIGNATURE, manifest))
 
@@ -174,6 +180,7 @@ export class ManifestHelper {
         const info = new InfoModel()
         info.takamakaCode = takamakaCode
         info.manifest = manifest
+        info.accountsLedger = accountsLedger.reference
         info.chainId = chainId.value ?? ''
         info.versions = versions.reference
         info.verificationVersion = verificationVersion.value ?? '0'
@@ -182,6 +189,7 @@ export class ManifestHelper {
         info.maxCumulativeSizeOfDependencies = maxCumulativeSizeOfDependencies.value ? Number(maxCumulativeSizeOfDependencies.value) : 0
         info.allowsSelfCharged = allowsSelfCharged.value ? 'true' === allowsSelfCharged.value : false
         info.allowsUnsignedFaucet = allowsUnsignedFaucet.value ? 'true' === allowsUnsignedFaucet.value : false
+        info.allowsMintBurnFromGamete = allowsMintBurnFromGamete.value ? 'true' === allowsMintBurnFromGamete.value : false
         info.skipsVerification = skipsVerification.value ? 'true' === skipsVerification.value : false
         info.signature = signature.value ?? ''
         info.gameteInfo = new GameteInfo(gamete.reference, balanceOfGamete.value, redBalanceOfGamete.value, maxFaucet.value, maxRedFaucet.value)
