@@ -128,6 +128,11 @@ export class CodeSignature {
     public static readonly GET_MAX_GAS_PER_TRANSACTION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getMaxGasPerTransaction", ClassType.BIG_INTEGER.name,[])
 
     /**
+     * The method {@code getInitialGasPrice} of the gas station.
+     */
+    public static readonly GET_INITIAL_GAS_PRICE = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name, "getInitialGasPrice", ClassType.BIG_INTEGER.name, []);
+
+    /**
      * The method "getTargetGasAtReward" of the gas station.
      */
     public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel( ClassType.GAS_STATION.name,"getTargetGasAtReward", ClassType.BIG_INTEGER.name,[])
@@ -143,17 +148,27 @@ export class CodeSignature {
     public static readonly GET_OBLIVION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getOblivion", BasicType.LONG.name,[])
 
     /**
-     * The method "getHeight" of the manifest.
+     * The method "getHeight" of the validators.
      */
     public static readonly GET_HEIGHT = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getHeight", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method "getNumberOfTransactions" of the manifest.
+     * The method "getNumberOfTransactions" of the validators.
      */
     public static readonly GET_NUMBER_OF_TRANSACTIONS = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getNumberOfTransactions", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method "getTicketForNewPoll" of the manifest.
+     * The method {@code getTotalSupply} of the validators.
+     */
+    public static readonly GET_TOTAL_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getTotalSupply", ClassType.BIG_INTEGER.name, [])
+
+    /**
+     * The method {@code getTotalSupplyRed} of the validators.
+     */
+    public static readonly GET_TOTAL_SUPPLY_RED = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getTotalSupplyRed", ClassType.BIG_INTEGER.name, [])
+
+    /**
+     * The method "getTicketForNewPoll" of the validators.
      */
     public static readonly GET_TICKET_FOR_NEW_POLL = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getTicketForNewPoll", ClassType.BIG_INTEGER.name, [])
 
@@ -161,6 +176,11 @@ export class CodeSignature {
      * The method "getPolls" of the validators object.
      */
     public static readonly GET_POLLS = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getPolls", ClassType.STORAGE_SET_VIEW.name,[])
+
+    /**
+     * The method "reward" of the validators contract.
+     */
+    public static readonly VALIDATORS_REWARD = new VoidMethodSignatureModel(ClassType.VALIDATORS.name, "reward", [ClassType.BIG_INTEGER.name, ClassType.BIG_INTEGER.name, ClassType.STRING.name, ClassType.STRING.name, ClassType.BIG_INTEGER.name, ClassType.BIG_INTEGER.name])
 
     /**
      * The method "getVerificationVersion" of the versions object.

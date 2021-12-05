@@ -13,6 +13,7 @@ export class GasStation {
     oblivion?: string
     inflationInfo: string
     oblivionInfo: string
+    initialGasPrice?: string
 
     constructor(
         gasStation?: StorageReferenceModel,
@@ -21,7 +22,8 @@ export class GasStation {
         ignoresGasPrice?: string,
         targetGasAtReward?: string,
         inflation?: string,
-        oblivion?: string
+        oblivion?: string,
+        initialGasPrice?: string
         ) {
         this.gasStation = gasStation
         this.gasPrice = gasPrice ?? '0'
@@ -32,6 +34,7 @@ export class GasStation {
         this.oblivion = oblivion ?? '0'
         this.inflationInfo = this.inflation !== '0' ? (Number(this.inflation) / 100000.0).toFixed(2) + '%' : ''
         this.oblivionInfo = this.oblivion !== '0' ? (100.0 * Number(this.oblivion) / 1000000).toFixed(2) + '%' : ''
+        this.initialGasPrice = initialGasPrice ?? '0'
     }
 
 

@@ -12,6 +12,8 @@ export class Validators {
     numberOfTransactions?: string
     ticketForNewPoll?: string
     numberOfPolls?: string
+    totalSupply?: string
+    totalSupplyRed?: string
 
     constructor(
         validatorsReference?: StorageReferenceModel,
@@ -19,7 +21,9 @@ export class Validators {
         height?: string,
         numberOfTransactions?: string,
         ticketForNewPoll?: string,
-        numberOfPolls?: string
+        numberOfPolls?: string,
+        totalSupply?: string,
+        totalSupplyRed?: string
     ) {
         this.validatorsReference = validatorsReference
         this.numOfValidators = numOfValidators ?? '0'
@@ -27,5 +31,7 @@ export class Validators {
         this.numberOfTransactions = numberOfTransactions ?? '0'
         this.ticketForNewPoll = ticketForNewPoll ?? '0'
         this.numberOfPolls = numberOfPolls ?? '0'
+        this.totalSupply = totalSupply ?? '0'
+        this.totalSupplyRed = totalSupplyRed ?? '0'
     }
 }
