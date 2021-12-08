@@ -65,6 +65,10 @@ export declare class CodeSignature {
      */
     static readonly ALLOWS_UNSIGNED_FAUCET: NonVoidMethodSignatureModel;
     /**
+     * The method {@code allowsMintBurnFromGamete} of the manifest.
+     */
+    static readonly ALLOWS_MINT_BURN_FROM_GAMETE: NonVoidMethodSignatureModel;
+    /**
      * The method "skipsVerification" of the manifest.
      */
     static readonly SKIPS_VERIFICATION: NonVoidMethodSignatureModel;
@@ -101,6 +105,10 @@ export declare class CodeSignature {
      */
     static readonly GET_MAX_GAS_PER_TRANSACTION: NonVoidMethodSignatureModel;
     /**
+     * The method {@code getInitialGasPrice} of the gas station.
+     */
+    static readonly GET_INITIAL_GAS_PRICE: NonVoidMethodSignatureModel;
+    /**
      * The method "getTargetGasAtReward" of the gas station.
      */
     static readonly GET_TARGET_GAS_AT_REWARD: NonVoidMethodSignatureModel;
@@ -113,21 +121,33 @@ export declare class CodeSignature {
      */
     static readonly GET_OBLIVION: NonVoidMethodSignatureModel;
     /**
-     * The method "getHeight" of the manifest.
+     * The method "getHeight" of the validators.
      */
     static readonly GET_HEIGHT: NonVoidMethodSignatureModel;
     /**
-     * The method "getNumberOfTransactions" of the manifest.
+     * The method "getNumberOfTransactions" of the validators.
      */
     static readonly GET_NUMBER_OF_TRANSACTIONS: NonVoidMethodSignatureModel;
     /**
-     * The method "getTicketForNewPoll" of the manifest.
+     * The method {@code getTotalSupply} of the validators.
+     */
+    static readonly GET_TOTAL_SUPPLY: NonVoidMethodSignatureModel;
+    /**
+     * The method {@code getTotalSupplyRed} of the validators.
+     */
+    static readonly GET_TOTAL_SUPPLY_RED: NonVoidMethodSignatureModel;
+    /**
+     * The method "getTicketForNewPoll" of the validators.
      */
     static readonly GET_TICKET_FOR_NEW_POLL: NonVoidMethodSignatureModel;
     /**
      * The method "getPolls" of the validators object.
      */
     static readonly GET_POLLS: NonVoidMethodSignatureModel;
+    /**
+     * The method "reward" of the validators contract.
+     */
+    static readonly VALIDATORS_REWARD: VoidMethodSignatureModel;
     /**
      * The method "getVerificationVersion" of the versions object.
      */
@@ -137,7 +157,7 @@ export declare class CodeSignature {
      */
     static readonly ID: NonVoidMethodSignatureModel;
     /**
-     * The method publicKey of an externally owned account.
+     * The method publicKey of an account.
      */
     static readonly PUBLIC_KEY: NonVoidMethodSignatureModel;
     /**

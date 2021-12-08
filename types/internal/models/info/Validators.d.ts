@@ -11,5 +11,7 @@ export declare class Validators {
     numberOfTransactions?: string;
     ticketForNewPoll?: string;
     numberOfPolls?: string;
-    constructor(validatorsReference?: StorageReferenceModel, numOfValidators?: string, height?: string, numberOfTransactions?: string, ticketForNewPoll?: string, numberOfPolls?: string);
+    totalSupply?: string;
+    totalSupplyRed?: string;
+    constructor(validatorsReference?: StorageReferenceModel, numOfValidators?: string, height?: string, numberOfTransactions?: string, ticketForNewPoll?: string, numberOfPolls?: string, totalSupply?: string, totalSupplyRed?: string);
 }

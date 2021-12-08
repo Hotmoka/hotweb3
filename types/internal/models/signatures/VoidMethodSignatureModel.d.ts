@@ -5,10 +5,6 @@ import { MarshallingContext } from "../../marshalling/MarshallingContext";
  */
 export declare class VoidMethodSignatureModel extends MethodSignatureModel {
     /**
-     * The method "reward" of the validators contract.
-     */
-    static readonly VALIDATORS_REWARD: VoidMethodSignatureModel;
-    /**
      * Builds the signature of a void method.
      * @param definingClass the class of the method
      * @param methodName the name of the method

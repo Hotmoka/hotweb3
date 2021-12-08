@@ -9,6 +9,7 @@ import { Validators } from "./Validators";
 export declare class InfoModel {
     takamakaCode?: TransactionReferenceModel;
     manifest?: StorageReferenceModel;
+    accountsLedger?: StorageReferenceModel;
     chainId?: string;
     versions?: StorageReferenceModel;
     verificationVersion?: string;
@@ -17,6 +18,7 @@ export declare class InfoModel {
     maxCumulativeSizeOfDependencies?: number;
     allowsSelfCharged?: boolean;
     allowsUnsignedFaucet?: boolean;
+    allowsMintBurnFromGamete?: boolean;
     skipsVerification?: boolean;
     signature?: string;
     gameteInfo?: GameteInfo;

@@ -12,5 +12,6 @@ export declare class GasStation {
     oblivion?: string;
     inflationInfo: string;
     oblivionInfo: string;
-    constructor(gasStation?: StorageReferenceModel, gasPrice?: string, maxGasPerTransaction?: string, ignoresGasPrice?: string, targetGasAtReward?: string, inflation?: string, oblivion?: string);
+    initialGasPrice?: string;
+    constructor(gasStation?: StorageReferenceModel, gasPrice?: string, maxGasPerTransaction?: string, ignoresGasPrice?: string, targetGasAtReward?: string, inflation?: string, oblivion?: string, initialGasPrice?: string);
 }

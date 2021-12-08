@@ -14,6 +14,10 @@ export declare class Stream {
      */
     private readonly MAX_BLOCK_SIZE;
     /**
+     * Length of char buffer to write strings.
+     */
+    private readonly CHAR_BUF_SIZE;
+    /**
      * Block of optional data. Byte following tag indicates number of bytes in this block data.
      */
     private readonly TC_BLOCKDATA;
@@ -22,25 +26,51 @@ export declare class Stream {
      */
     private readonly TC_BLOCKDATALONG;
     /**
-     * The buffer to write to.
+     * The general/block buffer to write to.
      */
     private buffer;
     /**
-     * The offset of the block body buffer.
+     * The offset of the general/block buffer.
      */
     private offset;
     /**
+     * The header buffer.
+     */
+    private headerBuffer;
+    /**
+     * The char buffer to write strings.
+     */
+    private charBuffer;
+    /**
+     * The final buffer which wraps the header and the general/block buffer.
+     */
+    private bufferedStream;
+    constructor();
+    /**
+     * Writes all buffered data to the bufferedStream stream.
+     */
+    private drain;
+    /**
      * Writes block data header. Data blocks shorter than 256 bytes
-     * are prefixed with a 2-byte header; all others start with
-     * a 5-byte header.
-     * @return the block data header buffer
+     * are prefixed with a 2-byte header; all others start with a 5-byte header.
      */
     private writeBlockHeader;
     /**
      * It writes the magic number and version to the stream.
-     * @return the stream header buffer
      */
     private writeStreamHeader;
+    /**
+     * It writes a string to the buffer.
+     * @param s the string
+     */
+    private writeStringInternal;
+    /**
+     * It writes a string to a char buffer.
+     * @param str the string
+     * @param srcBegin the start position from where to copy the chars from str
+     * @param srcEnd the end position where to stop copying the chars from str
+     */
+    private toCharBuffer;
     /**
      * It returns the buffer.
      * @return the buffer
