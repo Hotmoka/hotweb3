@@ -92,13 +92,22 @@ describe('Testing AccountHelper', () => {
         expect(account.reference?.transaction.hash).to.eql('782905b414b296df4b90a15ade21f4914e30325f5f499f7223fcd607f521929f')
     })
 
-    it('it should build a valid account from the given mnemonic', async () => {
+    it('it should build a valid account from the given mnemonic 2', async () => {
         const mnemonic = "gossip fat patient zero label tired abstract athlete wheat cloud guitar music online truck raccoon brisk method rocket ski inch speed muffin actress glow slight chaos sorry tomato choice plunge father brown pigeon rifle junk cheap"
 
         const account =  new Bip39({dictionary: Bip39Dictionary.ENGLISH, mnemonic: mnemonic}).getAccount()
         expect(account.entropy).to.eql('64ea6e847fd7c3c5403871f9e57d9f48')
         expect(account.reference).to.be.not.undefined
         expect(account.reference?.transaction.hash).to.eql('f9afd26c10e28c376f29392d112240b31ecba4cb3df202834dd4e8e8a4b735e5')
+    })
+
+    it('it should build a valid account from the given mnemonic 3', async () => {
+        const mnemonic = "session dismiss play above twenty donkey where magnet middle tennis hospital dawn define worth brain mass blossom process tell half bronze shoe powder neutral level extend person acquire earn spatial news talk awesome youth cruel luxury"
+
+        const account =  new Bip39({dictionary: Bip39Dictionary.ENGLISH, mnemonic: mnemonic}).getAccount()
+        expect(account.entropy).to.eql('c447ea99004eb2827e942f8c5be5b79b')
+        expect(account.reference).to.be.not.undefined
+        expect(account.reference?.transaction.hash).to.eql('f399fbc6bc441815737b3431cb8cea4ca780aa1e8d011455a1254eec109fecd2')
     })
 
     it('it should reconstruct the 36 mnemonic words from the given entropy and storage reference', async () => {

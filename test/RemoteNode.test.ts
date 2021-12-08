@@ -29,9 +29,9 @@ import {
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
 import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey} from "./constants";
 
-const signer = new Signer(Algorithm.ED25519, getPrivateKey())
-const basicJarClasspath = new TransactionReferenceModel("local", "1a41100fbe283326ad043b4b84d220e820bcded1acaf46b33c86f0aafa0fbd74")
-const gasLimit = "500000"
+const SIGNER = new Signer(Algorithm.ED25519, getPrivateKey())
+const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "37e05f7ced4fde2540e96a5f6036fa9d7774e44b10b6d7b5bcbd8a2b7447de96")
+const GAS_LIMIT = "500000"
 
 
 describe('Testing the GET methods of a remote hotmoka node', () => {
@@ -152,7 +152,7 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         expect(result).to.be.not.null
         expect(result.algorithm).to.be.not.null
         expect(result.algorithm).to.be.not.empty
-        expect(result.algorithm).to.be.eql(Algorithm[signer.algorithm].toLocaleLowerCase())
+        expect(result.algorithm).to.be.eql(Algorithm[SIGNER.algorithm].toLocaleLowerCase())
     }).timeout(10000)
 })
 
@@ -183,11 +183,11 @@ describe('Testing the RUN methods of a remote hotmoka node', () => {
     }).timeout(10000)
 })
 
-describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmoka node [ADD version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotmoka node [ADD version]', () => {
    let simpleStorageReference: StorageReferenceModel
 
     it('addConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -197,9 +197,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new ConstructorSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 [BasicType.INT.name]
@@ -216,7 +216,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
 
 
     it('runInstanceMethodCallTransaction - it should invoke simple.foo3() == 13', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -226,9 +226,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new NonVoidMethodSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 "foo3",
@@ -248,7 +248,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
 
 
     it('addStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -258,9 +258,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new NonVoidMethodSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 "foo5",
@@ -278,7 +278,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
     }).timeout(10000)
 
     it('runStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -288,9 +288,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new NonVoidMethodSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 "foo5",
@@ -309,10 +309,10 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on remote hotmok
 
 })
 
-describe('Testing the io-hotmoka-examples-X-basic.jar installed to a remote hotmoka node [POST version]', () => {
+describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -322,9 +322,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed to a remote hotm
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new ConstructorSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 [BasicType.INT.name]
@@ -346,7 +346,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed to a remote hotm
 
 
     it('postStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, signer)
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
 
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -356,9 +356,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed to a remote hotm
             EOA,
             nonceOfEOA,
             CHAIN_ID,
-            gasLimit,
+            GAS_LIMIT,
             gasPrice,
-            basicJarClasspath,
+            BASIC_JAR_REFERENCE,
             new NonVoidMethodSignatureModel(
                 "io.hotmoka.examples.basic.Simple",
                 "foo5",
@@ -395,7 +395,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
         const gasStation = info.gasStation
         const validators = info.validators
 
-        if (!gameteInfo) {
+        if (!gameteInfo || !gameteInfo.gamete) {
             assert.fail('missing gamete info')
         }
 
@@ -415,23 +415,32 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('missing versions reference')
         }
 
-        expect(info.takamakaCode.hash).to.be.eql('56e46353158a66f893460554be026e3fc15d1a215bc59606ea5fac585527ff1a')
+        if (!info.accountsLedger) {
+            assert.fail('missing accountsLedger reference')
+        }
+
+        expect(info.takamakaCode.hash).to.be.eql('b991b27cb8276c6f9d0cad9f6ce251a661ff4bc7fba55b3362d9e6fac31dec1a')
         expect(info.chainId).to.be.eql(CHAIN_ID)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
         expect(info.maxDependencies).to.be.eql(20)
         expect(info.allowsSelfCharged).to.be.eql(false)
         expect(info.allowsUnsignedFaucet).to.be.eql(true)
+        expect(info.allowsMintBurnFromGamete).to.be.eql(false)
         expect(info.skipsVerification).to.be.eql(false)
         expect(info.signature).to.be.eql('ed25519')
         expect(info.verificationVersion).to.be.eql('0')
-        expect(info.versions.transaction.hash).to.be.eql('4fddb139c1d376a1e3da3c54c3cab0f98410d151d9284c092f256496b5ba1ab3')
+        expect(info.versions.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
+        expect(info.accountsLedger.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
 
         // gamete
         expect(gameteInfo.gamete).to.be.not.undefined
+        expect(gameteInfo.gamete.transaction).to.be.not.undefined
+        expect(gameteInfo.gamete.transaction.hash).to.be.eql('9ed7f9894dad170f2eb0d44cf70b00718b72536df5578ece4881d7893df2974c')
         expect(gameteInfo.balanceOfGamete).to.be.not.undefined
+        expect(Number(gameteInfo.balanceOfGamete!)).to.be.greaterThan(1000)
         expect(gameteInfo.redBalance).to.be.eql('0')
-        expect(gameteInfo.maxFaucet).to.be.eql('1000000000000')
+        expect(gameteInfo.maxFaucet).to.be.eql('10000000000000')
         expect(gameteInfo.maxRedFaucet).to.be.eql('0')
 
         // gasStation
@@ -457,9 +466,9 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('validator not defined')
         }
         expect(validator.validator).to.be.not.undefined
-        expect(validator.validator.transaction.hash).to.be.eql('4fddb139c1d376a1e3da3c54c3cab0f98410d151d9284c092f256496b5ba1ab3')
+        expect(validator.validator.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
         expect(validator.id).to.be.not.undefined
-        expect(validator.id).to.be.eql('016C31DDFCD28FC55653279891B1A57EAB2824F2')
+        expect(validator.id).to.be.eql('3D614A374ACFF2B9D94381B3F8BF136BDC55A83E')
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
 

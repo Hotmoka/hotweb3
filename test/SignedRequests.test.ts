@@ -1,8 +1,9 @@
 import {expect} from "chai";
 import assert = require("assert");
 import {
+    AccountHelper,
     Algorithm,
-    BasicType,
+    BasicType, Bip39Dictionary,
     ClassType,
     CodeSignature,
     ConstructorCallTransactionRequestModel,
@@ -18,7 +19,16 @@ import {
     TransactionReferenceModel,
     VoidMethodSignatureModel
 } from "../src"
-import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, getLocalJar} from "./constants";
+import {CHAIN_ID, EOA, REMOTE_NODE_URL, getLocalJar} from "./constants";
+
+export const getPrivateKey = (): string => {
+    const keyPair = AccountHelper.generateEd25519KeyPairFrom(
+        'mysecret',
+        Bip39Dictionary.ENGLISH,
+        '64ea6e847fd7c3c5403871f9e57d9f48'
+    )
+    return keyPair.privateKey
+}
 
 
 const signer = new Signer(Algorithm.ED25519, getPrivateKey())
@@ -230,7 +240,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         if (!transactionReference) {
             assert.fail('transactionReference cannot be null')
         }
-        expect(transactionReference.hash).to.eql('14f96faef92e8533ae9107d83b7b126da488dbfff1770b0dddc2231a10b10a8e')
+        expect(transactionReference.hash).to.eql('7255b62463199affa18796074bcac64ca01e6a0d90f7ffbdaee6f2bec8534102')
 
     }).timeout(10000)
 })
