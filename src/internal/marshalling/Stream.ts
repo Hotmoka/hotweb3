@@ -122,8 +122,8 @@ export class Stream {
             if (this.offset >= this.MAX_BLOCK_SIZE) {
                 this.drain()
             }
-            let n = Math.min(csize - cpos, this.MAX_BLOCK_SIZE - this.offset)
-            let stop = this.offset + n
+            const n = Math.min(csize - cpos, this.MAX_BLOCK_SIZE - this.offset)
+            const stop = this.offset + n
             while (this.offset < stop) {
                 this.writeByte(this.charBuffer[cpos++])
             }
