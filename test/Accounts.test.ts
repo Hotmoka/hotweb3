@@ -5,11 +5,6 @@ import {Base58} from "../src";
 
 describe('Testing Base58', () => {
 
-    it('it should encode bytes to base58 string', async () => {
-        const encoded = Base58.encode('helloworld124')
-        expect(encoded).to.eql('9hLF3DCKexERxQyEQT')
-    })
-
     it('it should decode a base58 string', async () => {
         const decoded = Base58.decode('9hLF3DCKexERxQyEQT')
         expect(decoded).to.eql(Buffer.from('helloworld124'))
@@ -17,12 +12,22 @@ describe('Testing Base58', () => {
 
     it('it should encode a ed25519 publicKey', async () => {
         const encoded = Base58.encode('Goy0mEM97sWRuTdNDxUyJ/gYAnn9FPuWi3FsPeQsLNo=')
-        expect(encoded).to.eql('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
+        expect(encoded).to.eql('2ne3N6WvJaBLRR3wSZXhW4z88WMYbq5U2NwKjoSmEwQd')
+    })
+
+    it('it should encode a ed25519 publicKey', async () => {
+        const encoded = Base58.encode('PtOjX/Ae7RzPr0hFB8wInoefm9+S3rAj3QZKhWy+qlI=')
+        expect(encoded).to.eql('5EFTAeNkPSQGc8YSFXbZ2oH8BPAymYzsXWyJTmysTEUq')
+    })
+
+    it('it should decode a base58 public key o a ed25519 publicKey', async () => {
+        const decoded = Base58.decode('5EFTAeNkPSQGc8YSFXbZ2oH8BPAymYzsXWyJTmysTEUq')
+        expect(decoded.toString('base64')).to.eql('PtOjX/Ae7RzPr0hFB8wInoefm9+S3rAj3QZKhWy+qlI=')
     })
 
     it('it should decode a base58 publicKey to a ed25519 publicKey', async () => {
         const decoded = Base58.decode('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
-        expect(Buffer.from(decoded.toString(), 'base64').toString('base64')).to.eql('Goy0mEM97sWRuTdNDxUyJ/gYAnn9FPuWi3FsPeQsLNo=')
+        expect(decoded.toString('base64')).to.eql('R295MG1FTTk3c1dSdVRkTkR4VXlKL2dZQW5uOUZQdVdpM0ZzUGVRc0xObz0=')
     })
 })
 

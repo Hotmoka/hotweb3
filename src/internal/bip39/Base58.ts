@@ -38,18 +38,18 @@ export class Base58 {
 
     /**
      * Encodes the given string in base58 string (no checksum is appended).
-     * @param inputStr the bytes to encode
+     * @param inputStr the bytes to encode encoded in base64
      * @return the base58-encoded string
      */
     public static encode(inputStr: string): string {
-        if (!inputStr || inputStr.length == 0) {
+        if (!inputStr || inputStr.length === 0) {
             return ""
         }
 
-        const input = Buffer.from(inputStr)
+        const input = Buffer.from(inputStr, 'base64')
         // Count leading zeros.
         let zeros = 0
-        while (zeros < input.length && input[zeros] == 0) {
+        while (zeros < input.length && input[zeros] === 0) {
             ++zeros;
         }
         // Convert base-256 digits to base-58 digits (plus conversion to ASCII characters)
@@ -57,12 +57,12 @@ export class Base58 {
         let outputStart = encoded.length;
         for (let inputStart = zeros; inputStart < input.length; ) {
             encoded[--outputStart] = this.ALPHABET.charAt(Base58.divmod(input, inputStart, 256, 58))
-            if (input[inputStart] == 0) {
+            if (input[inputStart] === 0) {
                 ++inputStart; // optimization - skip leading zeros
             }
         }
         // Preserve exactly as many leading encoded zeros in output as there were leading zeros in input.
-        while (outputStart < encoded.length && encoded[outputStart] == Base58.ENCODED_ZERO) {
+        while (outputStart < encoded.length && encoded[outputStart] === Base58.ENCODED_ZERO) {
             ++outputStart;
         }
         while (--zeros >= 0) {
@@ -80,7 +80,7 @@ export class Base58 {
      * @throws HotmokaException if the given string is not a valid base58 string
      */
     public static decode(input: string): Buffer {
-        if (!input || input.length == 0) {
+        if (!input || input.length === 0) {
             return Buffer.alloc(0)
         }
 
@@ -96,7 +96,7 @@ export class Base58 {
         }
         // Count leading zeros.
         let zeros = 0;
-        while (zeros < input58.length && input58[zeros] == 0) {
+        while (zeros < input58.length && input58[zeros] === 0) {
             ++zeros;
         }
         // Convert base-58 digits to base-256 digits.
@@ -104,12 +104,12 @@ export class Base58 {
         let outputStart = decoded.length;
         for (let inputStart = zeros; inputStart < input58.length; ) {
             decoded[--outputStart] = Base58.divmod(input58, inputStart, 58, 256)
-            if (input58[inputStart] == 0) {
+            if (input58[inputStart] === 0) {
                 ++inputStart; // optimization - skip leading zeros
             }
         }
         // Ignore extra leading zeroes that were added during the calculation.
-        while (outputStart < decoded.length && decoded[outputStart] == 0) {
+        while (outputStart < decoded.length && decoded[outputStart] === 0) {
             ++outputStart;
         }
         // Return decoded data (including original number of leading zeros).
