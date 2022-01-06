@@ -28,6 +28,7 @@ import {
 } from "../src"
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
 import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, HOTMOKA_VERSION, wait} from "./constants";
+import {NodeInfo} from "../src/internal/models/info/NodeInfo";
 
 const SIGNER = new Signer(Algorithm.ED25519, getPrivateKey())
 const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "caa886f1e8cb3c70622d95ef035f82850301c40adc2b50a9185c5b24f5735182")
@@ -52,6 +53,15 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         expect(result.transaction).to.be.not.null
         expect(result.transaction.hash).to.be.not.null
         expect(result.transaction.hash).to.be.have.length.above(10)
+    }).timeout(10000)
+
+    it('getNodeID - it should respond with a valid node info', async () => {
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const result: NodeInfo = await remoteNode.getNodeID()
+
+        expect(result.type).to.be.eql('io.hotmoka.tendermint.TendermintBlockchain')
+        expect(result.version).to.be.eql('1.0.7')
+        expect(result.ID).to.be.eql('e740b8ef1307361fa0936bccc94fade7b1bc3f39')
     }).timeout(10000)
 
     it('getState - it should respond with a valid state of the manifest', async () => {
