@@ -2,16 +2,16 @@ import {AccountHelper, Bip39Dictionary, StorageReferenceModel, TransactionRefere
 import * as fs from "fs";
 import * as path from "path"
 
-export const HOTMOKA_VERSION = '1.0.6'
+export const HOTMOKA_VERSION = '1.0.7'
 export const CHAIN_ID = "marabunta"
-export const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "f399fbc6bc441815737b3431cb8cea4ca780aa1e8d011455a1254eec109fecd2"), "0")
+export const EOA = new StorageReferenceModel(new TransactionReferenceModel("local", "54df7d537e8a6eee1fb3a9b76723921ba60bdb22839625bf566f98a61ff686b4"), "0")
 export const REMOTE_NODE_URL = "http://panarea.hotmoka.io"
 
 export const getPrivateKey = (): string => {
     const keyPair = AccountHelper.generateEd25519KeyPairFrom(
-        'mypassword',
+        'hello',
         Bip39Dictionary.ENGLISH,
-        'c447ea99004eb2827e942f8c5be5b79b'
+        Buffer.from('o2Nl+HScZe3pCiBNe9048w==', 'base64').toString('hex')
     )
     return keyPair.privateKey
 }
@@ -24,3 +24,5 @@ export const getLocalJar = (jarName: string): Buffer => {
         )
     )
 }
+
+export const wait = (timeout: number): Promise<void> => new Promise(resolve => setTimeout(() => resolve(), timeout))

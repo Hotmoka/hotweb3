@@ -27,7 +27,7 @@ export declare class Base58 {
     private static init;
     /**
      * Encodes the given string in base58 string (no checksum is appended).
-     * @param inputStr the bytes to encode
+     * @param inputStr the bytes to encode encoded in base64
      * @return the base58-encoded string
      */
     static encode(inputStr: string): string;

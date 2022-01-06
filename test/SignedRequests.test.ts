@@ -240,7 +240,7 @@ describe('Testing the signed requests of the Hotmoka JS objects', () => {
         if (!transactionReference) {
             assert.fail('transactionReference cannot be null')
         }
-        expect(transactionReference.hash).to.eql('7255b62463199affa18796074bcac64ca01e6a0d90f7ffbdaee6f2bec8534102')
+        expect(transactionReference.hash).to.eql('7d9faa6c6a42d7db9494a60c9cc1162db44f597cdd3e4ad5c977eaa91b879a5e')
 
     }).timeout(10000)
 })

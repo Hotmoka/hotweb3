@@ -27,12 +27,13 @@ import {
     TransactionRestResponseModel
 } from "../src"
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
-import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey} from "./constants";
+import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, HOTMOKA_VERSION, wait} from "./constants";
 
 const SIGNER = new Signer(Algorithm.ED25519, getPrivateKey())
-const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "37e05f7ced4fde2540e96a5f6036fa9d7774e44b10b6d7b5bcbd8a2b7447de96")
+const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "caa886f1e8cb3c70622d95ef035f82850301c40adc2b50a9185c5b24f5735182")
 const GAS_LIMIT = "500000"
 
+console.log('Testing Hotmoka version ' + HOTMOKA_VERSION)
 
 describe('Testing the GET methods of a remote hotmoka node', () => {
 
@@ -312,8 +313,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
 describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
+        await wait(3000)
 
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
@@ -346,8 +348,9 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
 
 
     it('postStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
+        await wait(3000)
 
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
 
@@ -419,7 +422,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('missing accountsLedger reference')
         }
 
-        expect(info.takamakaCode.hash).to.be.eql('b991b27cb8276c6f9d0cad9f6ce251a661ff4bc7fba55b3362d9e6fac31dec1a')
+        expect(info.takamakaCode.hash).to.be.eql('5fd6ae9fe7dbd499621f56814c1f6f1e30718ca9aea69b427dee8c16b9f6c665')
         expect(info.chainId).to.be.eql(CHAIN_ID)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
@@ -430,13 +433,13 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(info.skipsVerification).to.be.eql(false)
         expect(info.signature).to.be.eql('ed25519')
         expect(info.verificationVersion).to.be.eql('0')
-        expect(info.versions.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
-        expect(info.accountsLedger.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
+        expect(info.versions.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
+        expect(info.accountsLedger.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
 
         // gamete
         expect(gameteInfo.gamete).to.be.not.undefined
         expect(gameteInfo.gamete.transaction).to.be.not.undefined
-        expect(gameteInfo.gamete.transaction.hash).to.be.eql('9ed7f9894dad170f2eb0d44cf70b00718b72536df5578ece4881d7893df2974c')
+        expect(gameteInfo.gamete.transaction.hash).to.be.eql('5aeca15b70978d3aa4973f2611a775cf9db13c2391f03e7ab2593fe010e31cd5')
         expect(gameteInfo.balanceOfGamete).to.be.not.undefined
         expect(Number(gameteInfo.balanceOfGamete!)).to.be.greaterThan(1000)
         expect(gameteInfo.redBalance).to.be.eql('0')
@@ -466,9 +469,9 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('validator not defined')
         }
         expect(validator.validator).to.be.not.undefined
-        expect(validator.validator.transaction.hash).to.be.eql('a5d4a29b2cd0b183bcdc5d47ed3196c20a021757ec1dcc3aba25d46c0ab2b719')
+        expect(validator.validator.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
         expect(validator.id).to.be.not.undefined
-        expect(validator.id).to.be.eql('3D614A374ACFF2B9D94381B3F8BF136BDC55A83E')
+        expect(validator.id).to.be.eql('8797ECB886B86523E65A760427F5279A8177DE45')
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
 
