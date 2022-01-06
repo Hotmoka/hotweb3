@@ -27,6 +27,7 @@ import {TransactionException} from "./exceptions/TransactionException";
 import {TimeoutException} from "./exceptions/TimeoutException";
 import {InterruptedException} from "./exceptions/InterruptedException";
 import {CodeExecutionException} from "./exceptions/CodeExecutionException";
+import {NodeInfo} from "./models/info/NodeInfo";
 
 /**
  * Client to connect to a remote Hotmoka node
@@ -132,6 +133,10 @@ export class RemoteNode implements Node {
 
     getManifest(): Promise<StorageReferenceModel> {
         return RemoteNode.get<StorageReferenceModel>(this.url + '/get/manifest')
+    }
+
+    getNodeID(): Promise<NodeInfo> {
+        return RemoteNode.get<NodeInfo>(this.url + '/get/nodeID')
     }
 
     getState(object: StorageReferenceModel): Promise<StateModel> {

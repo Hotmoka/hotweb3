@@ -13,6 +13,7 @@ import {StorageValueModel} from "./models/values/StorageValueModel";
 import {InstanceMethodCallTransactionRequestModel} from "./models/requests/InstanceMethodCallTransactionRequestModel";
 import {StaticMethodCallTransactionRequestModel} from "./models/requests/StaticMethodCallTransactionRequestModel";
 import {SignatureAlgorithmResponseModel} from "./models/responses/SignatureAlgorithmResponseModel";
+import {NodeInfo} from "./models/info/NodeInfo";
 
 
 /**
@@ -44,6 +45,13 @@ export interface Node {
      * @throws HotmokaException if generic errors occur
      */
     getManifest(): Promise<StorageReferenceModel>
+
+    /**
+     * Yields node-specific information about the node. This is likely different for each node
+     * of the network, hence are out of consensus.
+     * @return the node-specific information about the node
+     */
+    getNodeID(): Promise<NodeInfo>
 
     /**
      * Yields the class tag of the object with the given storage reference.

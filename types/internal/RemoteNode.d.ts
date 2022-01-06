@@ -16,6 +16,7 @@ import { StaticMethodCallTransactionRequestModel } from "./models/requests/Stati
 import { SignatureAlgorithmResponseModel } from "./models/responses/SignatureAlgorithmResponseModel";
 import { InfoModel } from "./models/info/InfoModel";
 import { Signer } from "./signature/Signer";
+import { NodeInfo } from "./models/info/NodeInfo";
 /**
  * Client to connect to a remote Hotmoka node
  * and to interact with the exposed API.
@@ -64,6 +65,7 @@ export declare class RemoteNode implements Node {
     private static post;
     getClassTag(object: StorageReferenceModel): Promise<ClassTagModel>;
     getManifest(): Promise<StorageReferenceModel>;
+    getNodeID(): Promise<NodeInfo>;
     getState(object: StorageReferenceModel): Promise<StateModel>;
     getTakamakaCode(): Promise<TransactionReferenceModel>;
     getNameOfSignatureAlgorithmForRequests(): Promise<SignatureAlgorithmResponseModel>;
