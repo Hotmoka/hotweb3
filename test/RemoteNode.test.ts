@@ -1,10 +1,7 @@
-import {expect} from 'chai';
-import assert = require("assert");
+import {assert, expect} from 'chai';
 import {
-    AccountHelper,
     Algorithm,
     BasicType,
-    Bip39Dictionary,
     ConstructorCallTransactionRequestModel,
     ConstructorCallTransactionSuccessfulResponseModel,
     ConstructorSignatureModel,
@@ -12,7 +9,6 @@ import {
     InstanceMethodCallTransactionRequestModel,
     JarStoreInitialTransactionResponseModel,
     JarStoreTransactionRequestModel,
-    KeyPair,
     MethodCallTransactionSuccessfulResponseModel,
     NonVoidMethodSignatureModel,
     NoSuchElementException,
@@ -27,11 +23,11 @@ import {
     TransactionRestResponseModel
 } from "../src"
 import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
-import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, HOTMOKA_VERSION, wait} from "./constants";
+import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, HOTMOKA_VERSION} from "./constants";
 import {NodeInfo} from "../src/internal/models/info/NodeInfo";
 
 const SIGNER = new Signer(Algorithm.ED25519, getPrivateKey())
-const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "caa886f1e8cb3c70622d95ef035f82850301c40adc2b50a9185c5b24f5735182")
+const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "f04e9dd9d74b0f0ca17a4fbc1d143149ca6cf4d89afa60c72d47a9d1f5fb2083")
 const GAS_LIMIT = "500000"
 
 console.log('Testing Hotmoka version ' + HOTMOKA_VERSION)
@@ -61,7 +57,7 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
 
         expect(result.type).to.be.eql('io.hotmoka.tendermint.TendermintBlockchain')
         expect(result.version).to.be.eql('1.0.7')
-        expect(result.ID).to.be.eql('e740b8ef1307361fa0936bccc94fade7b1bc3f39')
+        expect(result.ID).to.be.eql('5ca9732ac7efff4f03ef012e7ce9407b01f73e0c')
     }).timeout(10000)
 
     it('getState - it should respond with a valid state of the manifest', async () => {
@@ -323,8 +319,6 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
 describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotmoka node [POST version]', () => {
 
     it('postConstructorCallTransaction - it should invoke new Simple(13)', async () => {
-        await wait(3000)
-
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -358,8 +352,6 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
 
 
     it('postStaticMethodCallTransaction - it should invoke Simple.foo5() == 14', async () => {
-        await wait(3000)
-
         const remoteNode = new RemoteNode(REMOTE_NODE_URL, SIGNER)
         const gasPrice = await remoteNode.getGasPrice()
         const nonceOfEOA = await remoteNode.getNonceOf(EOA)
@@ -432,7 +424,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('missing accountsLedger reference')
         }
 
-        expect(info.takamakaCode.hash).to.be.eql('5fd6ae9fe7dbd499621f56814c1f6f1e30718ca9aea69b427dee8c16b9f6c665')
+        expect(info.takamakaCode.hash).to.be.eql('5878d6d66699ffe19f95482c3080356008f917263c68a8a872be3c437020c9eb')
         expect(info.chainId).to.be.eql(CHAIN_ID)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
@@ -443,13 +435,13 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(info.skipsVerification).to.be.eql(false)
         expect(info.signature).to.be.eql('ed25519')
         expect(info.verificationVersion).to.be.eql('0')
-        expect(info.versions.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
-        expect(info.accountsLedger.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
+        expect(info.versions.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
+        expect(info.accountsLedger.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
 
         // gamete
         expect(gameteInfo.gamete).to.be.not.undefined
         expect(gameteInfo.gamete.transaction).to.be.not.undefined
-        expect(gameteInfo.gamete.transaction.hash).to.be.eql('5aeca15b70978d3aa4973f2611a775cf9db13c2391f03e7ab2593fe010e31cd5')
+        expect(gameteInfo.gamete.transaction.hash).to.be.eql('ce08d392e97600279f8571dd4971e1a1b7422015655001c7cb4abb0159266a86')
         expect(gameteInfo.balanceOfGamete).to.be.not.undefined
         expect(Number(gameteInfo.balanceOfGamete!)).to.be.greaterThan(1000)
         expect(gameteInfo.redBalance).to.be.eql('0')
@@ -479,95 +471,12 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('validator not defined')
         }
         expect(validator.validator).to.be.not.undefined
-        expect(validator.validator.transaction.hash).to.be.eql('188c6c032ca1f4f559e1cd2d3e044ba81e08b6a01934fc12ef0657cb8636c7a8')
+        expect(validator.validator.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
         expect(validator.id).to.be.not.undefined
-        expect(validator.id).to.be.eql('8797ECB886B86523E65A760427F5279A8177DE45')
+        expect(validator.id).to.be.eql('3367D160E5190B4ED636A2973F39A71BA3F7726F')
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
 
     }).timeout(40000)
-})
-
-describe('Testing the account creation of hotmoka', () => {
-    let accountCreationTransaction: TransactionReferenceModel | null = null
-    let keyPair: KeyPair
-    let account: StorageValueModel
-    const password = "pippo"
-
-    it('it should create a hotmoka account from faucet', async () => {
-        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
-
-        account = await accountHelper.createAccountFromFaucet(
-            Algorithm.ED25519,
-            keyPair,
-            "2",
-            "0",
-            resultTransaction => accountCreationTransaction = resultTransaction
-        )
-        expect(account).to.be.not.undefined
-        expect(accountCreationTransaction).to.be.not.null
-
-        if (!account.reference) {
-            assert.fail('account reference should be defined')
-        }
-        expect(account.reference.transaction).to.be.not.undefined
-        expect(account.reference.transaction.hash).to.be.not.undefined
-        expect(account.reference.transaction.type).to.be.eq('local')
-
-    }).timeout(40000)
-
-    it('it should return a valid request for the transaction reference of the account created', async () => {
-        if (!accountCreationTransaction) {
-            assert.fail('transaction reference should be defined')
-        }
-
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-        const result: TransactionRestRequestModel<unknown> = await remoteNode.getRequestAt(accountCreationTransaction)
-        expect(result).to.be.not.null
-        expect(result).to.be.not.undefined
-
-        const request = result.transactionRequestModel as InstanceMethodCallTransactionRequestModel
-        expect(request).to.be.not.null
-        expect(request.method).to.be.not.null
-        expect(request.method.methodName).to.be.not.null
-        expect(request.method.methodName).to.be.eql('faucetED25519')
-
-    }).timeout(10000)
-
-    it('it should return a valid response for the transaction reference of the account created', async () => {
-        if (!accountCreationTransaction) {
-            assert.fail('transaction reference should be defined')
-        }
-
-        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
-        const result: TransactionRestResponseModel<unknown> = await remoteNode.getResponseAt(accountCreationTransaction)
-        expect(result).to.be.not.null
-        expect(result).to.be.not.undefined
-
-        const response = result.transactionResponseModel as MethodCallTransactionSuccessfulResponseModel
-        expect(response).to.be.not.null
-        expect(response.result).to.be.not.null
-        expect(response.result.reference).to.be.not.null
-
-    }).timeout(10000)
-
-    it('it should verify correctly the created public key in the node', async () => {
-        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        if (!account.reference) {
-            assert.fail('account reference is undefined')
-        }
-        const isVerified = await accountHelper.verifyAccount(account.reference, keyPair.publicKey)
-        expect(isVerified).to.eql(true)
-    })
-
-    it('it should fail verifying the created public key in the node when providing a wrong public key', async () => {
-        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        if (!account.reference) {
-            assert.fail('account reference is undefined')
-        }
-        const isVerified = await accountHelper.verifyAccount(account.reference, '_' + keyPair.publicKey.substr(1))
-        expect(isVerified).to.eql(false)
-    })
 })
 

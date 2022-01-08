@@ -1,7 +1,20 @@
-import {expect} from 'chai';
+import {assert, expect} from 'chai';
 import {Bip39} from "../src/internal/bip39/Bip39";
-import {AccountHelper, Bip39Dictionary, Base58, RemoteNode} from "../src";
+import {
+    AccountHelper,
+    Bip39Dictionary,
+    Base58,
+    RemoteNode,
+    TransactionReferenceModel,
+    KeyPair,
+    StorageValueModel,
+    Algorithm,
+    InstanceMethodCallTransactionRequestModel,
+    TransactionRestResponseModel,
+    MethodCallTransactionSuccessfulResponseModel
+} from "../src";
 import {REMOTE_NODE_URL} from "./constants";
+import {TransactionRestRequestModel} from "../src/internal/models/requests/TransactionRestRequestModel";
 
 describe('Testing Base58', () => {
 
@@ -66,11 +79,6 @@ describe('Testing Bip39', () => {
 
 
 describe('Testing AccountHelper', () => {
-
-    it('it should verify that a base58 public key can be decode to a valid ed25519 public key', async () => {
-        const isPublicKey = AccountHelper.isEd25519PublicKey('QE8P6XyPoDEob4LZ6tkxDcT596QJBsE7C9HuWJFAfnAERtwfw7qSuX5JqSvg')
-        expect(isPublicKey).to.be.true
-    })
 
     it('it should verify that a base58 public key can be decode to a valid ed25519 public key', async () => {
         const isPublicKey = AccountHelper.isEd25519PublicKey('5e6WhvAzBwStgY27BPhvk7J8Bzu5S8wFdhfdSQsYKSZj')
@@ -146,9 +154,93 @@ describe('Testing AccountHelper', () => {
 
     it('it should return null for a public key that is not binded to the accounts ledger', async () => {
         const accountsHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
-        const result = await accountsHelper.getReferenceFromAccountsLedger("Dj13EILoQgsdsSSD3d58T4xuOuudJ6UWwqQ+3a8wsHIk=")
+        const result = await accountsHelper.getReferenceFromAccountsLedger("AMVhQoVf3j13pYWuZduazpCEWzRfvzkNGUreJKmmboDp")
 
         expect(result).to.be.null
     })
 
+})
+
+
+describe('Testing the account creation of hotmoka', () => {
+    let accountCreationTransaction: TransactionReferenceModel | null = null
+    let keyPair: KeyPair
+    let account: StorageValueModel
+    const password = "pippo"
+
+    it('it should create a hotmoka account from faucet', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        keyPair = AccountHelper.generateEd25519KeyPairFrom(password, Bip39Dictionary.ENGLISH)
+
+        account = await accountHelper.createAccountFromFaucet(
+            Algorithm.ED25519,
+            keyPair,
+            "2",
+            "0",
+            resultTransaction => accountCreationTransaction = resultTransaction
+        )
+        expect(account).to.be.not.undefined
+        expect(accountCreationTransaction).to.be.not.null
+
+        if (!account.reference) {
+            assert.fail('account reference should be defined')
+        }
+        expect(account.reference.transaction).to.be.not.undefined
+        expect(account.reference.transaction.hash).to.be.not.undefined
+        expect(account.reference.transaction.type).to.be.eq('local')
+
+    }).timeout(40000)
+
+    it('it should return a valid request for the transaction reference of the account created', async () => {
+        if (!accountCreationTransaction) {
+            assert.fail('transaction reference should be defined')
+        }
+
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const result: TransactionRestRequestModel<unknown> = await remoteNode.getRequestAt(accountCreationTransaction)
+        expect(result).to.be.not.null
+        expect(result).to.be.not.undefined
+
+        const request = result.transactionRequestModel as InstanceMethodCallTransactionRequestModel
+        expect(request).to.be.not.null
+        expect(request.method).to.be.not.null
+        expect(request.method.methodName).to.be.not.null
+        expect(request.method.methodName).to.be.eql('faucetED25519')
+
+    }).timeout(10000)
+
+    it('it should return a valid response for the transaction reference of the account created', async () => {
+        if (!accountCreationTransaction) {
+            assert.fail('transaction reference should be defined')
+        }
+
+        const remoteNode = new RemoteNode(REMOTE_NODE_URL)
+        const result: TransactionRestResponseModel<unknown> = await remoteNode.getResponseAt(accountCreationTransaction)
+        expect(result).to.be.not.null
+        expect(result).to.be.not.undefined
+
+        const response = result.transactionResponseModel as MethodCallTransactionSuccessfulResponseModel
+        expect(response).to.be.not.null
+        expect(response.result).to.be.not.null
+        expect(response.result.reference).to.be.not.null
+
+    }).timeout(10000)
+
+    it('it should verify correctly the created public key in the node', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        if (!account.reference) {
+            assert.fail('account reference is undefined')
+        }
+        const isVerified = await accountHelper.verifyAccount(account.reference, keyPair.publicKey)
+        expect(isVerified).to.eql(true)
+    })
+
+    it('it should fail verifying the created public key in the node when providing a wrong public key', async () => {
+        const accountHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        if (!account.reference) {
+            assert.fail('account reference is undefined')
+        }
+        const isVerified = await accountHelper.verifyAccount(account.reference, '_' + keyPair.publicKey.substr(1))
+        expect(isVerified).to.eql(false)
+    })
 })
