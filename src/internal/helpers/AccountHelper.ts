@@ -88,9 +88,46 @@ export class AccountHelper {
      */
     public static isEd25519PublicKey(base58PublicKey: string): boolean {
         try {
-            return Buffer.from(Base58.decode(base58PublicKey).toString(), 'base64').length === 32
+            return Buffer.from(Base58.decode(base58PublicKey).toString('base64'), 'base64').length === 32
         } catch (e) {
             return false
+        }
+    }
+
+    /**
+     * Returns from the accounts ledger the storage reference of a public key.
+     * @param publicKeyBase58 the public key encoded in base58
+     * @return the storage reference of the public key or null if the public key is not binded to a storage reference into the accounts ledger
+     * @throws HotmokaException if errors occur
+     */
+    public async getReferenceFromAccountsLedger(publicKeyBase58: string): Promise<StorageReferenceModel | null> {
+        try {
+            const manifest = await this.remoteNode.getManifest()
+            const takamakaCode = await this.remoteNode.getTakamakaCode()
+            const accountsLedger = await this.getAccountsLedger(takamakaCode, manifest)
+
+            const publicKey = Base58.decode(publicKeyBase58).toString('base64')
+            const result = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
+                    manifest,
+                    "0",
+                    "",
+                    AccountHelper._100_000.toString(),
+                    "0",
+                    takamakaCode,
+                    CodeSignature.GET_FROM_ACCOUNTS_LEDGER,
+                    accountsLedger,
+                    [StorageValueModel.newStorageValue(publicKey, ClassType.STRING.name)]
+                )
+            )
+
+            if (result && result.reference) {
+                return result.reference
+            } else {
+                return null
+            }
+
+        } catch (e) {
+            throw new HotmokaException("Unable to retrieve the reference from the accounts ledger")
         }
     }
 
@@ -142,7 +179,8 @@ export class AccountHelper {
         let accountCreationRequest: InstanceMethodCallTransactionRequestModel | ConstructorCallTransactionRequestModel
         let account: StorageReferenceModel | undefined
         if (addToLedger) {
-            const accountsLedger = await this.getAccountsLedger(takamakaCode)
+            const manifest = await this.remoteNode.getManifest()
+            const accountsLedger = await this.getAccountsLedger(takamakaCode, manifest)
             const gas = gas1 + gas2 + AccountHelper.EXTRA_GAS_FOR_ANONYMOUS
             accountCreationRequest = new InstanceMethodCallTransactionRequestModel(
                 payer,
@@ -151,7 +189,7 @@ export class AccountHelper {
                 gas.toString(),
                 gasPrice,
                 takamakaCode,
-                new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "add", ClassType.EOA_ED25519.name, [ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
+                new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "add", ClassType.EOA.name, [ClassType.BIG_INTEGER.name, ClassType.STRING.name]),
                 accountsLedger,
                 [
                     StorageValueModel.newStorageValue(balance, ClassType.BIG_INTEGER.name),
@@ -380,10 +418,11 @@ export class AccountHelper {
     /**
      * It returns the accounts ledger of the manifest.
      * @param takamakaCode the reference of takamakaCode
+     * @param manifest the manifest
      * @return the reference of the accounts ledger
      */
-    private async getAccountsLedger(takamakaCode: TransactionReferenceModel): Promise<StorageReferenceModel> {
-        const manifest = await this.remoteNode.getManifest()
+    private async getAccountsLedger(takamakaCode: TransactionReferenceModel, manifest: StorageReferenceModel): Promise<StorageReferenceModel> {
+
         const accountsLedger = await this.remoteNode.runInstanceMethodCallTransaction(new InstanceMethodCallTransactionRequestModel(
                 manifest,
                 "0",

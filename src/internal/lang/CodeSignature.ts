@@ -206,4 +206,9 @@ export class CodeSignature {
      * The method {@code getAccountsLedger} of the manifest.
      */
     public static readonly GET_ACCOUNTS_LEDGER = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "getAccountsLedger", ClassType.ACCOUNTS_LEDGER.name, [])
+
+    /**
+     * The method {@code get} of the accountsLedger.
+     */
+    public static readonly GET_FROM_ACCOUNTS_LEDGER = new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "get", ClassType.EOA.name, [ClassType.STRING.name])
 }
