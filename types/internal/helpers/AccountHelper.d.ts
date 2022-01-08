@@ -54,6 +54,13 @@ export declare class AccountHelper {
      */
     static isEd25519PublicKey(base58PublicKey: string): boolean;
     /**
+     * Returns from the accounts ledger the storage reference of a public key.
+     * @param publicKeyBase58 the public key encoded in base58
+     * @return the storage reference of the public key or null if the public key is not binded to a storage reference into the accounts ledger
+     * @throws HotmokaException if errors occur
+     */
+    getReferenceFromAccountsLedger(publicKeyBase58: string): Promise<StorageReferenceModel | null>;
+    /**
      * Creates a new account by letting another account pay.
      * @param algorithm the signature algorithm for the new account
      * @param payer the storage reference of the payer
@@ -125,6 +132,7 @@ export declare class AccountHelper {
     /**
      * It returns the accounts ledger of the manifest.
      * @param takamakaCode the reference of takamakaCode
+     * @param manifest the manifest
      * @return the reference of the accounts ledger
      */
     private getAccountsLedger;

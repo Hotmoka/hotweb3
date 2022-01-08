@@ -164,4 +164,8 @@ export declare class CodeSignature {
      * The method {@code getAccountsLedger} of the manifest.
      */
     static readonly GET_ACCOUNTS_LEDGER: NonVoidMethodSignatureModel;
+    /**
+     * The method {@code get} of the accountsLedger.
+     */
+    static readonly GET_FROM_ACCOUNTS_LEDGER: NonVoidMethodSignatureModel;
 }
