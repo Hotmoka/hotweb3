@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {Bip39} from "../src/internal/bip39/Bip39";
-import {AccountHelper, Bip39Dictionary} from "../src";
-import {Base58} from "../src";
+import {AccountHelper, Bip39Dictionary, Base58, RemoteNode} from "../src";
+import {REMOTE_NODE_URL} from "./constants";
 
 describe('Testing Base58', () => {
 
@@ -72,6 +72,12 @@ describe('Testing AccountHelper', () => {
         expect(isPublicKey).to.be.true
     })
 
+    it('it should verify that a base58 public key can be decode to a valid ed25519 public key', async () => {
+        const isPublicKey = AccountHelper.isEd25519PublicKey('5e6WhvAzBwStgY27BPhvk7J8Bzu5S8wFdhfdSQsYKSZj')
+        expect(isPublicKey).to.be.true
+    })
+
+
     it('it should build a valid keypair the given password and entropy', async () => {
         const keyPair = AccountHelper.generateEd25519KeyPairFrom(
             'VERONA',
@@ -127,6 +133,22 @@ describe('Testing AccountHelper', () => {
             "dress", "pupil", "axis", "spoil", "clap", "coral", "napkin", "style", "nasty", "warm", "ball", "viable", "science",
             "vivid", "arrive", "pony", "hire"
         ])
+    })
+
+
+    it('it should return the storage reference of a public key from the accounts ledger', async () => {
+        const accountsHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        const reference = await accountsHelper.getReferenceFromAccountsLedger("5e6WhvAzBwStgY27BPhvk7J8Bzu5S8wFdhfdSQsYKSZj")
+
+        expect(reference).to.be.not.null
+        expect(reference!.transaction.hash).to.eql("64a4e9991e04847d6582a5b5bb953efea439d60f1f94f91a89a416b315991b78")
+    })
+
+    it('it should return null for a public key that is not binded to the accounts ledger', async () => {
+        const accountsHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
+        const result = await accountsHelper.getReferenceFromAccountsLedger("Dj13EILoQgsdsSSD3d58T4xuOuudJ6UWwqQ+3a8wsHIk=")
+
+        expect(result).to.be.null
     })
 
 })
