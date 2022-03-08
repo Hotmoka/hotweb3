@@ -123,6 +123,11 @@ export class CodeSignature {
     public static readonly GET_VALIDATORS = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name,"getValidators", ClassType.VALIDATORS.name,[])
 
     /**
+     * The method "getStake" of the validators object.
+     */
+    public static readonly GET_STAKE = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getStake", ClassType.BIG_INTEGER.name, [ClassType.VALIDATOR.name]);
+
+    /**
      * The method "getVersions" of the manifest.
      */
     public static readonly GET_VERSIONS = new NonVoidMethodSignatureModel( ClassType.MANIFEST.name,"getVersions", ClassType.VERSIONS.name,[])
@@ -163,16 +168,6 @@ export class CodeSignature {
     public static readonly GET_NUMBER_OF_TRANSACTIONS = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getNumberOfTransactions", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method {@code getTotalSupply} of the validators.
-     */
-    public static readonly GET_TOTAL_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getTotalSupply", ClassType.BIG_INTEGER.name, [])
-
-    /**
-     * The method {@code getTotalSupplyRed} of the validators.
-     */
-    public static readonly GET_TOTAL_SUPPLY_RED = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getTotalSupplyRed", ClassType.BIG_INTEGER.name, [])
-
-    /**
      * The method "getTicketForNewPoll" of the validators.
      */
     public static readonly GET_TICKET_FOR_NEW_POLL = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name,"getTicketForNewPoll", ClassType.BIG_INTEGER.name, [])
@@ -211,4 +206,34 @@ export class CodeSignature {
      * The method {@code get} of the accountsLedger.
      */
     public static readonly GET_FROM_ACCOUNTS_LEDGER = new NonVoidMethodSignatureModel(ClassType.ACCOUNTS_LEDGER.name, "get", ClassType.EOA.name, [ClassType.STRING.name])
+
+    /**
+     * The method "getInitialSupply" of the validators object.
+     */
+    public static readonly GET_INITIAL_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getInitialSupply", ClassType.BIG_INTEGER.name, []);
+
+    /**
+     * The method "getCurrentSupply" of the validators.
+     */
+    public static readonly GET_CURRENT_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getCurrentSupply", ClassType.BIG_INTEGER.name, []);
+
+    /**
+     * The method "getFinalSupply" of the validators object.
+     */
+    public static readonly GET_FINAL_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getFinalSupply", ClassType.BIG_INTEGER.name, []);
+
+    /**
+     * The method "getInitialRedSupply" of the validators object.
+     */
+    public static readonly GET_INITIAL_RED_SUPPLY = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getInitialRedSupply", ClassType.BIG_INTEGER.name, []);
+
+    /**
+     * The method "getInitialInflation" of the validators object.
+     */
+    public static readonly GET_INITIAL_INFLATION = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getInitialInflation", BasicType.LONG.name, []);
+
+    /**
+     * The method "getCurrentInflation" of the validators object.
+     */
+    public static readonly GET_CURRENT_INFLATION = new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getCurrentInflation", BasicType.LONG.name, []);
 }

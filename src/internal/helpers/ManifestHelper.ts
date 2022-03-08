@@ -156,7 +156,6 @@ export class ManifestHelper {
         const maxGasPerTransaction = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_MAX_GAS_PER_TRANSACTION, gasStation.reference))
         const ignoresGasPrice = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.IGNORES_GAS_PRICE, gasStation.reference))
         const targetGasAtReward = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_TARGET_GAS_AT_REWARD, gasStation.reference))
-        const inflation = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INFLATION, gasStation.reference))
         const oblivion = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_OBLIVION, gasStation.reference))
         const initialGasPrice = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INITIAL_GAS_PRICE, gasStation.reference))
 
@@ -170,8 +169,33 @@ export class ManifestHelper {
         const numberOfTransactions = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_NUMBER_OF_TRANSACTIONS, validators.reference))
         const ticketForNewPoll = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_TICKET_FOR_NEW_POLL, validators.reference))
         const polls = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_POLLS, validators.reference))
-        const totalSupply = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_TOTAL_SUPPLY, validators.reference))
-        const totalSupplyRed = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_TOTAL_SUPPLY_RED, validators.reference))
+        const initialSupply = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INITIAL_SUPPLY, validators.reference))
+        const currentSupply = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_CURRENT_SUPPLY, validators.reference))
+        const finalSupply = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_FINAL_SUPPLY, validators.reference))
+        const initialRedSupply = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INITIAL_RED_SUPPLY, validators.reference))
+        const initialInflation = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INITIAL_INFLATION, validators.reference))
+        const currentInflation = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_CURRENT_INFLATION, validators.reference))
+
+        const offers = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.SHARED_ENTITY.name, "getOffers", ClassType.STORAGE_SET_VIEW.name, []), validators.reference
+            ))
+        const numOfOffers = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.STORAGE_SET_VIEW.name, "size", BasicType.INT.name, []), offers.reference!
+        ))
+
+        const buyerSurcharge = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getBuyerSurcharge", BasicType.INT.name, []), validators.reference
+        ))
+        const slashingForMisbehaving = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getSlashingForMisbehaving", BasicType.INT.name, []), validators.reference
+        ))
+        const slashingForNotBehaving = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getSlashingForNotBehaving", BasicType.INT.name, []), validators.reference
+        ))
+        const percentStaked = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(
+            manifest, takamakaCode, new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getPercentStaked", BasicType.INT.name, []), validators.reference
+        ))
+
         if (!polls.reference) {
             throw new HotmokaException("Polls not found")
         }
@@ -193,8 +217,13 @@ export class ManifestHelper {
         info.skipsVerification = skipsVerification.value ? 'true' === skipsVerification.value : false
         info.signature = signature.value ?? ''
         info.gameteInfo = new GameteInfo(gamete.reference, balanceOfGamete.value, redBalanceOfGamete.value, maxFaucet.value, maxRedFaucet.value)
-        info.gasStation = new GasStation(gasStation.reference, gasPrice.value, maxGasPerTransaction.value, ignoresGasPrice.value, targetGasAtReward.value, inflation.value, oblivion.value, initialGasPrice.value)
-        info.validators = new Validators(validators.reference, numOfValidators.value, height.value, numberOfTransactions.value, ticketForNewPoll.value, numOfPolls.value, totalSupply.value, totalSupplyRed.value)
+        info.gasStation = new GasStation(gasStation.reference, gasPrice.value, maxGasPerTransaction.value, ignoresGasPrice.value, targetGasAtReward.value, oblivion.value, initialGasPrice.value)
+        info.validators = new Validators( {validatorsReference: validators.reference, numOfValidators: numOfValidators.value, height: height.value,
+            numberOfTransactions: numberOfTransactions.value, ticketForNewPoll: ticketForNewPoll.value, numberOfPolls: numOfPolls.value,
+            initialSupply: initialSupply.value, currentSupply: currentSupply.value, finalSupply: finalSupply.value, initialRedSupply: initialRedSupply.value,
+            initialInflation: initialInflation.value, currentInflation: currentInflation.value, buyerSurcharge: buyerSurcharge.value,
+            slashingForMisbehaving: slashingForMisbehaving.value, slashingForNotBehaving: slashingForNotBehaving.value, percentStaked: percentStaked.value
+        })
 
         const numOfValidatorsValue = Number(numOfValidators.value) ?? 0
         for (let i = 0; i < numOfValidatorsValue; i++) {
@@ -243,6 +272,7 @@ export class ManifestHelper {
 
         const id = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.ID, validator.reference))
         const balanceOfValidator = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.BALANCE, validator.reference))
+       // const staked = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_STAKE, validator.reference, [validator]))
         const power = await this.remoteNode.runInstanceMethodCallTransaction(
             this.buildInstanceMethodCallTransactionModel(
                 manifest,
@@ -253,6 +283,6 @@ export class ManifestHelper {
             )
         )
 
-        return new Validator(validator.reference, id.value, balanceOfValidator.value, power.value, i)
+        return new Validator(validator.reference, id.value, balanceOfValidator.value, power.value, "0", i)
     }
 }
