@@ -152,17 +152,14 @@ export class RemoteNode implements Node {
     }
 
     async getRequestAt(reference: TransactionReferenceModel): Promise<TransactionRestRequestModel<unknown>> {
-        await this.wait(2000)
         return await RemoteNode.post<TransactionRestRequestModel<unknown>, TransactionReferenceModel>(this.url + '/get/request', reference)
     }
 
     async getResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
-        await this.wait(2000)
         return RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/response', reference)
     }
 
     async getPolledResponseAt(reference: TransactionReferenceModel): Promise<TransactionRestResponseModel<unknown>> {
-        await this.wait(2000)
         return RemoteNode.post<TransactionRestResponseModel<unknown>, TransactionReferenceModel>(this.url + '/get/polledResponse', reference)
     }
 
@@ -309,9 +306,5 @@ export class RemoteNode implements Node {
      */
     allowsUnsignedFaucet(): Promise<boolean> {
         return new ManifestHelper(this).allowsUnsignedFaucet()
-    }
-
-    private wait(milliseconds: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
 }
