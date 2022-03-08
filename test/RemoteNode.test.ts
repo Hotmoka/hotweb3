@@ -27,7 +27,7 @@ import {CHAIN_ID, EOA, REMOTE_NODE_URL, getPrivateKey, HOTMOKA_VERSION} from "./
 import {NodeInfo} from "../src/internal/models/info/NodeInfo";
 
 const SIGNER = new Signer(Algorithm.ED25519, getPrivateKey())
-const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "f04e9dd9d74b0f0ca17a4fbc1d143149ca6cf4d89afa60c72d47a9d1f5fb2083")
+const BASIC_JAR_REFERENCE = new TransactionReferenceModel("local", "bda75ca1ccd0e7906e813f0a122a885d75417f59ec3be9badf22760385bffd18")
 const GAS_LIMIT = "500000"
 
 console.log('Testing Hotmoka version ' + HOTMOKA_VERSION)
@@ -56,8 +56,8 @@ describe('Testing the GET methods of a remote hotmoka node', () => {
         const result: NodeInfo = await remoteNode.getNodeID()
 
         expect(result.type).to.be.eql('io.hotmoka.tendermint.TendermintBlockchain')
-        expect(result.version).to.be.eql('1.0.7')
-        expect(result.ID).to.be.eql('5ca9732ac7efff4f03ef012e7ce9407b01f73e0c')
+        expect(result.version).to.be.eql('1.0.8')
+        expect(result.ID).to.be.eql('b0b2ad16d1db72b9816286ad7a392cb8cbcc73ba')
     }).timeout(10000)
 
     it('getState - it should respond with a valid state of the manifest', async () => {
@@ -340,6 +340,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
         )
 
         const promiseResult = await remoteNode.postConstructorCallTransaction(requestConstructorCall)
+        await wait(5000)
         const result = await remoteNode.getResponseAt(promiseResult)
         const successfulTransaction = result.transactionResponseModel as ConstructorCallTransactionSuccessfulResponseModel
 
@@ -375,6 +376,7 @@ describe('Testing the io-hotmoka-examples-X-basic.jar installed on a remote hotm
         )
 
         const promiseResult = await remoteNode.postStaticMethodCallTransaction(requestInstanceMethodCall)
+        await wait(5000)
         const result = await remoteNode.getPolledResponseAt(promiseResult)
         const successfulTransaction = result.transactionResponseModel as MethodCallTransactionSuccessfulResponseModel
 
@@ -393,7 +395,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(allowsUnsignedFaucet).to.eql(true)
     })
 
-    it('info - it should respond with all the info of the remote node', async () => {
+    it.only('info - it should respond with all the info of the remote node', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL)
         const info: InfoModel = await remoteNode.info()
         const gameteInfo = info.gameteInfo
@@ -424,7 +426,7 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('missing accountsLedger reference')
         }
 
-        expect(info.takamakaCode.hash).to.be.eql('5878d6d66699ffe19f95482c3080356008f917263c68a8a872be3c437020c9eb')
+        expect(info.takamakaCode.hash).to.be.eql('c445a8f4f684fb50a9c86818515fe181d9711d4369e23e024182a7f5d1e33d67')
         expect(info.chainId).to.be.eql(CHAIN_ID)
         expect(info.maxErrorLength).to.be.eql(300)
         expect(info.maxCumulativeSizeOfDependencies).to.be.eql(10000000)
@@ -435,13 +437,13 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(info.skipsVerification).to.be.eql(false)
         expect(info.signature).to.be.eql('ed25519')
         expect(info.verificationVersion).to.be.eql('0')
-        expect(info.versions.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
-        expect(info.accountsLedger.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
+        expect(info.versions.transaction.hash).to.be.eql('5c8925c53825ecd3334e05925089f1b8d37c77ed1ed47e35a1c25666c093f271')
+        expect(info.accountsLedger.transaction.hash).to.be.eql('5c8925c53825ecd3334e05925089f1b8d37c77ed1ed47e35a1c25666c093f271')
 
         // gamete
         expect(gameteInfo.gamete).to.be.not.undefined
         expect(gameteInfo.gamete.transaction).to.be.not.undefined
-        expect(gameteInfo.gamete.transaction.hash).to.be.eql('ce08d392e97600279f8571dd4971e1a1b7422015655001c7cb4abb0159266a86')
+        expect(gameteInfo.gamete.transaction.hash).to.be.eql('0c9c4b4f3b112a9232ef307040d28350d6da886391385b59c36a6097cdd0bbdb')
         expect(gameteInfo.balanceOfGamete).to.be.not.undefined
         expect(Number(gameteInfo.balanceOfGamete!)).to.be.greaterThan(1000)
         expect(gameteInfo.redBalance).to.be.eql('0')
@@ -454,12 +456,21 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(gasStation.maxGasPerTransaction).to.be.eql('1000000000')
         expect(gasStation.ignoresGasPrice).to.be.eql(false)
         expect(gasStation.targetGasAtReward).to.be.eql('1000000')
-        expect(gasStation.inflation).to.be.eql('10000')
         expect(gasStation.oblivion).to.be.eql('250000')
 
         // validators
         expect(validators.validatorsReference).to.be.not.undefined
         expect(Number(validators.numOfValidators)).to.be.eql(1)
+        expect(Number(validators.buyerSurcharge)).to.be.eql(50000000)
+        expect(Number(validators.slashingForMisbehaving)).to.be.eql(1000000)
+        expect(Number(validators.slashingForNotBehaving)).to.be.eql(500000)
+        expect(Number(validators.percentStaked)).to.be.eql(75000000)
+        expect(Number(validators.currentInflation)).to.be.gt(900)
+        expect(Number(validators.initialInflation)).to.be.gt(900)
+        expect(Number(validators.initialSupply)).to.be.gt(100000000)
+        expect(Number(validators.currentSupply)).to.be.gt(100000000)
+        expect(Number(validators.finalSupply)).to.be.gt(200000000)
+        expect(Number(validators.initialRedSupply)).to.be.eql(0)
         expect(Number(validators.height)).to.be.gte(1)
         expect(Number(validators.numberOfTransactions)).to.be.gte(1)
         expect(Number(validators.ticketForNewPoll)).to.be.gte(100)
@@ -471,12 +482,17 @@ describe('Testing the Info of a remote hotmoka node', () => {
             assert.fail('validator not defined')
         }
         expect(validator.validator).to.be.not.undefined
-        expect(validator.validator.transaction.hash).to.be.eql('4cb4ebfcff972f60c22f1bf16950ca11fca32a2d1622b67d2b7f3e63166f37c3')
+        expect(validator.validator.transaction).to.be.not.undefined
         expect(validator.id).to.be.not.undefined
-        expect(validator.id).to.be.eql('3367D160E5190B4ED636A2973F39A71BA3F7726F')
+        expect(validator.staked).to.be.not.undefined
+        expect(Number(validator.staked)).to.be.gte(0)
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
 
     }).timeout(40000)
 })
+
+const wait = (milliseconds: number) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
