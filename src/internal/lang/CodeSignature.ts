@@ -148,9 +148,9 @@ export class CodeSignature {
     public static readonly GET_TARGET_GAS_AT_REWARD = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getTargetGasAtReward", ClassType.BIG_INTEGER.name,[])
 
     /**
-     * The method "getInflation" of the gas station.
-     */
-    public static readonly GET_INFLATION = new NonVoidMethodSignatureModel(ClassType.GAS_STATION.name,"getInflation", BasicType.LONG.name,[])
+    * The method "getInitialValidators" of the manifest.
+    */
+    public static readonly GET_INITIAL_VALIDATORS = new NonVoidMethodSignatureModel(ClassType.MANIFEST.name, "getInitialValidators", ClassType.SHARED_ENTITY_VIEW.name, []);
 
     /**
      * The method "getOblivion" of the gas station.

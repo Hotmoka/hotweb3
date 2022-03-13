@@ -8,10 +8,8 @@ export declare class GasStation {
     maxGasPerTransaction?: string;
     ignoresGasPrice?: boolean;
     targetGasAtReward?: string;
-    inflation?: string;
     oblivion?: string;
-    inflationInfo: string;
     oblivionInfo: string;
     initialGasPrice?: string;
-    constructor(gasStation?: StorageReferenceModel, gasPrice?: string, maxGasPerTransaction?: string, ignoresGasPrice?: string, targetGasAtReward?: string, inflation?: string, oblivion?: string, initialGasPrice?: string);
+    constructor(gasStation?: StorageReferenceModel, gasPrice?: string, maxGasPerTransaction?: string, ignoresGasPrice?: string, targetGasAtReward?: string, oblivion?: string, initialGasPrice?: string);
 }

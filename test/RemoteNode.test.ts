@@ -395,12 +395,13 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(allowsUnsignedFaucet).to.eql(true)
     })
 
-    it.only('info - it should respond with all the info of the remote node', async () => {
+    it('info - it should respond with all the info of the remote node', async () => {
         const remoteNode = new RemoteNode(REMOTE_NODE_URL)
         const info: InfoModel = await remoteNode.info()
         const gameteInfo = info.gameteInfo
         const gasStation = info.gasStation
         const validators = info.validators
+        const initialValidators = info.initialValidators
 
         if (!gameteInfo || !gameteInfo.gamete) {
             assert.fail('missing gamete info')
@@ -412,6 +413,10 @@ describe('Testing the Info of a remote hotmoka node', () => {
 
         if (!validators) {
             assert.fail('missing validators info')
+        }
+
+        if (!initialValidators) {
+            assert.fail('missing initialValidators info')
         }
 
         if (!info.takamakaCode) {
@@ -488,6 +493,25 @@ describe('Testing the Info of a remote hotmoka node', () => {
         expect(Number(validator.staked)).to.be.gte(0)
         expect(Number(validator.balanceOfValidator)).to.be.gt(100000)
         expect(Number(validator.power)).to.be.gte(1)
+
+        expect(initialValidators.validatorsReference).to.be.not.undefined
+        expect(initialValidators.numberOfInitialValidators).to.be.eq(1)
+        if (!initialValidators.validators) {
+            assert.fail('initial validators not defined')
+        }
+        expect(initialValidators.validators).to.be.not.undefined
+        expect(initialValidators.validators.length).to.be.eq(1)
+
+        const initialValidator = initialValidators.validators[0]
+        if (!initialValidator.validator) {
+            assert.fail('initial validator not defined')
+        }
+        expect(initialValidator.validator.transaction).to.be.not.undefined
+        expect(initialValidator.id).to.be.not.undefined
+        expect(initialValidator.staked).to.be.not.undefined
+        expect(Number(initialValidator.staked)).to.be.gte(0)
+        expect(Number(initialValidator.balanceOfValidator)).to.be.gt(100000)
+        expect(Number(initialValidator.power)).to.be.gte(1)
 
     }).timeout(40000)
 })

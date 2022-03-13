@@ -141,6 +141,10 @@ export declare class ClassType extends Marshallable {
      */
     static readonly STORAGE_TREE_MAP: ClassType;
     /**
+     * The frequently used class type for {@link io.takamaka.code.util.StorageMapView}.
+     */
+    static readonly STORAGE_MAP_VIEW: ClassType;
+    /**
      * The frequently used class type for {@link io.takamaka.code.util.StorageTreeArray}.
      */
     static readonly STORAGE_TREE_ARRAY: ClassType;

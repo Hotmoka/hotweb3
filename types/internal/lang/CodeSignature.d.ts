@@ -97,6 +97,10 @@ export declare class CodeSignature {
      */
     static readonly GET_VALIDATORS: NonVoidMethodSignatureModel;
     /**
+     * The method "getStake" of the validators object.
+     */
+    static readonly GET_STAKE: NonVoidMethodSignatureModel;
+    /**
      * The method "getVersions" of the manifest.
      */
     static readonly GET_VERSIONS: NonVoidMethodSignatureModel;
@@ -113,9 +117,9 @@ export declare class CodeSignature {
      */
     static readonly GET_TARGET_GAS_AT_REWARD: NonVoidMethodSignatureModel;
     /**
-     * The method "getInflation" of the gas station.
-     */
-    static readonly GET_INFLATION: NonVoidMethodSignatureModel;
+    * The method "getInitialValidators" of the manifest.
+    */
+    static readonly GET_INITIAL_VALIDATORS: NonVoidMethodSignatureModel;
     /**
      * The method "getOblivion" of the gas station.
      */
@@ -128,14 +132,6 @@ export declare class CodeSignature {
      * The method "getNumberOfTransactions" of the validators.
      */
     static readonly GET_NUMBER_OF_TRANSACTIONS: NonVoidMethodSignatureModel;
-    /**
-     * The method {@code getTotalSupply} of the validators.
-     */
-    static readonly GET_TOTAL_SUPPLY: NonVoidMethodSignatureModel;
-    /**
-     * The method {@code getTotalSupplyRed} of the validators.
-     */
-    static readonly GET_TOTAL_SUPPLY_RED: NonVoidMethodSignatureModel;
     /**
      * The method "getTicketForNewPoll" of the validators.
      */
@@ -168,4 +164,28 @@ export declare class CodeSignature {
      * The method {@code get} of the accountsLedger.
      */
     static readonly GET_FROM_ACCOUNTS_LEDGER: NonVoidMethodSignatureModel;
+    /**
+     * The method "getInitialSupply" of the validators object.
+     */
+    static readonly GET_INITIAL_SUPPLY: NonVoidMethodSignatureModel;
+    /**
+     * The method "getCurrentSupply" of the validators.
+     */
+    static readonly GET_CURRENT_SUPPLY: NonVoidMethodSignatureModel;
+    /**
+     * The method "getFinalSupply" of the validators object.
+     */
+    static readonly GET_FINAL_SUPPLY: NonVoidMethodSignatureModel;
+    /**
+     * The method "getInitialRedSupply" of the validators object.
+     */
+    static readonly GET_INITIAL_RED_SUPPLY: NonVoidMethodSignatureModel;
+    /**
+     * The method "getInitialInflation" of the validators object.
+     */
+    static readonly GET_INITIAL_INFLATION: NonVoidMethodSignatureModel;
+    /**
+     * The method "getCurrentInflation" of the validators object.
+     */
+    static readonly GET_CURRENT_INFLATION: NonVoidMethodSignatureModel;
 }

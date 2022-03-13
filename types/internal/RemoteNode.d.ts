@@ -152,5 +152,4 @@ export declare class RemoteNode implements Node {
      * @throws HotmokaException if generic errors occur
      */
     allowsUnsignedFaucet(): Promise<boolean>;
-    private wait;
 }

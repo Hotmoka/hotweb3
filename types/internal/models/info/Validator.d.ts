@@ -7,6 +7,7 @@ export declare class Validator {
     id?: string;
     balanceOfValidator?: string;
     power?: string;
+    staked?: string;
     num?: number;
-    constructor(validator?: StorageReferenceModel, id?: string, balanceOfValidator?: string, power?: string, num?: number);
+    constructor(validator?: StorageReferenceModel, id?: string, balanceOfValidator?: string, power?: string, staked?: string, num?: number);
 }

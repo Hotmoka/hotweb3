@@ -14,6 +14,7 @@ import {BasicType} from "../lang/BasicType";
 import {Validators} from "../models/info/Validators";
 import {Validator} from "../models/info/Validator";
 import {StorageValueModel} from "../models/values/StorageValueModel";
+import {InitialValidators} from "../models/info/InitialValidators";
 
 /**
  * Helper class to get information about the remote Hotmoka node.
@@ -229,6 +230,24 @@ export class ManifestHelper {
         for (let i = 0; i < numOfValidatorsValue; i++) {
             const validator = await this.getValidator(manifest, takamakaCode, shares.reference, i)
             info.validators.validators.push(validator)
+        }
+
+        const initialValidators = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode, CodeSignature.GET_INITIAL_VALIDATORS, manifest))
+        if (initialValidators.reference) {
+            const initialValidatorsArray: Array<Validator> = []
+            const initialValidatorsShares = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode,new NonVoidMethodSignatureModel(ClassType.VALIDATORS.name, "getShares", ClassType.STORAGE_MAP.name,  []), initialValidators.reference))
+            if (initialValidatorsShares.reference) {
+                const numberOfInitialValidators = await this.remoteNode.runInstanceMethodCallTransaction(this.buildInstanceMethodCallTransactionModel(manifest, takamakaCode,new NonVoidMethodSignatureModel(ClassType.STORAGE_MAP_VIEW.name, "size", BasicType.INT.name, []), initialValidatorsShares.reference))
+                const numOfInitialValidatorsValue = Number(numberOfInitialValidators.value) ?? 0
+
+                for (let i = 0; i < numOfInitialValidatorsValue; i++) {
+                    const validator = await this.getValidator(manifest, takamakaCode, shares.reference, i)
+                    initialValidatorsArray.push(validator)
+                }
+
+                info.initialValidators = new InitialValidators(initialValidators.reference, initialValidatorsArray)
+            }
+
         }
 
         return info
