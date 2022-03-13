@@ -144,7 +144,7 @@ describe('Testing AccountHelper', () => {
     })
 
 
-    it('it should return the storage reference of a public key from the accounts ledger', async () => {
+    it.skip('it should return the storage reference of a public key from the accounts ledger', async () => {
         const accountsHelper = new AccountHelper(new RemoteNode(REMOTE_NODE_URL))
         const reference = await accountsHelper.getReferenceFromAccountsLedger("5e6WhvAzBwStgY27BPhvk7J8Bzu5S8wFdhfdSQsYKSZj")
 
